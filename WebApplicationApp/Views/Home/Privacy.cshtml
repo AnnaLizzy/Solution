@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<style>
+    .marker {
+        position: absolute;
+        width: 10px;
+        /* Điều chỉnh kích thước của điểm đánh dấu */
+        height: 10px;
+        background-color: red;
+        /* Màu sắc của điểm đánh dấu */
+        border-radius: 50%;
+        /* Bo tròn để tạo hình dạng điểm */
+    }
+</style>
+<h1>@ViewData["Title"]</h1>
+<partial name="_ListPatialView" />
+<div class="map-container">
+    <img src="~/images/mapQv.png" class="w-100"  />
+    <div class="marker" hidden></div>
+</div>
+<div id='calendar'></div>
+@section Scripts {
+    <script src="~/lib/fullcalender-6.1.11/index.global.js"></script>
+    <script>
+        const x = [720, 665, 650, 460, 470]; // Sử dụng phần trăm (%) thay vì pixel (px)
+        const y = [258, 270, 227, 50, 230]; // Sử dụng phần trăm (%) thay vì pixel (px)
+        const urls = ["https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/1"
+            , "https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/2", 
+            "https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/3",
+            "https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/4", "https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/5"];
+         
+        for (let i = 0; i < x.length; i++) {
+            const marker = document.createElement("a"); // Thay đổi div thành thẻ anchor (a)
+            marker.href = urls[i]; // Đặt URL cho mỗi điểm đánh dấu
+            marker.className = "marker";
+            marker.style.left = x[i] + "%"; // Sử dụng phần trăm (%) thay vì pixel (px)
+            marker.style.top = y[i] + "%"; // Sử dụng phần trăm (%) thay vì pixel (px)
+            document.querySelector(".map-container").appendChild(marker);
+        }
+        //************************************************************************************* */
+       
+        // FullCalendar
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+
+                initialDate: '2024-03-12',
+                initialView: 'timeGridWeek',
+                nowIndicator: true,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                navLinks: true, // can click day/week names to navigate views
+                editable: true,
+                selectable: true,
+                selectMirror: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                events: [
+                    {
+                        title: 'CA_HC',
+                        start: '2024-03-01',
+                    },
+                    {
+                        title: 'CA_CHIEU - NGUYEN THI THANH',
+                        start: '2024-03-07',
+                        end: '2024-03-10'
+                    },
+                    {
+                        groupId: 999,
+                        title: 'Repeating Event',
+                        start: '2024-03-09T16:00:00'
+                    },
+                    {
+                        groupId: 999,
+                        title: 'Repeating Event',
+                        start: '2024-03-16T16:00:00'
+                    },
+                    {
+                        title: 'Conference',
+                        start: '2024-03-11',
+                        end: '2024-03-13'
+                    },
+                    {
+                        title: 'CA_SANG - Nguyen Van A',
+                        start: '2024-03-12T07:30:00',
+                        end: '2024-03-12T16:30:00'
+                    },
+                    {
+                        title: 'CA_CHIEU - Nguyen Van B',
+                        start: '2024-03-12T12:00:00'
+                    },
+                    {
+                        title: 'CA_TOI - Nguyen Van C',
+                        start: '2024-03-12T14:30:00'
+                    },
+                    {
+                        title: 'Happy Hour',
+                        start: '2024-03-12T17:30:00'
+                    },
+                    {
+                        title: 'Dinner',
+                        start: '2024-03-12T20:00:00'
+                    },
+                    {
+                        title: 'Birthday Party',
+                        start: '2024-03-13T07:00:00'
+                    },
+                    {
+                        title: 'Click for Google',
+                        url: 'http://google.com/',
+                        start: '2024-03-28',
+                        end: '2024-04-02'
+                    }
+                ]
+            });
+
+            calendar.render();
+
+        });
+    </script>
+
+}

@@ -1,0 +1,65 @@
+﻿@using ApiLibrary.ViewModels
+@model List<WorkShiftViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Work shift</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+ <table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã ca
+            </th>
+            <th>
+                Tên ca
+            </th>
+            <th>
+               Miêu tả 
+            </th>
+            <th>
+               Thời gian bắt đầu
+            </th>
+            <th>
+               Thời gian kết thúc
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShiftID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameShift)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescriptionShift)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ShiftID">Edit</a> |
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <a asp-action="Details" asp-route-id="@item.ShiftID">Details</a>
+                    </button>
+            
+                        <a  asp-action="Details" asp-route-id="@item.ShiftID">Details</a>
+               
+                <a asp-action="Delete" asp-route-id="@item.ShiftID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

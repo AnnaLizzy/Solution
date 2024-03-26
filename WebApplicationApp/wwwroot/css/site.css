@@ -1,0 +1,56 @@
+﻿html {
+  font-size: 14px;
+}
+::-webkit-scrollbar{
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Màu nền của phần track (phần đằng sau thanh cuộn) */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* Màu nền của thanh cuộn */
+    border-radius: 4px; /* Bo tròn các đầu của thanh cuộn */
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; /* Màu nền của thanh cuộn khi di chuột qua */
+    }
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+canvas {
+    border: 1px solid black;
+}
+.fixed-column {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.day {
+   text-align: center;
+}
+.main{
+    padding-top: 5rem;
+}
+.table-custome{
+    width: 1100px;
+    height:400px;
+}

@@ -1,0 +1,45 @@
+﻿@* @model WorkSchedules
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <h1>Location Địa điểm </h1>
+   
+    <p>Chọn khu vực: </p>
+    <select onchange="loadLocations(this.value)">
+        <option value="0">All</option>
+        @foreach (var item in Model.Area ?? throw new Exception("No data"))
+        {
+            <option value="@item.AreaID">@item.AreaName</option>
+        }
+    </select>   
+    <p>Chọn địa điểm :</p>
+    <select id="locationSelect">
+        <option id="loadLocations">All</option>
+    </select>
+  
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Location ID</th>
+                <th>Name</th>
+                <th>Detail</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Mode ?? throw new Exception("No data"))
+            {
+                <tr>
+                    <td>@item.ListID</td>
+                    <td>@item.LocationID</td>
+                    <td>@item.LocationName</td>
+                   
+                    <td><a href="@Url.Action("Edit", "Location", new { id = item.ID })">Edit</a></td>
+                    <td><a href="@Url.Action("Delete", "Location", new { id = item.ID })">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> *@

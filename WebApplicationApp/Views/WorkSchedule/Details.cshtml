@@ -1,0 +1,50 @@
+﻿@using ApiLibrary.ViewModels
+@model WorkScheduleViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ViewBag.Title = "Details";
+    
+}
+<h2>This this Work schedule detail</h2>
+<div>
+    <h4>WorkScheduleViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SchedulesID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SchedulesID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeeName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EmployeeName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShiftName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShiftName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LocationID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LocationID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EndTime)
+        </dd>
+    </dl>
+    </div>

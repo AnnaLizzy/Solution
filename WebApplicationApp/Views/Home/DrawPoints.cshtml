@@ -1,0 +1,13 @@
+﻿@{
+ ViewData["Title"] = "DrawPoints";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Ảnh với các chấm đã được vẽ lên</h1>
+@section Scripts {
+    <script>
+        // JavaScript hoặc CSS để hiển thị ảnh đã vẽ
+        // Đảm bảo thay thế đúng đường dẫn đến ảnh đã vẽ
+        var imageUrl = '@Url.Action("DrawPointsOnImage", "Home")';
+        document.getElementById("image-container").innerHTML = '<img src="' + imageUrl + '" alt="Ảnh đã vẽ các điểm trên layout">';
+    </script>
+}

@@ -1,0 +1,50 @@
+﻿@model CreateWorkScheduleViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Create";
+}
+<h4>Create</h4>
+
+<form asp-action="Create">
+   <h4>Create work schedule</h4>
+    <select id="areaDropdown" asp-for="@Model.AreaID" asp-items="@ViewBag.GetAreaList" class="form-control">
+        <option disabled selected>Select Area</option>
+    </select>
+    <select id="locationDropdown" class="form-control">
+    <option disabled selected>Select Location</option>
+    </select>
+</form>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+</button>
+<partial name="_Dialog" id="dialog"/>
+<div>
+<a asp-action="Index">Back to List</a>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#areaDropdown').change(function () {
+                var areaId = $(this).val();
+                $.ajax({
+                    url: 'https://localhost:44389/api/ListLocations/'+areaId,
+                    type: 'GET',
+                    data: { areaId: areaId },
+                    success: function (data) {
+                        $('#locationDropdown').empty();
+                        if (data.length === 0) {
+                            $('#locationDropdown').append($('<option></option>').text('No data').val(''));
+                        } else {
+                            $.each(data, function (index, location) {
+                                $('#locationDropdown').append($('<option></option>').attr('value', location.locationID).text(location.locationDetailName));
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert('Error occurred while fetching locations.');
+                    }
+                });
+            });
+        });
+    </script>
+}

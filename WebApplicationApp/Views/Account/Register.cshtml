@@ -1,0 +1,52 @@
+﻿@model RegisterRequest
+@{
+}
+<div class="row col-md-10 offset-md-1">
+    <h2>Register</h2>
+    <form asp-controller="Account" asp-action="Register" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EmployeeNo" class="control-label"></label>
+                <input asp-for="EmployeeNo " class="form-control" />
+                <span asp-validation-for="EmployeeNo" class="text-danger"></span>
+             </div>
+           <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        <div class="form-group">
+            <label asp-for="EmployeeName" class="control-label"></label>
+            <input asp-for="EmployeeName" class="form-control" />
+            <span asp-validation-for="EmployeeName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Gender" class="control-label"></label>
+            <input asp-for="Gender" class="form-control" />
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DateOfBirth" class="control-label"></label>
+            <input type="date" asp-for="DateOfBirth" class="form-control" />
+            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Company" class="control-label"></label>
+            <input asp-for="Company" class="form-control" />
+            <span asp-validation-for="Company" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
