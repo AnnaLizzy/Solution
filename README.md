@@ -13,17 +13,23 @@ WorkSchedules
   interval int not null
   Frequency varchar(20)
   Ví dụ
+
 | SchedulesID | EmployeeID | ShiftID | LocationID | StartTime               | EndTime                 | byweekday              |
 |-------------|------------|---------|------------|-------------------------|-------------------------|------------------------|
 | 3           | 1          | 1       | QV01       | 2024-04-04 07:30:53.373 | 2024-06-04 07:30:53.373 | mo, tu, we, th, fr, sa |
+
+
 ###Locations
+
 | ListID | LocationID | LocationName | Floors | X | Y | Area | Region |
 |--------|------------|--------------|--------|---|---|------|--------|
 | 1      |   1        |test location |   1    |235|   | Khu A|   A1   |
+
 ###WorkShifts
 | ShiftID | NameShift | DescriptionShift | StartTime          | EndTime            |
 |---------|-----------|------------------|---------------------|----------------------|
 |    1    |   CA_HC   |  Ca hành chính  | 08:00:00.0000000 | 17:00:00.0000000 |
+
 ###Employees
 | EmployeeID | EmployeeNo | Password | EmployeeName   | Gender | PhoneNumber | DateOfBirth | IsDeleted | CreateTime          | Company |
 |------------|------------|----------|----------------|--------|--------------|------------|-----------|---------------------|---------|
