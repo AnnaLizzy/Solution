@@ -22,6 +22,8 @@
 <div id='calendar'></div>
 @section Scripts {
     <script src="~/lib/fullcalender-6.1.11/index.global.js"></script>
+    <script src="~/lib/fullcalender-6.1.11/packages/timegrid/index.global.js"></script>
+    <script src="~/lib/fullcalender-6.1.11/packages/rrule/index.global.js"> </script>   
     <script>
         const x = [720, 665, 650, 460, 470]; // Sử dụng phần trăm (%) thay vì pixel (px)
         const y = [258, 270, 227, 50, 230]; // Sử dụng phần trăm (%) thay vì pixel (px)
@@ -97,8 +99,14 @@
                         start: '2024-03-12T14:30:00'
                     },
                     {
-                        title: 'Happy Hour',
-                        start: '2024-03-12T17:30:00'
+                        title: 'my recurring event',
+                        rrule: {
+                            freq: 'weekly',
+                            interval: 5,
+                            byweekday: ['mo', 'fr'],
+                            dtstart: '2024-02-01T10:30:00', // will also accept '20120201T103000'
+                            until: '2024-06-01' // will also accept '20120201'
+                        }
                     },
                     {
                         title: 'Dinner',

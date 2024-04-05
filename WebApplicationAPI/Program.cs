@@ -5,10 +5,7 @@ using WebApplicationAPI.Service;
 using WebApplicationAPI.Service.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using WebApplicationAPI.Constants;
 using Microsoft.OpenApi.Models;
-using WebApplicationAPI.DTOs;
-using System.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,9 +42,9 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme\\r\\n\\r\\n\r\n " +
+        Description = "JWT Authorization header using the Bearer scheme. " +
         "Enter 'Bearer' [space] and then your token in the text input below." +
-        "\r\n\\r\\n\\r\\nExample: 'Bearer 12345abcdef'",
+        "Example: 'Bearer 12345abcdef'",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -79,7 +76,7 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "App test API",
+        Title = "Đây là api lấy dữ liệu từ database ",
         Description = "An ASP.NET Core Web API for managing App items",
         TermsOfService = new Uri("https://example.com/terms"),
         Contact = new OpenApiContact
@@ -107,15 +104,17 @@ builder.Services.AddScoped<IWorkShiftService, WorkShiftService>();
 // In your ConfigureServices method
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddPolicy("AllowSpecificOrigin", builder =>
     {
-        builder.WithOrigins(SystemConstants.Url.BaseUrl)
+        builder.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
 
 var app = builder.Build();
+app.UseExceptionHandler("/error");
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -123,8 +122,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseExceptionHandler("/error");
-app.UseCors();
+app.UseRouting();
+app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

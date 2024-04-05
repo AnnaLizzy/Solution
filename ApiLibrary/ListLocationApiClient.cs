@@ -3,7 +3,7 @@ using ApiLibrary.Interfaces;
 
 namespace ApiLibrary
 {
-    public class ListLocationApiClient(HttpClient httpClient) : BaseApiClient(httpClient), IListLocationApiClient
+    public class ListLocationApiClient(HttpClient httpClient,IHttpClientFactory httpClientFactory) : BaseApiClient(httpClient,httpClientFactory), IListLocationApiClient
     {
         public async Task<List<ListLocationVM>> GetAllLocations()
         {           

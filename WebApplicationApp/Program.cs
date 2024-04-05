@@ -2,6 +2,7 @@
 using ApiLibrary;
 using ApiLibrary.Interfaces;
 using WebApplicationApp.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 
@@ -10,27 +11,41 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 //DI
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddScoped<IWorkShiftApiClient, WorkShiftApiClient>();
 builder.Services.AddScoped<IListLocationApiClient, ListLocationApiClient>();
 builder.Services.AddScoped<IAreaApiClient, AreaApiClient>();
 builder.Services.AddScoped<IWorkScheduleApiClient, WorkScheduleApiClient>();
+builder.Services.AddScoped<IAccountApiClient, AccountApiClient>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
-
+//use component razor page
+builder.Services.AddRazorPages();
 //CORs
 // In your ConfigureServices method
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddPolicy("AllowSpecificOrigin",builder =>
     {
-        builder.WithOrigins("https://localhost:44389")
+        builder.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
-
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Index";
+        options.AccessDeniedPath = "/User/Forbidden/";
+    });
+// add session and use session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+});
 
 
 var app = builder.Build();
@@ -45,15 +60,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 // In your Configure method
-app.UseCors();
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

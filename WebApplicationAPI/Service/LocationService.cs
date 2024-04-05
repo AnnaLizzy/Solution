@@ -15,11 +15,16 @@ namespace WebApplicationAPI.Service
         public async Task CreateLocation(LocationDTO locationDTO)
         {
             
-                var query = await _context.Locations.FirstOrDefaultAsync(x => x.LocationName == locationDTO.LocationName);
+                var query = await _context.Locations.FirstOrDefaultAsync(x => x.LocationName == locationDTO.LocationName );
                 if (query != null)
                 {
                     throw new AppException("Location Name has exist");
                 }
+                var checkLocationID = await _context.Locations.FirstOrDefaultAsync(x => x.LocationID == locationDTO.LocationID);
+                if (checkLocationID != null)
+                {
+                        throw new AppException("Location ID has exist");
+                    }
                 _context.Locations.Add(new Models.Locations
                 {
                     ListID = locationDTO.ListID,
@@ -62,21 +67,24 @@ namespace WebApplicationAPI.Service
 
         public async Task<List<LocationDTO>> GetLocations()
         {
-            var query = _context.Locations.Select(x => new LocationDTO
+            var query = await _context.Locations                                 
+                                 .Select(x => new LocationDTO
+                                 {
+                                     ListID = x.ListID,
+                                     LocationID = x.LocationID,
+                                     LocationName = x.LocationName ?? "N/A",
+                                     Area = x.Area ?? "N/A",
+                                     Floors = x.Floors ?? "N/A",
+                                     X = x.X ,
+                                     Y = x.Y,
+                                     Region = x.Region ?? "N/A"
+                                 })
+                                 .ToListAsync();
+            if (query == null || query.Count == 0)
             {
-                ListID = x.ListID,
-                LocationID = x.LocationID,
-                LocationName = x.LocationName,
-                Area = x.Area,                 
-                Floors = x.Floors,
-                X = x.X,
-                Y = x.Y,
-                Region = x.Region,               
-            });
-            var locations = await query.ToListAsync();
-            return locations;
-                       
-                        
+                throw new AppException("Khong co dia diem nao");
+            }
+            return query;
         }
 
         public async Task UpdateLocation(int id, LocationDTO locationDTO)

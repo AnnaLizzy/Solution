@@ -18,6 +18,7 @@ namespace WebApplicationApp.Controllers
 
         public IActionResult Index()
         {
+            _ = User.Identity?.Name;
             return View();
         }
 

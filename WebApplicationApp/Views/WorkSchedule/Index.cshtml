@@ -1,7 +1,8 @@
 ﻿@using ApiLibrary.ViewModels
+@using Newtonsoft.Json
 @model List<WorkScheduleViewModel>
 @{
-    Layout="~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Work Schedule";
 }
 <h3>this is Work schedule</h3>
@@ -18,7 +19,7 @@
                 Ca làm việc
             </th>
             <th>
-                Địa điểm làm việc 
+                Địa điểm làm việc
             </th>
             <th>
                 Thời gian bắt đầu
@@ -30,32 +31,138 @@
         </tr>
     </thead>
     <tbody>
-@foreach(var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SchedulesID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShiftName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocationID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.SchedulesID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SchedulesID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SchedulesID">Delete</a>
-            </td>
-        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SchedulesID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShiftName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LocationID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.SchedulesID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.SchedulesID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.SchedulesID">Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+<div id='calendar'></div>
+@section Scripts {
+    <script src="~/lib/fullcalender-6.1.11/index.global.min.js"></script>
+    <script src="~/lib/es5/rrule.min.js"></script>
+    <script src="~/lib/fullcalender-6.1.11/packages/timegrid/index.global.min.js"></script>
+    <script src="~/lib/fullcalender-6.1.11/packages/rrule/index.global.min.js"> </script>
+    <script src="~/lib/fullcalender-6.1.11/packages/core/locales-all.global.min.js"></script>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var today = "@DateTime.Now.ToString("yyyy-MM-dd")";
+            var calendarEl = document.getElementById("calendar");
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'vi',
+                headerToolbar: {
+                    left: 'prevYear,prev,next,nextYear today',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek,dayGridDay,listWeek'
+                },
+                weekNumbers: true,
+                initialDate: today,
+                editable: true,
+                events: [
+                    {
+                        title: "rrule event",
+                        rrule: {
+                            dtstart: "2024-02-09T07:30:00",
+                            until: "2024-06-01",
+                            freq: "weekly",
+                        },
+                        duration: "09:00",
+                    },
+                    {
+                        title: 'CA_HC - Tran Thi B',
+                        url: "htttps://google.com",
+                        rrule: {
+                            freq: 'weekly',
+                            interval: 1,
+                            byweekday: ['mo', 'tu', 'we', 'th', 'fr', 'sa'],
+                            dtstart: '2024-02-01', // will also accept '20120201T103000'
+                            until: '2024-06-01' // will also accept '20120201'
+                        }
+                    },
+
+                    @foreach (var item in Model)
+                    {
+                        var employeeNameEncoded = System.Web.HttpUtility.HtmlEncode(item.EmployeeName);
+                        var shiftNameEncoded = System.Web.HttpUtility.HtmlEncode(item.ShiftName);
+                        var startTimeEncoded = ((DateTime?)item.StartTime)?.ToString("yyyy-MM-dd");
+                        var endTimeEncoded = ((DateTime?)item.EndTime)?.ToString("yyyy-MM-dd");
+                        var frequency = item.Frequency;
+                        var interval = item.Interval;
+                        var databyweekday = item.ByWeekday;
+                        string[] weekdaysArray = databyweekday?.Split(',') ?? new string[0];
+                          string weekdays = JsonConvert.SerializeObject(weekdaysArray);
+                        <text>
+                            {
+                                title: '@Html.Raw(shiftNameEncoded) - @Html.Raw(employeeNameEncoded)',                              
+                                rrule: {
+                                    freq: '@Html.Raw(frequency)',
+                                    interval: '@Html.Raw(interval)',
+                                    byweekday: @Html.Raw(weekdays),
+                                    dtstart: '@Html.Raw(startTimeEncoded)',
+                                    until: '@Html.Raw(endTimeEncoded)'
+                                }
+                             }, 
+                       </text>
+                    }
+                ],
+                eventClick: function (arg)
+              
+                {
+                    var modal = document.createElement("div");
+                    var title = arg.event.title;
+                   
+                  
+                   
+                   
+                    modal.classList.add("modal");
+                    modal.innerHTML = `
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">${title}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Frequently :</p>
+                                            <p>Start time </p>
+                                            <p>End time :</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                    document.body.appendChild(modal);
+                    var bootstrapModal = new bootstrap.Modal(modal);
+                    bootstrapModal.show();
+                },
+            });
+
+            calendar.render();
+             var eventSources = calendar.getEvents();
+        });
+    </script>
+}

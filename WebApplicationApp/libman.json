@@ -9,6 +9,14 @@
     {
       "library": "bootstrap-icons@1.11.3",
       "destination": "wwwroot/lib/bootstrap-icons/"
+    },
+    {
+      "library": "popper.js@2.11.8",
+      "destination": "wwwroot/lib/"
+    },
+    {
+      "library": "choices.js@10.2.0",
+      "destination": "wwwroot/lib/choices.js/"
     }
   ]
 }

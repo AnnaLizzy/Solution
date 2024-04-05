@@ -17,5 +17,8 @@ namespace ApiLibrary.ViewModels
         public string? LocationName { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public string? Frequency { get; set; }
+        public int Interval { get; set; }
+        public string? ByWeekday { get; set; }
     }
 }

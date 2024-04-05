@@ -3,7 +3,7 @@ using ApiLibrary.ViewModels;
 
 namespace ApiLibrary
 {
-    public class AreaApiClient(HttpClient httpClient) : BaseApiClient(httpClient), IAreaApiClient
+    public class AreaApiClient(HttpClient httpClient, IHttpClientFactory httpClientFactory) : BaseApiClient(httpClient, httpClientFactory), IAreaApiClient
     {
         public async Task<AreaViewModel> GetArea(int id)
         {

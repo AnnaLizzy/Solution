@@ -18,7 +18,7 @@ using WebApplicationAPI.ViewModels;
 
 namespace WebApplicationAPI.Service
 {
-    public class EmployeeService(AppDbContext context,IConfiguration configuration ) : IEmployeeService
+    public class EmployeeService(AppDbContext context, IConfiguration configuration) : IEmployeeService
     {
         private readonly AppDbContext _context = context;
 
@@ -27,39 +27,37 @@ namespace WebApplicationAPI.Service
         {
             var parameters = new[]
             {
-                new SqlParameter("@EmployeeNo", employeeNo),
-                new SqlParameter("@password", password)
-            };
+                    new SqlParameter("@EmployeeNo", employeeNo),
+                    new SqlParameter("@password", password)
+                };
 
             using var connection = new SqlConnection(SystemConstants.AppSetting.ConnectionString);
             await connection.OpenAsync();
 
-            using (var command = new SqlCommand("UP_UserBeforeLoding_loding", connection))
+            using var command = new SqlCommand("UP_UserBeforeLoding_loding", connection);
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.AddRange(parameters);
+
+            using var reader = await command.ExecuteReaderAsync();
+            var result = new List<UserBeforeLoading>();
+
+            while (await reader.ReadAsync())
             {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddRange(parameters);
-
-                using var reader = await command.ExecuteReaderAsync();
-                var result = new List<UserBeforeLoading>();
-
-                while (await reader.ReadAsync())
+                var user = new UserBeforeLoading
                 {
-                    var user = new UserBeforeLoading
-                    {
-                        EmployeeNo = reader["EmployeeNo"].ToString(),
-                        Password = reader["Password"].ToString(),
-                    };
+                    EmployeeNo = reader["EmployeeNo"].ToString(),
+                    Password = reader["Password"].ToString(),
+                };
 
-                    result.Add(user);
-                }
-
-                return result;
+                result.Add(user);
             }
+
+            return result;
         }
         public async Task<ApiResult<string>> Authenticate(LoginDTO model)
         {
             // Gọi stored procedure từ DbContext
-            var user = await GetUserBeforeLoding_loding(model.UserName, model.Password);
+            var user = await GetUserBeforeLoding_loding(model.UserName ?? string.Empty, model.Password ?? string.Empty);
 
             // Kiểm tra kết quả trả về
             if (user == null || user.Count == 0)
@@ -67,7 +65,7 @@ namespace WebApplicationAPI.Service
                 return new ApiErrorResult<string>("Không tìm thấy người dùng hoặc mật khẩu không chính xác");
             }
 
-            var userInfo = user.FirstOrDefault() ;
+            var userInfo = user.FirstOrDefault();
 
             if (userInfo == null)
             {
@@ -76,8 +74,8 @@ namespace WebApplicationAPI.Service
 
             // Generate JWT token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Tokens:Key"]);
-           
+            var key = Encoding.ASCII.GetBytes(_configuration["Tokens:Key"]!);
+
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -85,7 +83,7 @@ namespace WebApplicationAPI.Service
                 Issuer = _configuration["Tokens:Issuer"],
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new(ClaimTypes.Name, userInfo.EmployeeNo.ToString())
+                        new(ClaimTypes.Name, userInfo.EmployeeNo?.ToString() ?? string.Empty)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(
@@ -95,9 +93,9 @@ namespace WebApplicationAPI.Service
 
             return new ApiSuccessResult<string>(tokenHandler.WriteToken(token));
         }
-        public async Task CreateEmployee( EmployeeDTO employee)
+        public async Task CreateEmployee(EmployeeDTO employee)
         {
-            var emp = await _context.Employee.FindAsync(employee.EmployeeID) 
+            var emp = await _context.Employee.FindAsync(employee.EmployeeID)
                 ?? throw new AppException("da ton tai nhan vien trong he thong");
             emp.EmployeeID = employee.EmployeeID;
             emp.EmployeeNo = employee.EmployeeNo;
@@ -146,25 +144,25 @@ namespace WebApplicationAPI.Service
 
         public async Task<List<EmployeeDTO>> GetEmployees()
         {
-           var query = _context.Employee.Select(e => new EmployeeDTO
-           {
-               EmployeeID = e.EmployeeID,
-               EmployeeNo = e.EmployeeNo,
-              EmployeeName = e.EmployeeName,
-              Gender = e.Gender,
-              DateOfBirth = e.DateOfBirth,
-              Password = e.Password,
-              PhoneNumber  = e.PhoneNumber,
-              Company = e.Company,
-              IsDeleted = e.IsDeleted
-           });  
+            var query = _context.Employee.Select(e => new EmployeeDTO
+            {
+                EmployeeID = e.EmployeeID,
+                EmployeeNo = e.EmployeeNo,
+                EmployeeName = e.EmployeeName,
+                Gender = e.Gender,
+                DateOfBirth = e.DateOfBirth,
+                Password = e.Password,
+                PhoneNumber = e.PhoneNumber,
+                Company = e.Company,
+                IsDeleted = e.IsDeleted
+            });
             var data = await query.ToListAsync();
             return data;
         }
 
-        public async Task UpdateEmployee(int id,EmployeeDTO employee)
+        public async Task UpdateEmployee(int id, EmployeeDTO employee)
         {
-            var emp =await _context.Employee.FindAsync(id) ?? throw new AppException("Employee not found");
+            var emp = await _context.Employee.FindAsync(id) ?? throw new AppException("Employee not found");
             emp.EmployeeName = employee.EmployeeName;
             emp.PhoneNumber = employee.PhoneNumber;
             emp.Company = employee.Company;
@@ -173,7 +171,7 @@ namespace WebApplicationAPI.Service
             emp.DateOfBirth = employee.DateOfBirth;
             emp.Company = employee.Company;
             _context.Employee.Update(emp);
-             await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
         }
     }

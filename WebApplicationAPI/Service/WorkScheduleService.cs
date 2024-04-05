@@ -7,32 +7,43 @@ using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Service
 {
-    public class WorkScheduleService(AppDbContext appDb,AppDbContext2 appDb2) : IWorkScheduleService
+    public class WorkScheduleService(AppDbContext appDb) : IWorkScheduleService
     {
         private readonly AppDbContext _context = appDb;
-        private readonly AppDbContext2 _context2 = appDb2;
-        public Task CreateWorkSchedule( WorkScheduleDTO model)
+
+        public async Task CreateWorkSchedule(WorkScheduleDTO model)
         {
-           
             var shift = _context.WorkShift.FirstOrDefault(x => x.ShiftID == model.ShiftID) ?? throw new AppException("Khong ton tai ca lam viec nay");
-            var location = _context.Locations.FirstOrDefault(x => x.LocationID == model.LocationID) ?? throw new AppException("Khong ton tai vi tri lam viec nay");
+            var location = _context.Locations.FirstOrDefault(x => x.ListID == model.ListId) ?? throw new AppException("Khong ton tai vi tri lam viec nay");
+            var dataLocation = await _context.Locations
+                .Where(locations => locations.ListID == model.ListId)
+                .Select(locations => locations.LocationID)
+                .FirstOrDefaultAsync();
             var employee = _context.Employee.FirstOrDefault(x => x.EmployeeID == model.EmployeeID) ?? throw new AppException("Khong ton tai nhan vien nay");
-            var newWorkSchedule = new WorkScheduleDTO
+            var newWorkSchedule = new WorkSchedules
             {
                 EmployeeID = model.EmployeeID,
                 ShiftID = model.ShiftID,
-                LocationID = model.LocationID,
+                LocationID = dataLocation,
                 StartTime = model.StartTime,
-                EndTime = model.EndTime
+                EndTime = model.EndTime,
+                Frequency = model.Frequency,
+                Interval = model.Interval,
+                ByWeekday = model.ByWeekday
             };
-            return Task.CompletedTask;
+            _context.WorkSchedules.Add(newWorkSchedule);
+            await _context.SaveChangesAsync();
         }
 
         public Task DeleteWorkSchedule(int id)
         {
-            var query = _context.WorkSchedules.FirstOrDefault(x => x.SchedulesID == id) ?? throw new AppException("Khong ton tai lich lam viec nay");
-            _context.WorkSchedules.Remove(query);
-            return Task.CompletedTask;
+            var query = _context.WorkSchedules.FirstOrDefault(x => x.SchedulesID == id) ;
+           if(query != null)
+            {
+                _context.WorkSchedules.Remove(query);
+                return _context.SaveChangesAsync();
+            }
+            throw new AppException("Khong ton tai lich lam viec nay");
         }
 
         public async Task<WorkScheduleDTO> GetWorkSchedule(int id)
@@ -51,7 +62,10 @@ namespace WebApplicationAPI.Service
                             LocationID = workSchedule.LocationID,
                             LocationName = location.LocationName,
                             StartTime = workSchedule.StartTime,
-                            EndTime = workSchedule.EndTime
+                            EndTime = workSchedule.EndTime,
+                            Frequency = workSchedule.Frequency,
+                            Interval = workSchedule.Interval,
+                            ByWeekday = workSchedule.ByWeekday
                         };
             return model.FirstOrDefault() ?? throw new AppException("No data");
         }
@@ -71,7 +85,10 @@ namespace WebApplicationAPI.Service
                             LocationID = workSchedule.LocationID,
                             LocationName = location.LocationName,
                             StartTime = workSchedule.StartTime,
-                            EndTime = workSchedule.EndTime
+                            EndTime = workSchedule.EndTime,
+                            Frequency = workSchedule.Frequency,
+                            Interval = workSchedule.Interval,
+                            ByWeekday = workSchedule.ByWeekday
                         };
             return await query.ToListAsync();
         }
@@ -87,7 +104,9 @@ namespace WebApplicationAPI.Service
             query.LocationID = model.LocationID;
             query.StartTime = model.StartTime;
             query.EndTime = model.EndTime;
-
+            query.Frequency = model.Frequency;
+            query.Interval = model.Interval;
+            query.ByWeekday = model.ByWeekday;
              _context.WorkSchedules.Update(query);
             await _context.SaveChangesAsync();
         }

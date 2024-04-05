@@ -17,11 +17,25 @@ namespace ApiLibrary.ViewModels
         public string? LocationName { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-          
+        public string? Frequenly { get; set; }
+        public int Interval { get; set; }
+        public ByWeekday ByWeekday { get; set; }
         public int AreaID { get; set; }
       
         public string? NameShift { get; set; }
         public string? DescriptionShift { get; set; }
         public List<ListLocationVM>? LocationVM { get; set; }
     }
+    public enum ByWeekday
+    {
+        mo =  1,
+        tu = 2,
+        we = 3,
+        th = 4,
+        fr = 5,
+        sa = 6,
+        su = 7
+
+    }
+   
 }

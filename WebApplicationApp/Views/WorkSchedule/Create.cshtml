@@ -3,23 +3,133 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Create";
 }
+<style>
+    .form-control {
+        margin-bottom: 20px;
+    }
+</style>
 <h4>Create</h4>
-
-<form asp-action="Create">
-   <h4>Create work schedule</h4>
-    <select id="areaDropdown" asp-for="@Model.AreaID" asp-items="@ViewBag.GetAreaList" class="form-control">
-        <option disabled selected>Select Area</option>
-    </select>
-    <select id="locationDropdown" class="form-control">
-    <option disabled selected>Select Location</option>
-    </select>
-</form>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
+<button type="button" class="btn btn-outline-primary btn-sm">
+    <a asp-action="Index">Back to List</a>
 </button>
-<partial name="_Dialog" id="dialog"/>
-<div>
-<a asp-action="Index">Back to List</a>
+<form asp-action="Create" method="post">
+    <h4>Create work schedule</h4>
+    <div class="form-group">
+        <label class="control-label">Khu vực làm việc :</label>
+        <select id="areaDropdown" asp-for="@Model.AreaID" asp-items="@ViewBag.GetAreaList" class="form-control" required>
+            <option disabled selected>Select Area</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Vị trí làm việc :</label>
+        <select id="locationDropdown" class="form-control" asp-for="LocationID" required>
+            <option disabled selected>Select Location</option>
+        </select>
+    </div>
+    <div class="form-group" >
+        <label class="control-label">Chi tiết vị trí làm việc :</label>
+        <select id="listLocationDropDown"  asp-items="@ViewBag.GetLocationList" class="form-control" required>
+            <option disabled selected>Select Location Detail</option>
+         </select>
+    </div>
+    <div class="form-group">     
+        <label class="control-label">Ca làm việc :</label>
+        <select asp-for="ShiftID" asp-items="@ViewBag.GetShiftList" class="form-control" required>
+            <option disabled selected>Select Work Shift</option>
+        </select>
+    </div>   
+    <div class="form-group">      
+        <label class="control-label">Nhân viên  :</label>
+        <select asp-for="EmployeeID" asp-items="@ViewBag.GetEmployeeList" class="form-control" required>
+            <option disabled selected>Select Employee</option>
+        </select>
+    </div>
+     <div class="form-control">
+        <label class="control-label">Chu kỳ :</label>
+        <input type="number" class="form-control" asp-for="Interval"/>
+    </div>
+    <div >
+        
+        <div class="form-check">
+            <input class="form-check-input" type="radio" asp-for="Frequenly" value="daily" id="flexRadioDefault1">
+            <label class="form-check-label" for="flexRadioDefault1">
+               Daily
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" asp-for="Frequenly" value="weekly"  id="flexRadioDefault2" checked>
+            <label class="form-check-label" for="flexRadioDefault2">
+                Weekly
+            </label>
+        </div>
+        <div class="form-check"> 
+            <input class="form-check-input" type="radio" asp-for="Frequenly" value="monthly"  id="flexRadioDefault3" />
+            <label class="form-check-label" for="flexRadioDefault3">
+                Monthly
+            </label>
+        </div>
+        <p>Ngày làm việc trên tuần :</p>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="1" id="flexCheckDefault" />
+            <label class="form-check-label" for="flexCheckDefault">
+                Thứ hai
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="2" id="flexCheckChecked1" />
+            <label class="form-check-label" for="flexCheckChecked1">
+                Thứ ba
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="3" id="flexCheckChecked2" />
+            <label class="form-check-label" for="flexCheckChecked2">
+                Thứ tư
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="4" id="flexCheckChecked3" />
+            <label class="form-check-label" for="flexCheckChecked3">
+                Thứ năm
+            </label>
+         </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="5" id="flexCheckChecked4" />
+            <label class="form-check-label" for="flexCheckChecked4">
+                Thứ sáu
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="6" id="flexCheckChecked5" />
+            <label class="form-check-label" for="flexCheckChecked5">
+                Thứ bảy
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="7" id="flexCheckChecked6" />
+            <label class="form-check-label" for="flexCheckChecked6">
+                Chủ nhật
+            </label>
+        </div>
+</div>
+    <div class="form-control">
+        <label asp-for="StartTime" class="control-label"></label>
+        <input asp-for="StartTime" type="date" class="form-control" required />
+    </div>
+    <div class="form-control">
+        <label asp-for="EndTime" class="control-label"></label>
+        <input asp-for="EndTime" type="date" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+<div id='calendar'></div>
+<div class="form-control">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+    </button>
+    <partial name="_Dialog" id="dialog" />
 </div>
 @section Scripts {
     <script>
@@ -27,8 +137,10 @@
             $('#areaDropdown').change(function () {
                 var areaId = $(this).val();
                 $.ajax({
-                    url: 'https://localhost:44389/api/ListLocations/'+areaId,
+                    url: 'https://localhost:44389/api/ListLocations/' + areaId,
                     type: 'GET',
+                    crossDomain: true,
+                    dataType: 'json',
                     data: { areaId: areaId },
                     success: function (data) {
                         $('#locationDropdown').empty();
@@ -45,6 +157,86 @@
                     }
                 });
             });
+        });
+        // FullCalendar
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+
+                initialDate: '2024-03-12',
+                initialView: 'timeGridWeek',
+                nowIndicator: true,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                navLinks: true, // can click day/week names to navigate views
+                editable: true,
+                selectable: true,
+                selectMirror: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                events: [
+                    {
+                        title: 'CA_HC',
+                        start: '2024-03-01',
+                    },
+                    {
+                        title: 'CA_CHIEU - NGUYEN THI THANH',
+                        start: '2024-03-07',
+                        end: '2024-03-10'
+                    },
+                    {
+                        groupId: 999,
+                        title: 'Repeating Event',
+                        start: '2024-03-09T16:00:00'
+                    },
+                    {
+                        groupId: 999,
+                        title: 'Repeating Event',
+                        start: '2024-03-16T16:00:00'
+                    },
+                    {
+                        title: 'Conference',
+                        start: '2024-03-11',
+                        end: '2024-03-13'
+                    },
+                    {
+                        title: 'CA_SANG - Nguyen Van A',
+                        start: '2024-03-12T07:30:00',
+                        end: '2024-03-12T16:30:00'
+                    },
+                    {
+                        title: 'CA_CHIEU - Nguyen Van B',
+                        start: '2024-03-12T12:00:00'
+                    },
+                    {
+                        title: 'CA_TOI - Nguyen Van C',
+                        start: '2024-03-12T14:30:00'
+                    },
+                    {
+                        title: 'Happy Hour',
+                        start: '2024-03-12T17:30:00'
+                    },
+                    {
+                        title: 'Dinner',
+                        start: '2024-03-12T20:00:00'
+                    },
+                    {
+                        title: 'Birthday Party',
+                        start: '2024-03-13T07:00:00'
+                    },
+                    {
+                        title: 'Click for Google',
+                        url: 'http://google.com/',
+                        start: '2024-03-28',
+                        end: '2024-04-02'
+                    }
+                ]
+            });
+
+            calendar.render();
+
         });
     </script>
 }

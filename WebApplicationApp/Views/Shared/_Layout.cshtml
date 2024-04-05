@@ -36,28 +36,18 @@
                                 <li><a class="dropdown-item" asp-controller="WorkShifts" asp-action="Index">Ca làm việc</a></li>
                             </ul>
                         </li>
-                        
+
                       
                     </ul>
+                   
                 </div>
             </div>
+            @* @await Component.InvokeAsync("Navigation") *@
         </nav>
     </header>
     <div class="container ">
         <main role="main" class="pb-3 main">
-            @if(TempData["error"] != null)
-            {
-                <div class="text-danger h3">@TempData["error"]</div>
-            }
-            @if(TempData["success"] != null)
-            {
-                <div class="text-success h3">@TempData["success"]</div>
-            }
-         
-            @if(TempData["info"] != null)
-            {
-                <div class="text-info h3">@TempData["info"]</div>
-            }
+         <partial name="_AlertPartial" />
             @RenderBody()
         </main>
     </div>
@@ -108,7 +98,9 @@
             </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script> 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/umd/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
    
     @await RenderSectionAsync("Scripts", required: false)

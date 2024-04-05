@@ -10,7 +10,7 @@
         public string? PhoneNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
         public bool IsDeleted { get; set; }
-
+        public DateTime? CreatedDate { get; set; }
         public string? Company { get; set; }
        
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ApiLibrary
 {
-    public class WorkShiftApiClient(HttpClient httpClient,IHttpClientFactory httpClientFactory) : BaseApiClient(httpClient), IWorkShiftApiClient
+    public class WorkShiftApiClient(HttpClient httpClient,IHttpClientFactory httpClientFactory) : BaseApiClient(httpClient, httpClientFactory), IWorkShiftApiClient
         
     {
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;

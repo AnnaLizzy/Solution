@@ -11,8 +11,8 @@
         }
         public class Url()
         {
-            public const string BaseUrl = "https://localhost:44389/";
-           
+            public const string BaseUrl = "https://localhost:44334/";//WebApp
+            public const string BaseApiUrl = "https://localhost:44389/";//Swagger api
         }
     }
 }

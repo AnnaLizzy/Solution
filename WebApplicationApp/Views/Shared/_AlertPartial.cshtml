@@ -1,6 +1,65 @@
-﻿<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    @ViewBag.AlertMessage
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
+﻿@if (TempData["success"] != null)
+{
+    <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+
+        <!-- Then put toasts within -->
+        <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
+            <div class="toast-header">
+
+                <strong class="me-auto">OK</strong>
+                <small>now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+
+            <div class="toast-body">@TempData["success"]</div>
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var errorToast = document.querySelector('.toast');
+            var bsToast = new bootstrap.Toast(errorToast, { autohide: false });
+
+            if ('@TempData["success"]' !== '') {
+
+                bsToast.show();
+                setTimeout(function () {
+                    bsToast.hide();
+                }, 10000);
+            }
+           
+        });
+    </script>
+
+}
+
+@if (TempData["error"] != null)
+{
+    <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+
+        <!-- Then put toasts within -->
+        <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
+            <div class="toast-header">
+
+                <strong class="me-auto">Error</strong>
+                <small>now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+
+            <div class="toast-body">@TempData["error"]</div>
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var errorToast = document.querySelector('.toast');
+            var bsToast = new bootstrap.Toast(errorToast, { autohide: false });
+            if ('@TempData["error"]' !== '') {
+                bsToast.show();
+                setTimeout(function () {
+                    bsToast.hide();
+                }, 10000);
+            }            
+        });
+    </script>
+}

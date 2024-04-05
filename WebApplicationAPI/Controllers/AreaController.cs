@@ -9,7 +9,7 @@ namespace WebApplicationAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class AreaController(IAreaService areaService,
         ILocationService locationService,
         IWorkScheduleService workScheduleService) : ControllerBase

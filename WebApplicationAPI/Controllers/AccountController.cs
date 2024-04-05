@@ -1,16 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using WebApplicationAPI.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.OpenApi;
-using Microsoft.EntityFrameworkCore;
-using WebApplicationAPI.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.DTOs;
 using WebApplicationAPI.Service.Interfaces;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplicationAPI.Controllers
@@ -18,8 +8,7 @@ namespace WebApplicationAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class AccountController(IEmployeeService employeeService,
-        IConfiguration configuration)      : ControllerBase
+    public class AccountController(IEmployeeService employeeService)  : ControllerBase
     {
         private readonly IEmployeeService _employeeService = employeeService;
 
@@ -27,7 +16,12 @@ namespace WebApplicationAPI.Controllers
         /// Login
         /// </summary>
         /// <param name="model"></param>
-        /// <returns></returns>
+        /// <returns>result</returns>
+        /// <remarks>
+        /// Sample: 
+        ///       Username : V0515311
+        ///       Password: 123456
+        /// </remarks>
         [HttpPost]
         [AllowAnonymous]
         [Route("login")]
@@ -39,7 +33,7 @@ namespace WebApplicationAPI.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _employeeService.Authenticate(model);
-            if (string.IsNullOrEmpty(result.ResultObj))
+            if (result == null || string.IsNullOrEmpty(result.ResultObj))
             {
                 return BadRequest(result);
             }

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplicationAPI", "WebApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplicationApp", "WebApplicationApp\WebApplicationApp.csproj", "{79CAC850-0932-463C-AC43-12DBC5CE2DD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiLibrary", "ApiLibrary\ApiLibrary.csproj", "{B48F9E33-DBFD-43B0-A01F-8387B506B660}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiLibrary", "ApiLibrary\ApiLibrary.csproj", "{B48F9E33-DBFD-43B0-A01F-8387B506B660}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

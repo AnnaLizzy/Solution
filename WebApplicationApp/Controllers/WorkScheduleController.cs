@@ -1,16 +1,28 @@
 ﻿using ApiLibrary.Interfaces;
 using ApiLibrary.ViewModels;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
+using WebApplicationAPI.Constants;
 
 namespace WebApplicationApp.Controllers
 {
+    [EnableCors("AllowSpecificOrigin")]
     public class WorkScheduleController(IWorkScheduleApiClient workScheduleApi,
-            IListLocationApiClient listLocationApiClient,IAreaApiClient areaApiClient) : Controller
+            IListLocationApiClient listLocationApiClient,IAreaApiClient areaApiClient,
+            IWorkShiftApiClient shiftApiClient,
+            IAccountApiClient accountApiClient,
+            IHttpContextAccessor accessor,
+            HttpClient httpClient) : Controller
     {
         private readonly IWorkScheduleApiClient workScheduleApi = workScheduleApi;
         private readonly IListLocationApiClient listLocationApi = listLocationApiClient;
         private readonly IAreaApiClient areaApi = areaApiClient;
+        private readonly IWorkShiftApiClient shiftApi = shiftApiClient;
+        private readonly IAccountApiClient accountApi = accountApiClient;
+        private readonly IHttpContextAccessor _httpContextAccessor = accessor;
+        private readonly HttpClient _httpClient = httpClient;
         public async Task<IActionResult> Index()
         {
 
@@ -22,71 +34,66 @@ namespace WebApplicationApp.Controllers
             var data = await workScheduleApi.GetWorkSchedule(id);
             return View(data);
         }
-        public async Task<IActionResult> Create()
+        /// <summary>
+        /// func get all areas
+        /// </summary>
+        /// <returns></returns>
+        private async Task<IEnumerable<SelectListItem>> GetAreasAsync()
         {
             var getAreaList = await areaApi.GetAreas();
-            IEnumerable<SelectListItem> areaData = getAreaList.Select(a => new SelectListItem
+            var areaData = getAreaList.Select(a => new SelectListItem
             {
                 Text = a.AreaName,
                 Value = a.AreaID.ToString()
             });
-            ViewBag.GetAreaList = areaData;
-         
-            //List<ListLocationVM>? locationList;
+            return areaData;
+        }
+        private async Task<IEnumerable<SelectListItem>> GetWorkShifts()
+        {
+            var getShiftList = await shiftApi.GetWorkShifts();
+            var shiftData = getShiftList.Select(s => new SelectListItem
+            {
+                Text = s.NameShift,
+                Value = s.ShiftID.ToString()
+            });
+            return shiftData;
+        }
+        private async Task<IEnumerable<SelectListItem>> GetListLocations()
+        {
+            var list = await listLocationApi.GetAllLocations();
+            var locationData = list.Select(l => new SelectListItem
+            {
+                Text = l.LocationName,
+                Value = l.LocationID?.ToString()
+            });
+            return locationData;
+        }
+    
+        public async Task<IActionResult> Create()
+        {
+            string? token = _httpContextAccessor?.HttpContext?.Session.GetString(SystemConstants.AppSetting.Token);
 
-            //switch (areaData.FirstOrDefault()?.Value)
-            //{
-            //    case "3":
-            //        locationList = await listLocationApi.GetLocation(3);                   
-            //        ViewBag.LocationList = locationList?.Select(l => new SelectListItem
-            //        {
-            //            Text = l.LocationName,
-            //            Value = l.LocationID?.ToString()
-            //        });
-            //        break;
-            //    case "99":
-            //        locationList = await listLocationApi.GetLocation(99);                    
-            //        ViewBag.LocationList = locationList?.Select(l => new SelectListItem
-            //        {
-            //            Text = l.LocationName,
-            //            Value = l.LocationID?.ToString()
-            //        });
-            //        break;
-            //    case "101":
-            //        locationList = await listLocationApi.GetLocation(101);                   
-            //        ViewBag.LocationList = locationList?.Select(l => new SelectListItem
-            //        {
-            //            Text = l.LocationName,
-            //            Value = l.LocationID?.ToString()
-            //        });
-            //        break;
-            //    case "5":
-            //        var locationList5 = await listLocationApi.GetLocation(5);
-            //       ViewBag.LocationList = locationList5.Select(l => new SelectListItem
-            //       {
-            //            Text = l.LocationName,
-            //            Value = l.LocationID?.ToString()
-            //        });
-            //        break;
-            //    case "11":
-            //        var locationList11 = await listLocationApi.GetLocation(11);
-            //        ViewBag.LocationList = locationList11.Select(l => new SelectListItem
-            //        {
-            //            Text = l.LocationName,
-            //            Value = l.LocationID?.ToString()
-            //        });
-            //        break;
-            //    default:
-            //        var allLocationList = await listLocationApi.GetAllLocations();
-            //        IEnumerable<SelectListItem> allLocationData = allLocationList.Select(l => new SelectListItem
-            //        {
-            //            Text = l.LocationName,
-            //            Value = l.LocationID?.ToString()
-            //        });
-            //        ViewBag.LocationList = allLocationData;
-            //        break;
-            //}
+            ViewBag.GetAreaList = await GetAreasAsync();
 
+            ViewBag.GetShiftList = await GetWorkShifts();
+           
+            ViewBag.GetLocationList = await GetListLocations();
+
+            if (token != null)
+            {
+                var getEmployeeList = await accountApi.GetEmployees(token);
+
+                IEnumerable<SelectListItem> employeeData = getEmployeeList.Select(e => new SelectListItem
+                {
+                    Text = e.EmployeeName,
+                    Value = e.EmployeeID.ToString()
+                });
+                ViewBag.GetEmployeeList = employeeData;
+            }
+            else { TempData["Error"] = "Please login to continue";
+                           return RedirectToAction("Login", "Account");
+                       }
+           
             return View();
         }
 
@@ -94,13 +101,34 @@ namespace WebApplicationApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateWorkScheduleViewModel workSchedule)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await workScheduleApi.CreateWorkSchedule(workSchedule);
+                // ModelState không hợp lệ, hiển thị lại form tạo công việc với thông báo lỗi
+                TempData["Error"] = "Create failed. Please check your input.";
+                return View(workSchedule);
+            }
+
+            // Gọi API để tạo công việc
+            var result = await workScheduleApi.CreateWorkSchedule(workSchedule);
+
+            if (result)
+            {
+                // Tạo công việc thành công, chuyển hướng đến trang danh sách công việc
+                TempData["Success"] = "Create successful";
                 return RedirectToAction(nameof(Index));
             }
-            return View(workSchedule);
+            else
+            {
+                // Tạo công việc thất bại, hiển thị lại form tạo công việc với thông báo lỗi
+                TempData["Error"] = "Create failed. Please try again later.";
+                return View(workSchedule);
+            }
         }
+        /// <summary>
+        /// Update work schedule
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Edit(int id)
         {
             var workSchedule = await workScheduleApi.GetWorkSchedule(id);
