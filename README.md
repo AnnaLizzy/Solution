@@ -2,7 +2,7 @@
 - Đây là webapp gồm api và web sắp xếp ca làm việc.
 - Webapp chưa hoàn thành được, chỉ tham khảo.
 ## Database
-- WorkSchedules
+-[Table] WorkSchedules
  - SchedulesID int primary key
  - EmployeeID nvarchar(200) not null FR key Employees
  - ShiftID int not null FR key WorkShifts
