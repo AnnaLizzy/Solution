@@ -2,16 +2,16 @@
 - Đây là webapp gồm api và web sắp xếp ca làm việc.
 - Webapp chưa hoàn thành được, chỉ tham khảo.
 ## Database
-WorkSchedules
-  SchedulesID int primary key
-  EmployeeID nvarchar(200) not null FR key Employees
-  ShiftID int not null FR key WorkShifts
-  LocationID int not null FR key Locations
-  StartTime DateTime
-  EndTime DateTime
-  byweekday varchar(200)
-  interval int not null
-  Frequency varchar(20)
+- WorkSchedules
+ - SchedulesID int primary key
+ - EmployeeID nvarchar(200) not null FR key Employees
+ - ShiftID int not null FR key WorkShifts
+ - LocationID int not null FR key Locations
+ - StartTime DateTime
+ - EndTime DateTime
+ - byweekday varchar(200)
+ - interval int not null
+ - Frequency varchar(20)
   Ví dụ
 
 | SchedulesID | EmployeeID | ShiftID | LocationID | StartTime               | EndTime                 | byweekday              |
