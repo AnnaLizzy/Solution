@@ -3,9 +3,10 @@
 @model List<WorkScheduleViewModel>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Work Schedule";
+    ViewBag.Title = "Work Schedule - Bảng sắp xếp ca tổng hợp";
 }
-<h3>this is Work schedule</h3>
+<a asp-action="Create">Create</a>
+<h3>Bảng sắp xếp ca tổng hợp</h3>
 <table class="table table-hover">
     <thead>
         <tr>
@@ -84,26 +85,26 @@
                 initialDate: today,
                 editable: true,
                 events: [
-                    {
-                        title: "rrule event",
-                        rrule: {
-                            dtstart: "2024-02-09T07:30:00",
-                            until: "2024-06-01",
-                            freq: "weekly",
-                        },
-                        duration: "09:00",
-                    },
-                    {
-                        title: 'CA_HC - Tran Thi B',
-                        url: "htttps://google.com",
-                        rrule: {
-                            freq: 'weekly',
-                            interval: 1,
-                            byweekday: ['mo', 'tu', 'we', 'th', 'fr', 'sa'],
-                            dtstart: '2024-02-01', // will also accept '20120201T103000'
-                            until: '2024-06-01' // will also accept '20120201'
-                        }
-                    },
+                    // {
+                    //     title: "rrule event",
+                    //     rrule: {
+                    //         dtstart: "2024-02-09T07:30:00",
+                    //         until: "2024-06-01",
+                    //         freq: "weekly",
+                    //     },
+                    //     duration: "09:00",
+                    // },
+                    // {
+                    //     title: 'CA_HC - Tran Thi B',
+                    //     url: "htttps://google.com",
+                    //     rrule: {
+                    //         freq: 'weekly',
+                    //         interval: 1,
+                    //         byweekday: ['mo', 'tu', 'we', 'th', 'fr', 'sa'],
+                    //         dtstart: '2024-02-01', // will also accept '20120201T103000'
+                    //         until: '2024-06-01' // will also accept '20120201'
+                    //     }
+                    // },
 
                     @foreach (var item in Model)
                     {
@@ -135,10 +136,6 @@
                 {
                     var modal = document.createElement("div");
                     var title = arg.event.title;
-                   
-                  
-                   
-                   
                     modal.classList.add("modal");
                     modal.innerHTML = `
                                 <div class="modal-dialog">
@@ -148,8 +145,8 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Frequently :</p>
-                                            <p>Start time </p>
+                                            <p>Frequently:</p>
+                                            <p>Start time:</p>
                                             <p>End time :</p>
                                         </div>
                                     </div>
@@ -163,6 +160,7 @@
 
             calendar.render();
              var eventSources = calendar.getEvents();
+            console.log(eventSources);
         });
     </script>
 }

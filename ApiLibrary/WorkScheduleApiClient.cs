@@ -1,10 +1,6 @@
 ﻿using ApiLibrary.Interfaces;
 using ApiLibrary.ViewModels;
 using WebApplicationAPI.Constants;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ApiLibrary
 {
@@ -16,7 +12,7 @@ namespace ApiLibrary
             // Kiểm tra dữ liệu đầu vào
             if (workSchedule == null)
             {
-                throw new ArgumentNullException(nameof(workSchedule), "workSchedule không được null");
+                throw new ArgumentNullException(nameof(workSchedule), "Please enter WorkSchedule");
             }
 
             // Kiểm tra các thuộc tính cần thiết
@@ -26,8 +22,10 @@ namespace ApiLibrary
                 throw new ArgumentException("Chưa được cung cấp đầy đủ thông tin", nameof(workSchedule));
             }
 
-     
-  
+
+            string[] weekdaysArray = workSchedule.ByWeekday ?? new string[0];
+            string weekdaysString = string.Join(",", weekdaysArray);
+
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(SystemConstants.Url.BaseApiUrl);
@@ -39,9 +37,9 @@ namespace ApiLibrary
                         { new StringContent(workSchedule.ShiftID.ToString()), "ShiftID" },
                         { new StringContent(workSchedule.StartTime.ToString() ?? ""), "StartTime" },
                         { new StringContent(workSchedule.EndTime.ToString() ?? ""), "EndTime" },
-                        { new StringContent(workSchedule.Frequenly?.ToString() ?? ""),"Frequenly" },
+                        { new StringContent(workSchedule.Frequency?.ToString() ?? ""),"Frequency" },
                         { new StringContent(workSchedule.Interval.ToString()),"Interval" },
-                        { new StringContent(workSchedule.ByWeekday.ToString() ?? ""),"ByWeekday" }
+                        { new StringContent(weekdaysString),"ByWeekday" }
 
                     };
 
@@ -49,16 +47,7 @@ namespace ApiLibrary
             var response = await client.PostAsync("/api/WorkSchedule/", requestContent);
 
             // Kiểm tra kết quả của yêu cầu và xử lý
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            else
-            {
-                // Xử lý lỗi hoặc ngoại lệ
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                throw new Exception($"Lỗi khi gửi yêu cầu API: {errorMessage}");
-            }
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteWorkSchedule(int? id)

@@ -4,6 +4,7 @@ using WebApplicationAPI.DTOs;
 using WebApplicationAPI.Exception;
 using WebApplicationAPI.Models;
 using WebApplicationAPI.Service.Interfaces;
+using WebApplicationAPI.ViewModels;
 
 namespace WebApplicationAPI.Service
 {
@@ -11,28 +12,34 @@ namespace WebApplicationAPI.Service
     {
         private readonly AppDbContext _context = appDb;
 
-        public async Task CreateWorkSchedule(WorkScheduleDTO model)
+        public async Task<ApiResult<bool>> CreateWorkSchedule(WorkScheduleDTO model)
         {
             var shift = _context.WorkShift.FirstOrDefault(x => x.ShiftID == model.ShiftID) ?? throw new AppException("Khong ton tai ca lam viec nay");
-            var location = _context.Locations.FirstOrDefault(x => x.ListID == model.ListId) ?? throw new AppException("Khong ton tai vi tri lam viec nay");
-            var dataLocation = await _context.Locations
-                .Where(locations => locations.ListID == model.ListId)
-                .Select(locations => locations.LocationID)
-                .FirstOrDefaultAsync();
+            var location = _context.Locations.FirstOrDefault(x => x.LocationID == model.LocationID) ?? throw new AppException("Khong ton tai vi tri lam viec nay");
+            //var dataLocation = await _context.Locations
+            //    .Where(locations => locations.ListID == model.ListId)
+            //    .Select(locations => locations.LocationID)
+            //    .FirstOrDefaultAsync();
             var employee = _context.Employee.FirstOrDefault(x => x.EmployeeID == model.EmployeeID) ?? throw new AppException("Khong ton tai nhan vien nay");
             var newWorkSchedule = new WorkSchedules
             {
                 EmployeeID = model.EmployeeID,
                 ShiftID = model.ShiftID,
-                LocationID = dataLocation,
+                LocationID = model.LocationID,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
                 Frequency = model.Frequency,
                 Interval = model.Interval,
-                ByWeekday = model.ByWeekday
+                ByWeekday = model.ByWeekday,
             };
             _context.WorkSchedules.Add(newWorkSchedule);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+           result = result > 0 ? 1 : 0;
+            return new ApiResult<bool>
+            {
+                IsSuccessed = result > 0,
+                Message = result > 0 ? "Tạo lịch làm việc thành công" : "Tạo lịch làm việc thất bại"
+            };  
         }
 
         public Task DeleteWorkSchedule(int id)

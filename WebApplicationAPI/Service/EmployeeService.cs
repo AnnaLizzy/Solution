@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
@@ -27,14 +26,14 @@ namespace WebApplicationAPI.Service
         {
             var parameters = new[]
             {
-                    new SqlParameter("@EmployeeNo", employeeNo),
-                    new SqlParameter("@password", password)
+                    new SqlParameter(SystemConstants.Parametters.EmployeeNo, employeeNo),
+                    new SqlParameter(SystemConstants.Parametters.Password, password)
                 };
 
             using var connection = new SqlConnection(SystemConstants.AppSetting.ConnectionString);
             await connection.OpenAsync();
 
-            using var command = new SqlCommand("UP_UserBeforeLoding_loding", connection);
+            using var command = new SqlCommand(SystemConstants.StoreProceduces.CheckLogin, connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddRange(parameters);
 
@@ -45,8 +44,8 @@ namespace WebApplicationAPI.Service
             {
                 var user = new UserBeforeLoading
                 {
-                    EmployeeNo = reader["EmployeeNo"].ToString(),
-                    Password = reader["Password"].ToString(),
+                    EmployeeNo = reader[SystemConstants.Parametters.empNo].ToString(),
+                    Password = reader[SystemConstants.Parametters.pass].ToString(),
                 };
 
                 result.Add(user);
@@ -62,25 +61,25 @@ namespace WebApplicationAPI.Service
             // Kiểm tra kết quả trả về
             if (user == null || user.Count == 0)
             {
-                return new ApiErrorResult<string>("Không tìm thấy người dùng hoặc mật khẩu không chính xác");
+                return new ApiErrorResult<string>(SystemConstants.MessageError.LoginError);
             }
 
             var userInfo = user.FirstOrDefault();
 
             if (userInfo == null)
             {
-                return new ApiErrorResult<string>("Không tìm thấy người dùng hoặc mật khẩu không chính xác");
+                return new ApiErrorResult<string>(SystemConstants.MessageError.LoginError);
             }
 
             // Generate JWT token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Tokens:Key"]!);
+            var key = Encoding.ASCII.GetBytes(_configuration[SystemConstants.AppSetting.TokenKey]!);
 
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Audience = _configuration["Tokens:Issuer"],
-                Issuer = _configuration["Tokens:Issuer"],
+                Audience = _configuration[SystemConstants.AppSetting.TokenIssuer],
+                Issuer = _configuration[SystemConstants.AppSetting.TokenIssuer],
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                         new(ClaimTypes.Name, userInfo.EmployeeNo?.ToString() ?? string.Empty)
@@ -95,21 +94,25 @@ namespace WebApplicationAPI.Service
         }
         public async Task CreateEmployee(EmployeeDTO employee)
         {
-            var emp = await _context.Employee.FindAsync(employee.EmployeeID)
-                ?? throw new AppException("da ton tai nhan vien trong he thong");
-            emp.EmployeeID = employee.EmployeeID;
-            emp.EmployeeNo = employee.EmployeeNo;
-            emp.Password = employee.Password;
-            emp.EmployeeName = employee.EmployeeName;
-            emp.Gender = employee.Gender;
-            emp.DateOfBirth = employee.DateOfBirth;
-            emp.IsDeleted = false;
-            emp.PhoneNumber = employee.PhoneNumber;
-            emp.Company = employee.Company;
-           
-
+            var emp = await _context.Employee.FirstOrDefaultAsync(x => x.EmployeeNo == employee.EmployeeNo);
+            if (emp != null)
+            {
+                throw new AppException(SystemConstants.MessageError.EmployeeErrorExist);
+            }
+            var newEmp = new Employee
+            {
+                EmployeeNo = employee.EmployeeNo,
+                Password = employee.Password,
+                EmployeeName = employee.EmployeeName,
+                Gender = employee.Gender,
+                DateOfBirth = employee.DateOfBirth,
+                IsDeleted = employee.IsDeleted,
+                PhoneNumber = employee.PhoneNumber,
+                CreateTime = DateTime.UtcNow,
+                Company = employee.Company,
+            };
             // Add the new employee to the context
-            _context.Employee.Add(emp);
+            _context.Employee.Add(newEmp);
             await _context.SaveChangesAsync();
         }
 
@@ -126,7 +129,8 @@ namespace WebApplicationAPI.Service
         public async Task<EmployeeDTO> GetEmployee(int id)
         {
             var emp = await _context.Employee
-                .FirstOrDefaultAsync(e => e.EmployeeID == id) ?? throw new AppException("Employee not found");
+                .FirstOrDefaultAsync(e => e.EmployeeID == id) 
+                ?? throw new AppException(SystemConstants.MessageError.EmployeeErrorNotExist);
             var data = new EmployeeDTO
             {
                 EmployeeID = emp.EmployeeID,
@@ -162,7 +166,8 @@ namespace WebApplicationAPI.Service
 
         public async Task UpdateEmployee(int id, EmployeeDTO employee)
         {
-            var emp = await _context.Employee.FindAsync(id) ?? throw new AppException("Employee not found");
+            var emp = await _context.Employee.FindAsync(id)
+                ?? throw new AppException(SystemConstants.MessageError.EmployeeErrorNotExist);
             emp.EmployeeName = employee.EmployeeName;
             emp.PhoneNumber = employee.PhoneNumber;
             emp.Company = employee.Company;

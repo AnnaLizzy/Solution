@@ -27,7 +27,7 @@ namespace WebApplicationAPI.Service
             // Chuyển đổi WorkShiftDTO thành WorkShift
             var newWorkShift = new WorkShift
             {
-                ShiftID = workShift.ShiftID,
+               
                 NameShift = workShift.NameShift,
                 DescriptionShift = workShift.DescriptionShift,
                 StartTime = workShift.StartTime,

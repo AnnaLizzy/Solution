@@ -1,131 +1,156 @@
 ﻿@model CreateWorkScheduleViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create - Tạo mới lịch làm việc";
 }
 <style>
     .form-control {
         margin-bottom: 20px;
     }
 </style>
-<h4>Create</h4>
-<button type="button" class="btn btn-outline-primary btn-sm">
+<h4 class="text-center">Create - tạo mới lịch làm việc</h4>
+<button type="button" class="btn btn-sm">
     <a asp-action="Index">Back to List</a>
 </button>
-<form asp-action="Create" method="post">
-    <h4>Create work schedule</h4>
-    <div class="form-group">
-        <label class="control-label">Khu vực làm việc :</label>
-        <select id="areaDropdown" asp-for="@Model.AreaID" asp-items="@ViewBag.GetAreaList" class="form-control" required>
-            <option disabled selected>Select Area</option>
-        </select>
+<form class="row g-3" asp-action="Create" method="post" enctype="multipart/form-data">   
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Khu vực làm việc :</label>
+            <select id="areaDropdown" asp-for="@Model.AreaID" asp-items="@ViewBag.GetAreaList" class="form-control" required>
+                <option disabled selected>Select Area</option>
+            </select>
+        </div>
     </div>
-    <div class="form-group">
-        <label class="control-label">Vị trí làm việc :</label>
-        <select id="locationDropdown" class="form-control" asp-for="LocationID" required>
-            <option disabled selected>Select Location</option>
-        </select>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Vị trí làm việc :</label>
+            <select id="locationDropdown" class="form-control" asp-for="LocationID" required>
+                <option disabled selected>Select Location</option>
+            </select>
+        </div>
     </div>
-    <div class="form-group" >
-        <label class="control-label">Chi tiết vị trí làm việc :</label>
-        <select id="listLocationDropDown"  asp-items="@ViewBag.GetLocationList" class="form-control" required>
-            <option disabled selected>Select Location Detail</option>
-         </select>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Chi tiết vị trí làm việc :</label>
+            <select id="listLocationDropDown" asp-items="@ViewBag.GetLocationList" class="form-control" required>
+                <option disabled selected>Select Location Detail</option>
+            </select>
+        </div>
     </div>
-    <div class="form-group">     
-        <label class="control-label">Ca làm việc :</label>
-        <select asp-for="ShiftID" asp-items="@ViewBag.GetShiftList" class="form-control" required>
-            <option disabled selected>Select Work Shift</option>
-        </select>
-    </div>   
-    <div class="form-group">      
-        <label class="control-label">Nhân viên  :</label>
-        <select asp-for="EmployeeID" asp-items="@ViewBag.GetEmployeeList" class="form-control" required>
-            <option disabled selected>Select Employee</option>
-        </select>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Ca làm việc :</label>
+            <select asp-for="ShiftID" asp-items="@ViewBag.GetShiftList" class="form-control" required>
+                <option disabled selected>Select Work Shift</option>
+            </select>
+        </div>
     </div>
-     <div class="form-control">
-        <label class="control-label">Chu kỳ :</label>
-        <input type="number" class="form-control" asp-for="Interval"/>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Nhân viên  :</label>
+            <select asp-for="EmployeeID" asp-items="@ViewBag.GetEmployeeList" class="form-control" required>
+                <option disabled selected>Select Employee</option>
+            </select>
+        </div>
     </div>
-    <div >
-        
-        <div class="form-check">
-            <input class="form-check-input" type="radio" asp-for="Frequenly" value="daily" id="flexRadioDefault1">
-            <label class="form-check-label" for="flexRadioDefault1">
-               Daily
-            </label>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Chu kỳ lặp :</label>
+            <input type="number" class="form-control" asp-for="Interval" />
         </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" asp-for="Frequenly" value="weekly"  id="flexRadioDefault2" checked>
-            <label class="form-check-label" for="flexRadioDefault2">
-                Weekly
-            </label>
-        </div>
-        <div class="form-check"> 
-            <input class="form-check-input" type="radio" asp-for="Frequenly" value="monthly"  id="flexRadioDefault3" />
-            <label class="form-check-label" for="flexRadioDefault3">
-                Monthly
-            </label>
-        </div>
-        <p>Ngày làm việc trên tuần :</p>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="1" id="flexCheckDefault" />
-            <label class="form-check-label" for="flexCheckDefault">
-                Thứ hai
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="2" id="flexCheckChecked1" />
-            <label class="form-check-label" for="flexCheckChecked1">
-                Thứ ba
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="3" id="flexCheckChecked2" />
-            <label class="form-check-label" for="flexCheckChecked2">
-                Thứ tư
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="4" id="flexCheckChecked3" />
-            <label class="form-check-label" for="flexCheckChecked3">
-                Thứ năm
-            </label>
-         </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="5" id="flexCheckChecked4" />
-            <label class="form-check-label" for="flexCheckChecked4">
-                Thứ sáu
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="6" id="flexCheckChecked5" />
-            <label class="form-check-label" for="flexCheckChecked5">
-                Thứ bảy
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" asp-for="ByWeekday" value="7" id="flexCheckChecked6" />
-            <label class="form-check-label" for="flexCheckChecked6">
-                Chủ nhật
-            </label>
-        </div>
-</div>
-    <div class="form-control">
-        <label asp-for="StartTime" class="control-label"></label>
-        <input asp-for="StartTime" type="date" class="form-control" required />
     </div>
-    <div class="form-control">
-        <label asp-for="EndTime" class="control-label"></label>
-        <input asp-for="EndTime" type="date" class="form-control" required/>
+    <div class="form-group row ">
+        <div class="col-md-2">
+            <p>Lặp theo :</p>
+            <div class="form-check ">
+                <input class="form-check-input" type="radio" asp-for="Frequency" value="daily" id="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    Theo ngày
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" asp-for="Frequency" value="weekly" id="flexRadioDefault2" checked>
+                <label class="form-check-label" for="flexRadioDefault2">
+                    Theo tuần
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" asp-for="Frequency" value="monthly" id="flexRadioDefault3" />
+                <label class="form-check-label" for="flexRadioDefault3">
+                    Theo tháng
+                </label>
+            </div>
+        </div>
+        <div class=" col-md-9">
+
+            <p>Ngày làm việc trên tuần :</p>
+            <div class="row">
+                <div class="form-check col-md-2 ">
+                    <input class="form-check-input" type="checkbox" name="ByWeekday" value="mo" id="flexCheckDefault" />
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Thứ hai
+                    </label>
+                </div>
+                <div class="form-check col-md-2">
+                    <input class="form-check-input" type="checkbox" name="ByWeekday" value="tu" id="flexCheckChecked1" />
+                    <label class="form-check-label" for="flexCheckChecked1">
+                        Thứ ba
+                    </label>
+                </div>
+                <div class="form-check col-md-2">
+                    <input class="form-check-input" type="checkbox" name="ByWeekday" value="we" id="flexCheckChecked2" />
+                    <label class="form-check-label" for="flexCheckChecked2">
+                        Thứ tư
+                    </label>
+                </div>
+                <div class="form-check col-md-2">
+                    <input class="form-check-input" type="checkbox" name="ByWeekday" value="th" id="flexCheckChecked3" />
+                    <label class="form-check-label" for="flexCheckChecked3">
+                        Thứ năm
+                    </label>
+                </div>
+                <div class="form-check col-md-2">
+                    <input class="form-check-input" type="checkbox" name="ByWeekday" value="fr" id="flexCheckChecked4" />
+                    <label class="form-check-label" for="flexCheckChecked4">
+                        Thứ sáu
+                    </label>
+                </div>
+                <div class="form-check col-md-2">
+                    <input class="form-check-input" type="checkbox" name="ByWeekday" value="sa" id="flexCheckChecked5" />
+                    <label class="form-check-label" for="flexCheckChecked5">
+                        Thứ bảy
+                    </label>
+                </div>
+                <div class="form-check col-md-2">
+                    <input class="form-check-input" type="checkbox" name="ByWeekday" value="su" id="flexCheckChecked6" />
+                    <label class="form-check-label" for="flexCheckChecked6">
+                        Chủ nhật
+                    </label>
+                </div>
+                <span asp-validation-for="ByWeekday" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Ngày bắt đầu :</label>
+            <input asp-for="StartTime" class="form-control" type="date" required />
+            <span asp-validation-for="StartTime" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Ngày kết thúc :</label>
+            <input asp-for="EndTime" type="date" class="form-control" required />
+            <span asp-validation-for="StartTime" class="text-danger"></span>
+        </div>
     </div>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>
 <div id='calendar'></div>
-<div class="form-control">
+<div class="form-group pt-3">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Launch demo modal
     </button>

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.DTOs;
 using WebApplicationAPI.Exception;
@@ -8,13 +10,10 @@ namespace WebApplicationAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkScheduleController : ControllerBase
+    public class WorkScheduleController(IWorkScheduleService workScheduleService) : ControllerBase
     {
-    private readonly IWorkScheduleService _workScheduleService;
-        public WorkScheduleController(IWorkScheduleService workScheduleService)
-        {
-            _workScheduleService = workScheduleService;
-        }
+    private readonly IWorkScheduleService _workScheduleService = workScheduleService;
+
         /// <summary>
         /// Get all work schedules
         /// </summary>
@@ -50,16 +49,28 @@ namespace WebApplicationAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> CreateWorkSchedule( WorkScheduleDTO model)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateWorkSchedule([FromForm] WorkScheduleDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-           await _workScheduleService.CreateWorkSchedule(model)    ;
+
            
-         
-            return Ok();
+               var result =  await _workScheduleService.CreateWorkSchedule(model);
+            if (result.ResultObj == true)
+            {
+                return Ok(result.Message);
+            }
+            else
+            {
+                ModelState.AddModelError("", result?.Message ?? "");
+                return BadRequest(ModelState);
+                
+            }
+            
+            
         }
         /// <summary>
         /// Delete work schedule by id
@@ -67,7 +78,7 @@ namespace WebApplicationAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteWorkSchedule(int id)
+        public async Task<IActionResult> DeleteWorkSchedule(int id)
         {
             await _workScheduleService.DeleteWorkSchedule(id);
             return Ok();
@@ -79,7 +90,7 @@ namespace WebApplicationAPI.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPatch("{id}")]
-        public async Task<ActionResult> UpdateWorkSchedule(int id, WorkScheduleDTO model)
+        public async Task<IActionResult> UpdateWorkSchedule(int id, WorkScheduleDTO model)
         {
             await _workScheduleService.UpdateWorkSchedule(id, model);
             return Ok();

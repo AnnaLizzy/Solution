@@ -13,8 +13,8 @@ namespace WebApplicationApp.Controllers
             IListLocationApiClient listLocationApiClient,IAreaApiClient areaApiClient,
             IWorkShiftApiClient shiftApiClient,
             IAccountApiClient accountApiClient,
-            IHttpContextAccessor accessor,
-            HttpClient httpClient) : Controller
+            IHttpContextAccessor accessor
+            ) : Controller
     {
         private readonly IWorkScheduleApiClient workScheduleApi = workScheduleApi;
         private readonly IListLocationApiClient listLocationApi = listLocationApiClient;
@@ -22,7 +22,7 @@ namespace WebApplicationApp.Controllers
         private readonly IWorkShiftApiClient shiftApi = shiftApiClient;
         private readonly IAccountApiClient accountApi = accountApiClient;
         private readonly IHttpContextAccessor _httpContextAccessor = accessor;
-        private readonly HttpClient _httpClient = httpClient;
+        
         public async Task<IActionResult> Index()
         {
 
@@ -90,16 +90,17 @@ namespace WebApplicationApp.Controllers
                 });
                 ViewBag.GetEmployeeList = employeeData;
             }
-            else { TempData["Error"] = "Please login to continue";
-                           return RedirectToAction("Login", "Account");
-                       }
+            else {
+                TempData["Error"] = "Please login to continue";
+                return RedirectToAction("Index", "Account");
+            }
            
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateWorkScheduleViewModel workSchedule)
+        [HttpPost]  
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm]CreateWorkScheduleViewModel workSchedule)
         {
             if (!ModelState.IsValid)
             {
@@ -134,8 +135,8 @@ namespace WebApplicationApp.Controllers
             var workSchedule = await workScheduleApi.GetWorkSchedule(id);
             return View(workSchedule);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost]    
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Edit(int id, WorkScheduleViewModel workSchedule)
         {
             if (id != workSchedule.SchedulesID)

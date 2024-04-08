@@ -1,4 +1,5 @@
 ﻿using WebApplicationAPI.DTOs;
+using WebApplicationAPI.ViewModels;
 
 namespace WebApplicationAPI.Service.Interfaces
 {
@@ -6,7 +7,7 @@ namespace WebApplicationAPI.Service.Interfaces
     {
         Task<List<WorkScheduleDTO>> GetWorkSchedules();
         Task<WorkScheduleDTO> GetWorkSchedule(int id);
-        Task CreateWorkSchedule( WorkScheduleDTO model);
+        Task<ApiResult<bool>> CreateWorkSchedule( WorkScheduleDTO model);
         Task UpdateWorkSchedule(int id, WorkScheduleDTO model);
         Task DeleteWorkSchedule(int id);
     }

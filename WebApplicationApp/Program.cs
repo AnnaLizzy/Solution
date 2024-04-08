@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
@@ -18,6 +19,7 @@ builder.Services.AddScoped<IListLocationApiClient, ListLocationApiClient>();
 builder.Services.AddScoped<IAreaApiClient, AreaApiClient>();
 builder.Services.AddScoped<IWorkScheduleApiClient, WorkScheduleApiClient>();
 builder.Services.AddScoped<IAccountApiClient, AccountApiClient>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
