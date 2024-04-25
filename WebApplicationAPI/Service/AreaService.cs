@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApplicationAPI.Data;
 using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exception;
+using WebApplicationAPI.Exceptions;
 using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Service
@@ -9,7 +9,7 @@ namespace WebApplicationAPI.Service
     public class AreaService(AppDbContext2 context2) : IAreaService
     {
         private readonly AppDbContext2 _context2 = context2;
-        public async Task<AreaDTO> GetArea(int id)
+        public async Task<AreaDTO> GetArea(long id)
         {
             var data = await _context2.Area.FirstOrDefaultAsync(x => x.AreaID == id)
              ?? throw new AppException($"Khong ton tai khu vuc co ID :{id}");

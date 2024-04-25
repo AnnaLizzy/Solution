@@ -2,7 +2,7 @@
 using WebApplicationAPI.DTOs;
 using WebApplicationAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using WebApplicationAPI.Exception;
+
 
 namespace WebApplicationAPI.Controllers
 {
@@ -105,7 +105,7 @@ namespace WebApplicationAPI.Controllers
                 await _employeeService.CreateEmployee(model);
                 return Ok("Nhân viên đã được thêm thành công.");
             }
-            catch (AppException ex)
+            catch (Exception ex)
             {
                
                 return StatusCode(500, new { message = ex.Message });
@@ -121,8 +121,17 @@ namespace WebApplicationAPI.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateEmployee(int id, [FromBody] EmployeeDTO model)
         {
-            await _employeeService.UpdateEmployee(id, model);
-            return Ok("Success");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                await _employeeService.UpdateEmployee(id, model);
+                return Ok("Success");
+            }
+            catch(Exception ex) { return StatusCode(500, new { message = ex.Message }); }
+            
         }
       
         

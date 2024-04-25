@@ -6,18 +6,20 @@ using WebApplicationAPI.Service.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using WebApplicationAPI.Constants;
+using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString(SystemConstants.AppSetting.ConnectionStringDB1) ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 builder.Services.AddDbContext<AppDbContext2>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Database2Connection") ?? throw new InvalidOperationException("Connection string 'Database2Connection' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString(SystemConstants.AppSetting.ConnectionStringDB2) ?? throw new InvalidOperationException("Connection string 'Database2Connection' not found.")));
 
 // Add services to the container.
-var secretKey = builder.Configuration.GetValue<string>("SecretKey") ?? "";
-string issuer = builder.Configuration.GetValue<string>("Tokens:Issuer") ?? "";
-string signingKey = builder.Configuration.GetValue<string>("Tokens:Key") ?? "";
+var secretKey = builder.Configuration.GetValue<string>(SystemConstants.AppSetting.SecretKey) ?? "";
+string issuer = builder.Configuration.GetValue<string>(SystemConstants.AppSetting.TokenIssuer) ?? "";
+string signingKey = builder.Configuration.GetValue<string>(SystemConstants.AppSetting.TokenKey) ?? "";
 byte[] signingKeyBytes = Encoding.UTF8.GetBytes(signingKey);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -35,7 +37,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddControllers();
-  
+
 
 // Add security definition
 builder.Services.AddSwaggerGen(c =>
@@ -90,6 +92,9 @@ builder.Services.AddSwaggerGen(options =>
             Url = new Uri("https://example.com/license")
         }
     });
+    // using System.Reflection;
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 //DI
@@ -99,7 +104,9 @@ builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IWorkScheduleService, WorkScheduleService>();
 builder.Services.AddScoped<IListLocationService, ListLocationService>();
 builder.Services.AddScoped<IWorkShiftService, WorkShiftService>();
-
+builder.Services.AddScoped<IRegionService, RegionService>();
+builder.Services.AddScoped<IDoorPowerMangeService, DoorPowerManageService>();
+builder.Services.AddScoped<IUserBeforeLoadingService, UserBeforeLoadingService>();
 //CORs
 // In your ConfigureServices method
 builder.Services.AddCors(options =>

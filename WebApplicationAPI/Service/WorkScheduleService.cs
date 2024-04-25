@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApplicationAPI.Data;
 using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exception;
+using WebApplicationAPI.Exceptions;
 using WebApplicationAPI.Models;
 using WebApplicationAPI.Service.Interfaces;
 using WebApplicationAPI.ViewModels;
@@ -75,6 +75,55 @@ namespace WebApplicationAPI.Service
                             ByWeekday = workSchedule.ByWeekday
                         };
             return model.FirstOrDefault() ?? throw new AppException("No data");
+        }
+
+        public async Task<WorkScheduleDTO> GetWorkScheduleByEmployeeId(int id)
+        {
+            var query =  _context.WorkSchedules.FirstOrDefault(x => x.EmployeeID == id) 
+                ?? throw new AppException("Khong ton tai lich lam viec nay");
+            var model = await( from workSchedule in _context.WorkSchedules
+                        join employee in _context.Employee on workSchedule.EmployeeID equals employee.EmployeeID
+                        join workShift in _context.WorkShift on workSchedule.ShiftID equals workShift.ShiftID
+                        join location in _context.Locations on workSchedule.LocationID equals location.LocationID
+                        where workSchedule.EmployeeID == id
+                        select new WorkScheduleDTO
+                        {
+                            SchedulesID = workSchedule.SchedulesID,
+                            EmployeeName = employee.EmployeeName,
+                            ShiftName = workShift.NameShift,
+                            LocationID = workSchedule.LocationID,
+                            LocationName = location.LocationName,
+                            StartTime = workSchedule.StartTime,
+                            EndTime = workSchedule.EndTime,
+                            Frequency = workSchedule.Frequency,
+                            Interval = workSchedule.Interval,
+                            ByWeekday = workSchedule.ByWeekday
+                        }).ToListAsync();
+            return model.FirstOrDefault() ?? throw new AppException("No data");
+        }
+
+        public async Task<List<WorkScheduleDTO>> GetWorkScheduleByLocationId(string id)
+        {
+           var query =  _context.WorkSchedules.Where(x => x.LocationID == id) ?? throw new AppException("Khong ton tai lich lam viec nay");
+            var model = await (from workSchedule in _context.WorkSchedules
+                        join employee in _context.Employee on workSchedule.EmployeeID equals employee.EmployeeID
+                        join workShift in _context.WorkShift on workSchedule.ShiftID equals workShift.ShiftID
+                        join location in _context.Locations on workSchedule.LocationID equals location.LocationID
+                        where workSchedule.LocationID == id
+                        select new WorkScheduleDTO
+                        {
+                            SchedulesID = workSchedule.SchedulesID,
+                            EmployeeName = employee.EmployeeName,
+                            ShiftName = workShift.NameShift,
+                            LocationID = workSchedule.LocationID,
+                            LocationName = location.LocationName,
+                            StartTime = workSchedule.StartTime,
+                            EndTime = workSchedule.EndTime,
+                            Frequency = workSchedule.Frequency,
+                            Interval = workSchedule.Interval,
+                            ByWeekday = workSchedule.ByWeekday
+                        }).ToListAsync();
+            return model ?? throw new AppException("No data");
         }
 
         public async Task<List<WorkScheduleDTO>> GetWorkSchedules()

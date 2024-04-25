@@ -2,7 +2,8 @@
 {
     public class RegionDTO
     {
-        public int RegionID { get; set; }
+        public long RegionID { get; set; }
         public string? RegionName { get; set; }
+        public string? Area { get; set; }
     }
 }

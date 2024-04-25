@@ -4,22 +4,17 @@ using ApiLibrary.Interfaces;
 using WebApplicationApp.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-
-
-
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 //DI
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
 builder.Services.AddScoped<IWorkShiftApiClient, WorkShiftApiClient>();
 builder.Services.AddScoped<IListLocationApiClient, ListLocationApiClient>();
 builder.Services.AddScoped<IAreaApiClient, AreaApiClient>();
 builder.Services.AddScoped<IWorkScheduleApiClient, WorkScheduleApiClient>();
 builder.Services.AddScoped<IAccountApiClient, AccountApiClient>();
-
+builder.Services.AddScoped<IRegionApiClient, RegionApiClient>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
@@ -30,7 +25,7 @@ builder.Services.AddRazorPages();
 // In your ConfigureServices method
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",builder =>
+    options.AddPolicy("AllowSpecificOrigin", builder =>
     {
         builder.AllowAnyOrigin()
             .AllowAnyHeader()

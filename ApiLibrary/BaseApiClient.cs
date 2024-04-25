@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ApiLibrary.Constants;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
 using WebApplicationAPI.Constants;
@@ -24,7 +25,7 @@ namespace ApiLibrary
         public async Task<T?> PostAsync<T>(string url, object obj)
         {
             var json = JsonConvert.SerializeObject(obj);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var httpContent = new StringContent(json, Encoding.UTF8, ApiConst.Setting.StringContent);
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_baseUrl);            
      
@@ -39,7 +40,7 @@ namespace ApiLibrary
         public async Task<T?> PutAsync<T>(string url, object obj)
         {
             var data = JsonConvert.SerializeObject(obj);
-            var content = new StringContent(data, Encoding.UTF8, "application/json");
+            var content = new StringContent(data, Encoding.UTF8, ApiConst.Setting.StringContent);
             var response = await _httpClient.PutAsync(url, content);
             if (response.IsSuccessStatusCode)
             {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApplicationAPI.Data;
 using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exception;
 using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Service

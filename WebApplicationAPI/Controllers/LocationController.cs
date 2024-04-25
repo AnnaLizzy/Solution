@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exception;
 using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Controllers
@@ -77,7 +76,7 @@ namespace WebApplicationAPI.Controllers
                 await _locationService.DeleteLocation(id);
                 return Ok();
             }
-            catch (AppException ex)
+            catch (Exception ex)
             {
                 return BadRequest($"Failed to delete location with id: {id}. Error: {ex.Message}");
             }

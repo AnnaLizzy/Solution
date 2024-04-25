@@ -69,6 +69,7 @@ namespace ApiLibrary
 
         public async Task<bool> UpdateWorkSchedule(WorkScheduleViewModel workSchedule)
         {
+            var id = workSchedule.SchedulesID;
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(SystemConstants.Url.BaseApiUrl);
             var requestContent = new MultipartFormDataContent
@@ -82,7 +83,7 @@ namespace ApiLibrary
                 { new StringContent(workSchedule.Interval.ToString() ?? ""), "Interval" },
                 { new StringContent(workSchedule.ByWeekday?.ToString() ?? ""), "ByWeekday" }
             };
-            var response = await client.PutAsync($"/api/WorkSchedule/{workSchedule.SchedulesID}", requestContent);
+            var response = await client.PutAsync($"/api/WorkSchedule/{id}", requestContent);
             return response.IsSuccessStatusCode;
         }
     }

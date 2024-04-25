@@ -1,17 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApplicationAPI.Data;
 using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exception;
+using WebApplicationAPI.Exceptions;
 using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Service
 {
+    /// <summary>
+    /// Dia diem truc 
+    /// </summary>
+    /// <param name="appContext"></param>
 
     public class LocationService(AppDbContext appContext) : ILocationService
     {
         private readonly AppDbContext _context = appContext;
        
-
+        /// <summary>
+        /// Tao dia diem
+        /// </summary>
+        /// <param name="locationDTO"></param>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public async Task CreateLocation(LocationDTO locationDTO)
         {
             
@@ -40,7 +49,12 @@ namespace WebApplicationAPI.Service
                 
            
         }
-
+        /// <summary>
+        /// Xoa dia diem theo id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public async Task DeleteLocation(int id)
         {
             var query = _context.Locations.FirstOrDefault(x => x.ListID == id) ?? throw new AppException("Khong ton tai dia diem nay");
@@ -48,7 +62,12 @@ namespace WebApplicationAPI.Service
             await _context.SaveChangesAsync();
           
         }
-
+        /// <summary>
+        /// get địa điểm theo id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception"></exception>
         public async Task<LocationDTO> GetLocation(int id)
         {
             var location = await _context.Locations.Select(x => new LocationDTO
@@ -64,7 +83,11 @@ namespace WebApplicationAPI.Service
             }).FirstOrDefaultAsync(x => x.ListID == id) ?? throw new System.Exception($"khong tim thay dia diem id :{id}");
             return location;
         }
-
+        /// <summary>
+        /// get địa điểm 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public async Task<List<LocationDTO>> GetLocations()
         {
             var query = await _context.Locations                                 

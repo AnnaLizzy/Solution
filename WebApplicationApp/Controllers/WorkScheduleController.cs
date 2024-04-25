@@ -29,6 +29,13 @@ namespace WebApplicationApp.Controllers
             var data = await workScheduleApi.GetWorkSchedules();
             return View(data);
         }
+       
+        public async Task<IActionResult> ShowMap()
+        {        
+            ViewBag.GetLocationList = await GetListLocations();
+            ViewBag.GetAreaList = await GetAreasAsync();
+            return View();
+        }
         public async Task<IActionResult> Details(int id)
         {
             var data = await workScheduleApi.GetWorkSchedule(id);
@@ -68,7 +75,7 @@ namespace WebApplicationApp.Controllers
             });
             return locationData;
         }
-    
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             string? token = _httpContextAccessor?.HttpContext?.Session.GetString(SystemConstants.AppSetting.Token);
@@ -99,7 +106,7 @@ namespace WebApplicationApp.Controllers
         }
 
         [HttpPost]  
-        [Consumes("multipart/form-data")]
+       // [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm]CreateWorkScheduleViewModel workSchedule)
         {
             if (!ModelState.IsValid)
@@ -136,7 +143,7 @@ namespace WebApplicationApp.Controllers
             return View(workSchedule);
         }
         [HttpPost]    
-        [Consumes("multipart/form-data")]
+        //[Consumes("multipart/form-data")]
         public async Task<IActionResult> Edit(int id, WorkScheduleViewModel workSchedule)
         {
             if (id != workSchedule.SchedulesID)

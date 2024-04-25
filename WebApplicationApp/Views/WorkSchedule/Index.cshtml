@@ -1,6 +1,4 @@
-﻿@using ApiLibrary.ViewModels
-@using Newtonsoft.Json
-@model List<WorkScheduleViewModel>
+﻿@model List<WorkScheduleViewModel>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Work Schedule - Bảng sắp xếp ca tổng hợp";
@@ -28,7 +26,9 @@
             <th>
                 Thời gian kết thúc
             </th>
-            <th></th>
+            <th>
+                Thao tác
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -45,7 +45,7 @@
                     @Html.DisplayFor(modelItem => item.ShiftName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LocationID)
+                    @Html.DisplayFor(modelItem => item.LocationName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.StartTime)
@@ -62,7 +62,8 @@
         }
     </tbody>
 </table>
-<div id='calendar'></div>
+
+<div class="pt-3" id='calendar'></div>
 @section Scripts {
     <script src="~/lib/fullcalender-6.1.11/index.global.min.js"></script>
     <script src="~/lib/es5/rrule.min.js"></script>
@@ -85,73 +86,76 @@
                 initialDate: today,
                 editable: true,
                 events: [
-                    // {
-                    //     title: "rrule event",
-                    //     rrule: {
-                    //         dtstart: "2024-02-09T07:30:00",
-                    //         until: "2024-06-01",
-                    //         freq: "weekly",
-                    //     },
-                    //     duration: "09:00",
-                    // },
-                    // {
-                    //     title: 'CA_HC - Tran Thi B',
-                    //     url: "htttps://google.com",
-                    //     rrule: {
-                    //         freq: 'weekly',
-                    //         interval: 1,
-                    //         byweekday: ['mo', 'tu', 'we', 'th', 'fr', 'sa'],
-                    //         dtstart: '2024-02-01', // will also accept '20120201T103000'
-                    //         until: '2024-06-01' // will also accept '20120201'
-                    //     }
-                    // },
-
-                    @foreach (var item in Model)
-                    {
-                        var employeeNameEncoded = System.Web.HttpUtility.HtmlEncode(item.EmployeeName);
-                        var shiftNameEncoded = System.Web.HttpUtility.HtmlEncode(item.ShiftName);
-                        var startTimeEncoded = ((DateTime?)item.StartTime)?.ToString("yyyy-MM-dd");
-                        var endTimeEncoded = ((DateTime?)item.EndTime)?.ToString("yyyy-MM-dd");
-                        var frequency = item.Frequency;
-                        var interval = item.Interval;
-                        var databyweekday = item.ByWeekday;
-                        string[] weekdaysArray = databyweekday?.Split(',') ?? new string[0];
-                          string weekdays = JsonConvert.SerializeObject(weekdaysArray);
-                        <text>
-                            {
-                                title: '@Html.Raw(shiftNameEncoded) - @Html.Raw(employeeNameEncoded)',                              
-                                rrule: {
-                                    freq: '@Html.Raw(frequency)',
+        @foreach (var item in Model)
+        {
+            var locationName = System.Web.HttpUtility.HtmlEncode(item.LocationName);
+            var employeeNameEncoded = System.Web.HttpUtility.HtmlEncode(item.EmployeeName);
+            var shiftNameEncoded = System.Web.HttpUtility.HtmlEncode(item.ShiftName);
+            var startTimeEncoded = ((DateTime?)item.StartTime)?.ToString("yyyy-MM-dd");
+            var endTimeEncoded = ((DateTime?)item.EndTime)?.ToString("yyyy-MM-dd");
+            var frequency = item.Frequency;
+            var interval = item.Interval;
+            var databyweekday = item.ByWeekday;
+            string[] weekdaysArray = databyweekday?.Split(',') ?? new string[0];
+            string weekdays = JsonConvert.SerializeObject(weekdaysArray);
+            <text>
+                        {
+                            title: '@Html.Raw(shiftNameEncoded) - @Html.Raw(employeeNameEncoded)',
+                            rrule: {
+                                freq: '@Html.Raw(frequency)',
+                                interval: '@Html.Raw(interval)',
+                                byweekday: @Html.Raw(weekdays),
+                                dtstart: '@Html.Raw(startTimeEncoded)',
+                                until: '@Html.Raw(endTimeEncoded)'
+                            },
+                              extendedProps: {
+                                    employeeName: '@Html.Raw(employeeNameEncoded)',
+                                    shiftName: '@Html.Raw(shiftNameEncoded)',
+                                    frequency: '@Html.Raw(frequency)',
                                     interval: '@Html.Raw(interval)',
-                                    byweekday: @Html.Raw(weekdays),
-                                    dtstart: '@Html.Raw(startTimeEncoded)',
-                                    until: '@Html.Raw(endTimeEncoded)'
-                                }
-                             }, 
-                       </text>
-                    }
-                ],
-                eventClick: function (arg)
-              
-                {
+                                    weekdays: @Html.Raw(weekdays),
+                                    startTime: '@Html.Raw(startTimeEncoded)',
+                                    endTime: '@Html.Raw(endTimeEncoded)',
+                              
+                                    // Add other extended properties if needed
+                                },
+                                description: '@Html.Raw(locationName)',
+                          },
+            </text>
+            }
+                        ],
+                eventClick: function (arg) {
                     var modal = document.createElement("div");
                     var title = arg.event.title;
+                    var employeeName = arg.event.extendedProps.employeeName;
+                    var shiftName = arg.event.extendedProps.shiftName;
+                    var frequency = arg.event.extendedProps.frequency;
+                    var interval = arg.event.extendedProps.interval;
+                    var weekdays = arg.event.extendedProps.weekdays;
+                    var startTime = arg.event.extendedProps.startTime;
+                    var endTime = arg.event.extendedProps.endTime;
+                    var locationName = arg.event.extendedProps.description;
                     modal.classList.add("modal");
                     modal.innerHTML = `
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">${title}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Detail : ${title}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Tên nhân viên: ${employeeName}</p>
+                                                    <p>Ca làm việc: ${shiftName}</p>
+                                                    <p>Lặp lại sau : ${interval} lần </p>
+                                                    <p>Lặp theo: ${frequency}</p>
+                                                    <p>Ngày trong tuần : ${weekdays}</p>
+                                                    <p>Ngày bắt đầu: ${startTime}</p>
+                                                    <p>Ngày kết thúc : ${endTime}</p>
+                                                    <p>Tên địa điểm: ${locationName}</p>                                                    
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="modal-body">
-                                            <p>Frequently:</p>
-                                            <p>Start time:</p>
-                                            <p>End time :</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
+                                    `;
                     document.body.appendChild(modal);
                     var bootstrapModal = new bootstrap.Modal(modal);
                     bootstrapModal.show();
@@ -159,8 +163,8 @@
             });
 
             calendar.render();
-             var eventSources = calendar.getEvents();
-            console.log(eventSources);
+            // var eventSources = calendar.getEvents();
+            // console.log(eventSources);
         });
     </script>
 }

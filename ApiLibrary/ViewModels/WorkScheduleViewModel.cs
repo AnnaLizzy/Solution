@@ -13,6 +13,7 @@ namespace ApiLibrary.ViewModels
         public string? EmployeeName { get; set; }
         public int ShiftID { get; set; }
         public string? ShiftName { get; set; }
+        public string? ShiftDescription { get; set; }
         public string? LocationID { get; set; }
         public string? LocationName { get; set; }
         public DateTime? StartTime { get; set; }

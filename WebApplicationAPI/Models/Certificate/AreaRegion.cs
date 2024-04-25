@@ -7,6 +7,6 @@ namespace WebApplicationAPI.Models.Certificate
         [Key]
         public int AreaRegionID { get; set; }
         public int AreaID { get; set; }
-        public int RegionID { get; set; }
+        public long RegionID { get; set; }
     }
 }

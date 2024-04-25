@@ -24,7 +24,7 @@ namespace ApiLibrary
                 { new StringContent(workShift.StartTime.ToString()), "StartTime" },
                 { new StringContent(workShift.EndTime.ToString()), "EndTime" }
             };
-            var response = await client.PostAsync($"/api/WorkShift/", requestContent);
+            var response = await client.PostAsync("/api/WorkShift/", requestContent);
            return response.IsSuccessStatusCode;
         }
 
@@ -48,6 +48,7 @@ namespace ApiLibrary
 
         public async Task<bool> UpdateWorkShift( WorkShiftViewModel workShift)
         {
+            var id = workShift.ShiftID;
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:44300");
             var requestContent = new MultipartFormDataContent
@@ -57,7 +58,7 @@ namespace ApiLibrary
                 { new StringContent(workShift.StartTime.ToString()), "StartTime" },
                 { new StringContent(workShift.EndTime.ToString()), "EndTime" }
             };
-            var response = await client.PutAsync($"/api/WorkShift/{workShift.ShiftID}", requestContent);
+            var response = await client.PutAsync($"/api/WorkShift/{id}", requestContent);
             return response.IsSuccessStatusCode;
         }
     }

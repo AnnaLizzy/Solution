@@ -1,9 +1,5 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exception;
 using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Controllers
@@ -43,6 +39,26 @@ namespace WebApplicationAPI.Controllers
             }
             return Ok(data);
         }
+        [HttpGet("employee/{id}")]
+        public async Task<ActionResult<WorkScheduleDTO>> GetWorkScheduleByEmployeeId(int id)
+        {
+            var data = await _workScheduleService.GetWorkScheduleByEmployeeId(id);
+            if (data == null)
+            {
+                return BadRequest("No data");
+            }
+            return Ok(data);
+        }
+        [HttpGet("location/{id}")]
+        public async Task<ActionResult<WorkScheduleDTO>> GetWorkScheduleByLocationId(string id)
+        {
+            var data = await _workScheduleService.GetWorkScheduleByLocationId(id);
+            if (data == null)
+            {
+                return BadRequest("No data");
+            }
+            return Ok(data);
+        }
         /// <summary>
         /// Create work schedule
         /// </summary>
@@ -56,8 +72,6 @@ namespace WebApplicationAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-           
                var result =  await _workScheduleService.CreateWorkSchedule(model);
             if (result.ResultObj == true)
             {

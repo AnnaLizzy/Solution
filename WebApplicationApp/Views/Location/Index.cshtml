@@ -1,45 +1,66 @@
-﻿@* @model WorkSchedules
+﻿@model List<ListLocationVM>
 @{
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<h4>This is Location Địa điểm trực </h4>
 <div>
-    <h1>Location Địa điểm </h1>
-   
-    <p>Chọn khu vực: </p>
-    <select onchange="loadLocations(this.value)">
-        <option value="0">All</option>
-        @foreach (var item in Model.Area ?? throw new Exception("No data"))
+    <a asp-action="Create"><i class="bi bi-plus"></i>Create New</a>
+</div>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>
+                List ID
+            </th>
+            <th>
+                Location ID
+            </th>
+            <th>
+                Location Name
+            </th>
+            <th>
+                Floors
+            </th>
+            <th>
+                Area
+            </th>
+            <th>
+                Region
+            </th>
+            <th>
+                Thao tac
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
         {
-            <option value="@item.AreaID">@item.AreaName</option>
-        }
-    </select>   
-    <p>Chọn địa điểm :</p>
-    <select id="locationSelect">
-        <option id="loadLocations">All</option>
-    </select>
-  
-    <table>
-        <thead>
             <tr>
-                <th>ID</th>
-                <th>Location ID</th>
-                <th>Name</th>
-                <th>Detail</th>
-                <th></th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ListID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LocationID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LocationName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Floors)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Area)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Region)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ListID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ListID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ListID">Delete</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Mode ?? throw new Exception("No data"))
-            {
-                <tr>
-                    <td>@item.ListID</td>
-                    <td>@item.LocationID</td>
-                    <td>@item.LocationName</td>
-                   
-                    <td><a href="@Url.Action("Edit", "Location", new { id = item.ID })">Edit</a></td>
-                    <td><a href="@Url.Action("Delete", "Location", new { id = item.ID })">Delete</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div> *@
+        }
+    </tbody>
+</table>

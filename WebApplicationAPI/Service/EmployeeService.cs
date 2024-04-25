@@ -5,10 +5,10 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApplicationAPI.Exceptions;
 using WebApplicationAPI.Constants;
 using WebApplicationAPI.Data;
 using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exception;
 using WebApplicationAPI.Models;
 using WebApplicationAPI.Models.Certificate;
 using WebApplicationAPI.Service.Interfaces;
@@ -28,7 +28,7 @@ namespace WebApplicationAPI.Service
             {
                     new SqlParameter(SystemConstants.Parametters.EmployeeNo, employeeNo),
                     new SqlParameter(SystemConstants.Parametters.Password, password)
-                };
+            };
 
             using var connection = new SqlConnection(SystemConstants.AppSetting.ConnectionString);
             await connection.OpenAsync();
@@ -97,7 +97,7 @@ namespace WebApplicationAPI.Service
             var emp = await _context.Employee.FirstOrDefaultAsync(x => x.EmployeeNo == employee.EmployeeNo);
             if (emp != null)
             {
-                throw new AppException(SystemConstants.MessageError.EmployeeErrorExist);
+                throw new Exception(SystemConstants.MessageError.EmployeeErrorExist);
             }
             var newEmp = new Employee
             {
@@ -130,7 +130,7 @@ namespace WebApplicationAPI.Service
         {
             var emp = await _context.Employee
                 .FirstOrDefaultAsync(e => e.EmployeeID == id) 
-                ?? throw new AppException(SystemConstants.MessageError.EmployeeErrorNotExist);
+                ?? throw new Exception(SystemConstants.MessageError.EmployeeErrorNotExist);
             var data = new EmployeeDTO
             {
                 EmployeeID = emp.EmployeeID,
@@ -166,16 +166,22 @@ namespace WebApplicationAPI.Service
 
         public async Task UpdateEmployee(int id, EmployeeDTO employee)
         {
-            var emp = await _context.Employee.FindAsync(id)
-                ?? throw new AppException(SystemConstants.MessageError.EmployeeErrorNotExist);
-            emp.EmployeeName = employee.EmployeeName;
-            emp.PhoneNumber = employee.PhoneNumber;
-            emp.Company = employee.Company;
-            emp.Password = employee.Password;
-            emp.Gender = employee.Gender;
-            emp.DateOfBirth = employee.DateOfBirth;
-            emp.Company = employee.Company;
-            _context.Employee.Update(emp);
+            var emp = await _context.Employee.FirstOrDefaultAsync(e => e.EmployeeID == id);
+            if (emp != null)
+            {
+                throw new AppException(SystemConstants.MessageError.EmployeeErrorNotExist);
+            }
+            var data = new Employee
+            {
+                EmployeeName = emp?.EmployeeName ,
+                Company = emp?.Company,
+                PhoneNumber= emp?.PhoneNumber,
+                DateOfBirth = emp?.DateOfBirth ?? DateTime.MinValue,
+                Password = emp?.Password,
+                Gender= emp?.Gender,
+            };
+           
+            _context.Employee.Update(data);
             await _context.SaveChangesAsync();
 
         }

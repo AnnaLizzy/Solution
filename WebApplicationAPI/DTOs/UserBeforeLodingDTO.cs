@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApplicationAPI.Models.Certificate
+namespace WebApplicationAPI.DTOs
 {
-    public class UserBeforeLoading
+    public class UserBeforeLodingDTO
     {
         [Key]
         public int UserBeforeLodingID { get; set; }

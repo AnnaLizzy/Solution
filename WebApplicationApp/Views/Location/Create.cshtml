@@ -1,0 +1,99 @@
+﻿@model ListLocationVM
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4>Tao moi dia diem truc</h4>
+<hr />
+<button type="button" class="btn btn-sm">
+    <a asp-action="Index"><i class="bi bi-chevron-left"></i>Back to List</a>
+</button>
+<form class="row" asp-action="Create" method="post">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Ten vị trí làm việc :</label>
+            <input class="form-control" type="text" asp-for="LocationName" />
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Khu vực làm việc :</label>
+            <select id="areaDropdown" asp-for="@Model.Area" asp-items="@ViewBag.GetAreas" class="form-control" required>
+                <option disabled selected>Select Area</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Khu :</label>
+            <select id="regionDropdown" class="form-control" asp-for="Region" required>
+                <option disabled selected>Select Region</option>
+            </select>
+        </div>
+    </div>   
+    <div class="col-md-6">
+                <div class="form-group">
+                    <label for="choices-remove-button" class="control-label"
+                        >Hướng :</label
+                    >
+                    <select
+                        name="choices-remove-button"
+                        id="choices-remove-button"
+                        multiple
+                        class="form-control choices"
+                        required
+                    >                        
+                        <option value="East">Đông</option>
+                        <option value="West">Tây</option>
+                        <option value="South">Nam</option>
+                        <option value="North">Bắc</option>
+                    </select>
+                </div>
+          </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">Floors :</label>
+            <input class="form-control" type="text" asp-for="Floors" />
+        </div>
+    </div>    
+    <div class="form-group pt-3">
+         <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
+@section Scripts{
+    <link href="~/lib/choices.js/choices.min.css" rel="stylesheet" />
+    <script src="~/lib/choices.js/choices.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#areaDropdown').change(function () {
+                var areaId = $(this).val();
+                $.ajax({
+                    url: 'https://localhost:44389/api/Region/GetRegion/' + areaId + '/byAreaID',
+                    type: 'GET',
+                    crossDomain: true,
+                    dataType: 'json',
+                    data: { areaId: areaId },
+                    success: function (data) {
+                        $('#regionDropdown').empty();
+                        if (data.length === 0) {
+                            $('#regionDropdown').append($('<option></option>').text('No data').val(''));
+                        } else {
+                            $.each(data, function (index, region) {
+                                $('#regionDropdown').append($('<option></option>').attr('value', region.regionID).text(region.regionName));
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert('Error occurred while fetching locations.');
+                    }
+                });
+            });
+        });
+         document.addEventListener("DOMContentLoaded", function () {
+                const choicesBasic = new Choices("#choices-remove-button", {
+                    allowHTML: true,                 
+                });
+                
+            });
+    </script>
+}

@@ -11,7 +11,8 @@ namespace WebApplicationAPI.Data
         public DbSet<Region> Region { get; set; }
         public DbSet<AreaRegion> AreaRegion { get; set; }
         public DbSet<OndutyListLocations> OndutyListLocations { get; set; }
-        public DbSet<UserBeforeLoading> UserBeforeLoading { get; set; } 
+        public DbSet<UserBeforeLoading> UserBeforeLoding { get; set; } 
+        public DbSet<DoorPowerManager> DoorPowerManage { get; set; }
     }
    
 }

@@ -1,4 +1,5 @@
-﻿using ApiLibrary.Interfaces;
+﻿using ApiLibrary.Constants;
+using ApiLibrary.Interfaces;
 using Azure.Core;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -22,11 +23,11 @@ namespace ApiLibrary
         public async Task<ApiResult<string>> Authenticate(LoginDTO model)
         {
             var json = JsonConvert.SerializeObject(model);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            var httpContent = new StringContent(json, Encoding.UTF8, ApiConst.Setting.StringContent);
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_baseUrl);
-            var response = await client.PostAsync("/api/Account/login", httpContent);
+            var response = await client.PostAsync(ApiConst.Url.LoginUrl, httpContent);
             if (response.IsSuccessStatusCode)
             {
                 return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(await response.Content.ReadAsStringAsync())!;
@@ -39,13 +40,13 @@ namespace ApiLibrary
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_baseUrl);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await client.GetAsync("/api/Account");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ApiConst.Setting.Bearer, token);
+            var response = await client.GetAsync(ApiConst.Url.GetEmployees);
             if (response.IsSuccessStatusCode)
             {
                 return JsonConvert.DeserializeObject<List<EmployeeDTO>>(await response.Content.ReadAsStringAsync())!;
             }
-            return new List<EmployeeDTO>();
+            return [];
         }
     }
 }

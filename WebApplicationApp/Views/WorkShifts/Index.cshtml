@@ -7,59 +7,67 @@
 
 <h1>Work shift</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
- <table class="table">
-    <thead>
-        <tr>
-            <th>
-                Mã ca
-            </th>
-            <th>
-                Tên ca
-            </th>
-            <th>
-               Miêu tả 
-            </th>
-            <th>
-               Thời gian bắt đầu
-            </th>
-            <th>
-               Thời gian kết thúc
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShiftID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NameShift)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DescriptionShift)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ShiftID">Edit</a> |
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <a asp-action="Details" asp-route-id="@item.ShiftID">Details</a>
-                    </button>
-            
-                        <a  asp-action="Details" asp-route-id="@item.ShiftID">Details</a>
-               
-                <a asp-action="Delete" asp-route-id="@item.ShiftID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div>
+    <a asp-action="Create"><i class="bi bi-plus"></i>Create New</a>
+</div>
+<div>
+    <table class="table table-hover table-bordered ">
+        <thead>
+            <tr>
+                <th>
+                    Mã ca
+                </th>
+                <th>
+                    Tên ca
+                </th>
+                <th>
+                    Miêu tả
+                </th>
+                <th>
+                    Thời gian bắt đầu
+                </th>
+                <th>
+                    Thời gian kết thúc
+                </th>
+                <th>
+                    Hành động
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShiftID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NameShift)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescriptionShift)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                    </td>
+                    <td>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a asp-action="Edit" asp-route-id="@item.ShiftID">Edit</a>
+                            </div>
+                            <div class="col-md-3">                                
+                                    <a asp-action="Details" asp-route-id="@item.ShiftID">Details</a>
+                            </div>
+                            <div class="col-md-3">
+                                <a asp-action="Delete" asp-route-id="@item.ShiftID">Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

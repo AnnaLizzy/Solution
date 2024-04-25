@@ -2,7 +2,7 @@
 using WebApplicationAPI.DTOs;
 using WebApplicationAPI.Service.Interfaces;
 using WebApplicationAPI.Data;
-using WebApplicationAPI.Exception;
+using WebApplicationAPI.Exceptions;
 using WebApplicationAPI.Models;
 namespace WebApplicationAPI.Service
 {

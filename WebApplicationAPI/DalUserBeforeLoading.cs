@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
 using WebApplicationAPI.Constants;
-using WebApplicationAPI.Models.Certificate;
 
 namespace WebApplicationAPI
 {
