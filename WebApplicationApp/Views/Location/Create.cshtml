@@ -8,58 +8,60 @@
 <button type="button" class="btn btn-sm">
     <a asp-action="Index"><i class="bi bi-chevron-left"></i>Back to List</a>
 </button>
-<form class="row" asp-action="Create" method="post">
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Ten vị trí làm việc :</label>
-            <input class="form-control" type="text" asp-for="LocationName" />
+<div class="container-fluid">
+    <form class="row g-2" asp-action="Create" method="post">
+        <div class="col-6">
+            <div class="input-group input-group-dynamic">
+                <label class="control-label pt-2">Ten vị trí làm việc :</label>
+                <input class="form-control" type="text" asp-for="LocationName" />
+            </div>
+         </div>
+        <div class="col-6">
+            <div class="input-group input-group-dynamic">
+                <label class="control-label pt-2">Khu vực làm việc :</label>
+                <select id="areaDropdown" asp-for="@Model.Area" asp-items="@ViewBag.GetAreas" class="form-control" required>
+                    <option disabled selected>Select Area</option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Khu vực làm việc :</label>
-            <select id="areaDropdown" asp-for="@Model.Area" asp-items="@ViewBag.GetAreas" class="form-control" required>
-                <option disabled selected>Select Area</option>
-            </select>
+        <div class="col-6" >
+            <div class="input-group input-group-dynamic">
+                <label class="control-label pt-2">Khu :</label>
+                <select id="regionDropdown" class="form-control" asp-for="Region" required>
+                    <option disabled selected>Select Region</option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Khu :</label>
-            <select id="regionDropdown" class="form-control" asp-for="Region" required>
-                <option disabled selected>Select Region</option>
-            </select>
+        <div class="col-6">
+                    <div class="form-group">
+                        <label for="choices-remove-button" class="control-label"
+                            >Hướng :</label
+                        >
+                        <select
+                            name="choices-remove-button"
+                            id="choices-remove-button"
+                            multiple
+                            class="form-control choices"
+                            required
+                        >                        
+                            <option value="East">Đông</option>
+                            <option value="West">Tây</option>
+                            <option value="South">Nam</option>
+                            <option value="North">Bắc</option>
+                        </select>
+                    </div>
+            </div>
+        <div class="col-6">
+            <div class="input-group input-group-dynamic ">
+                <label class="control-label pt-2">Floors :</label>
+                <input class="form-control" type="text" asp-for="Floors" />
+            </div>
         </div>
-    </div>   
-    <div class="col-md-6">
-                <div class="form-group">
-                    <label for="choices-remove-button" class="control-label"
-                        >Hướng :</label
-                    >
-                    <select
-                        name="choices-remove-button"
-                        id="choices-remove-button"
-                        multiple
-                        class="form-control choices"
-                        required
-                    >                        
-                        <option value="East">Đông</option>
-                        <option value="West">Tây</option>
-                        <option value="South">Nam</option>
-                        <option value="North">Bắc</option>
-                    </select>
-                </div>
-          </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Floors :</label>
-            <input class="form-control" type="text" asp-for="Floors" />
+        <div class="form-group pt-3">
+             <button type="submit" class="btn btn-primary">Create</button>
         </div>
-    </div>    
-    <div class="form-group pt-3">
-         <button type="submit" class="btn btn-primary">Create</button>
-    </div>
-</form>
+    </form>
+</div>
 @section Scripts{
     <link href="~/lib/choices.js/choices.min.css" rel="stylesheet" />
     <script src="~/lib/choices.js/choices.min.js"></script>

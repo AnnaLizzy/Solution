@@ -7,60 +7,62 @@
 <div>
     <a asp-action="Create"><i class="bi bi-plus"></i>Create New</a>
 </div>
-<table class="table table-hover table-bordered">
-    <thead>
-        <tr>
-            <th>
-                List ID
-            </th>
-            <th>
-                Location ID
-            </th>
-            <th>
-                Location Name
-            </th>
-            <th>
-                Floors
-            </th>
-            <th>
-                Area
-            </th>
-            <th>
-                Region
-            </th>
-            <th>
-                Thao tac
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-hover table-bordered">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ListID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LocationID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LocationName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Floors)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Area)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Region)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ListID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ListID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ListID">Delete</a>
-                </td>
+                <th>
+                    List ID
+                </th>
+                <th>
+                    Location ID
+                </th>
+                <th>
+                    Location Name
+                </th>
+                <th>
+                    Floors
+                </th>
+                <th>
+                    Area
+                </th>
+                <th>
+                    Region
+                </th>
+                <th>
+                    Thao tac
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ListID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LocationID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LocationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Floors)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Area)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Region)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ListID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ListID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ListID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

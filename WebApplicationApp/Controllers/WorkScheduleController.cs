@@ -75,6 +75,7 @@ namespace WebApplicationApp.Controllers
             });
             return locationData;
         }
+      
         [HttpGet]
         public async Task<IActionResult> Create()
         {

@@ -7,104 +7,42 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+     <link href="~/css/material-kit.css" rel="stylesheet" />
+    <link href="~/css/material-icon.css" rel="stylesheet" />
 </head>
 <body>
-    <header>
-        <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApplication</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">                        
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                         <li class="nav-item dropdown">
-                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                               Địa điểm làm việc 
-                            </button>
-                            <ul class="dropdown-menu ">
-                                <li><a class="dropdown-item" asp-controller="Location" asp-action="Create">Thêm mới địa điểm</a></li>
-                                <li><a class="dropdown-item" asp-controller="Location" asp-action="Index">Danh sách địa điểm</a></li>
-                               
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Ca làm việc 
-                            </button>
-                            <ul class="dropdown-menu ">
-                                <li><a class="dropdown-item" asp-controller="WorkShifts" asp-action="Create">Thêm mới ca</a></li>
-                                <li><a class="dropdown-item" asp-controller="WorkSchedule" asp-action="Index">Sắp xếp ca tổng hợp</a></li>
-                                <li><a class="dropdown-item" asp-controller="WorkShifts" asp-action="Index">Ca làm việc</a></li>
-                            </ul>
-                        </li>
-                    </ul>                   
-                </div>
+   
+    <partial name="_Header" />     
+      <header class="header-2 hight">
+          @*
+        <div class="page-header min-vh-75 relative" >
+          <span class="mask bg-gradient-primary opacity-4"></span>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-7 text-center mx-auto">
+                <h1 class="text-white pt-3 mt-n5">Web Application</h1>
+                <p class="lead text-white mt-3">Free & Open Source Web UI Kit built over Bootstrap 5. <br /> Join over 1.6
+                  million developers around the world. </p>
+              </div>
             </div>
-            @* @await Component.InvokeAsync("Navigation") *@
-        </nav>
-    </header>
-    <div class="container ">
-        <main role="main" class="pb-3 main">
-         <partial name="_AlertPartial" />
-            @RenderBody()
-        </main>
+          </div
+        </div> *@
+      </header>
+    <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6">
+        <div class="container ">
+            <main role="main" class="pb-3 main">
+             <partial name="_AlertPartial" />
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <footer class="container py-5">
-        <div class="row">
-            <div class="col-12 col-md">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mb-2" role="img" viewBox="0 0 24 24"><title>Product</title><circle cx="12" cy="12" r="10" /><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94" /></svg>
-                <small class="d-block mb-3 text-body-secondary">&copy; 2017–2024</small>
-            </div>
-            <div class="col-6 col-md">
-                <h5>Ca làm việc</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Random feature</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Team feature</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Stuff for developers</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Another one</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Last time</a></li>
-                </ul>
-            </div>
-            <div class="col-6 col-md">
-                <h5>Resources</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="link-secondary text-decoration-none" href="#">Resource name</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Resource</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Another resource</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Final resource</a></li>
-                </ul>
-            </div>
-            <div class="col-6 col-md">
-                <h5>Resources</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="link-secondary text-decoration-none" href="#">Business</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Education</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Government</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Gaming</a></li>
-                </ul>
-            </div>
-            <div class="col-6 col-md">
-                <h5>About</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="link-secondary text-decoration-none" href="#">Team</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Locations</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Privacy</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Terms</a></li>
-                </ul>
-            </div>
-        </div>
-    </footer>
+    <partial name="_footer" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/umd/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/material-kit.min.js"></script>
    
     @await RenderSectionAsync("Scripts", required: false)
 </body>

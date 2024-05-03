@@ -23,6 +23,7 @@ namespace WebApplicationApp.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            
             return View();
         }
         /// <summary>

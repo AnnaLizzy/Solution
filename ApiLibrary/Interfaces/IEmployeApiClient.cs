@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ApiLibrary.Interfaces
 {
-    internal interface IEmployeApiClient
+   public interface IEmployeApiClient
     {
+
     }
 }

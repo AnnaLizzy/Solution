@@ -10,7 +10,7 @@
 <div>
     <a asp-action="Create"><i class="bi bi-plus"></i>Create New</a>
 </div>
-<div>
+<div class="table-responsive">
     <table class="table table-hover table-bordered ">
         <thead>
             <tr>
@@ -54,17 +54,13 @@
                         @Html.DisplayFor(modelItem => item.EndTime)
                     </td>
                     <td>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <a asp-action="Edit" asp-route-id="@item.ShiftID">Edit</a>
-                            </div>
-                            <div class="col-md-3">                                
-                                    <a asp-action="Details" asp-route-id="@item.ShiftID">Details</a>
-                            </div>
-                            <div class="col-md-3">
-                                <a asp-action="Delete" asp-route-id="@item.ShiftID">Delete</a>
-                            </div>
-                        </div>
+                        
+                        <a asp-action="Edit" asp-route-id="@item.ShiftID">Edit</a>|
+                                                          
+                        <a asp-action="Details" asp-route-id="@item.ShiftID">Details</a>|
+                            
+                        <a asp-action="Delete" asp-route-id="@item.ShiftID">Delete</a>
+                         
                     </td>
                 </tr>
             }

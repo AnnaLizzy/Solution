@@ -4,6 +4,9 @@ using WebApplicationAPI.Constants;
 
 namespace WebApplicationAPI
 {
+    /// <summary>
+    /// build query command
+    /// </summary>
     public class DalUserBeforeLoading
     {
         private static readonly string ConnecStr = SystemConstants.AppSetting.ConnectionString;
@@ -17,7 +20,12 @@ namespace WebApplicationAPI
             };
             return command;
         }
-
+        /// <summary>
+        /// Run stored procedure
+        /// </summary>
+        /// <param name="storedProcName"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public static SqlDataReader RunProcedure(string storedProcName, IDataParameter[] parameters)
         {
             using SqlConnection connection = new(ConnecStr);

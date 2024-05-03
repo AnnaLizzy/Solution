@@ -27,8 +27,6 @@ namespace WebApplicationAPI.Service
                         join areaRegion in _context2.AreaRegion on region.RegionID equals areaRegion.RegionID
                         join area in _context2.Area on areaRegion.AreaID equals area.AreaID
                         where areaRegion.AreaID == id
-
-
                         select new { region, areaRegion, area };
             var data = query.Select(x => new RegionDTO
             {

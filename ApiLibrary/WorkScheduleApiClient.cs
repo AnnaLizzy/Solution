@@ -23,7 +23,7 @@ namespace ApiLibrary
             }
 
 
-            string[] weekdaysArray = workSchedule.ByWeekday ?? new string[0];
+            string[] weekdaysArray = workSchedule.ByWeekday ?? [];
             string weekdaysString = string.Join(",", weekdaysArray);
 
 

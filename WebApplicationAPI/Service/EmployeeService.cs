@@ -22,6 +22,12 @@ namespace WebApplicationAPI.Service
         private readonly AppDbContext _context = context;
 
         private readonly IConfiguration _configuration = configuration;
+        /// <summary>
+        /// Get User Before Loading
+        /// </summary>
+        /// <param name="employeeNo"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public async Task<List<UserBeforeLoading>> GetUserBeforeLoding_loding(string employeeNo, string password)
         {
             var parameters = new[]
@@ -50,9 +56,13 @@ namespace WebApplicationAPI.Service
 
                 result.Add(user);
             }
-
             return result;
         }
+        /// <summary>
+        /// Xác thực thông tin đăng nhập
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<ApiResult<string>> Authenticate(LoginDTO model)
         {
             // Gọi stored procedure từ DbContext
@@ -92,6 +102,12 @@ namespace WebApplicationAPI.Service
 
             return new ApiSuccessResult<string>(tokenHandler.WriteToken(token));
         }
+        /// <summary>
+        /// Tạo nhân viên mới
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task CreateEmployee(EmployeeDTO employee)
         {
             var emp = await _context.Employee.FirstOrDefaultAsync(x => x.EmployeeNo == employee.EmployeeNo);

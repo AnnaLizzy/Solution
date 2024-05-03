@@ -26,11 +26,23 @@
             public const string ConnectionStringDB2 = "Database2Connection";
             public const string ConnectionString = "Data Source=10.224.69.61;Initial Catalog=CertificateDB;User ID=formsign;Password=1234567Aa;TrustServerCertificate=True;";
         }
+        /// <summary>
+        /// Url
+        /// </summary>
         public class Url()
         {
-            public const string BaseUrl = "https://localhost:44334/";//WebApp
-            public const string BaseApiUrl = "https://localhost:44389/";//Swagger api
+            /// <summary>
+            /// web app
+            /// </summary>
+            public const string BaseUrl = "https://localhost:44334/";
+            /// <summary>
+            /// Swagger api
+            /// </summary>
+            public const string BaseApiUrl = "https://localhost:44389/";
         }
+        /// <summary>
+        /// Parametters
+        /// </summary>
         public class Parametters()
         {
             public const string EmployeeNo = "@EmployeeNo";
@@ -38,10 +50,16 @@
             public const string empNo = "EmployeeNo";
             public const string pass = "Password";
         }
+        /// <summary>
+        /// StoreProceduces
+        /// </summary>
         public class StoreProceduces()
         {
             public const string CheckLogin = "UP_UserBeforeLoding_loding";
         }
+        /// <summary>
+        /// MessageError
+        /// </summary>
         public class MessageError()
         {
             /// <summary>

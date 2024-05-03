@@ -5,65 +5,66 @@
 }
 <a asp-action="Create">Create</a>
 <h3>Bảng sắp xếp ca tổng hợp</h3>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>
-                Mã lịch làm việc
-            </th>
-            <th>
-                Tên nhân viên
-            </th>
-            <th>
-                Ca làm việc
-            </th>
-            <th>
-                Địa điểm làm việc
-            </th>
-            <th>
-                Thời gian bắt đầu
-            </th>
-            <th>
-                Thời gian kết thúc
-            </th>
-            <th>
-                Thao tác
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SchedulesID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmployeeName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ShiftName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LocationName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EndTime)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.SchedulesID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.SchedulesID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.SchedulesID">Delete</a>
-                </td>
+                <th>
+                    Mã lịch làm việc
+                </th>
+                <th>
+                    Tên nhân viên
+                </th>
+                <th>
+                    Ca làm việc
+                </th>
+                <th>
+                    Địa điểm làm việc
+                </th>
+                <th>
+                    Thời gian bắt đầu
+                </th>
+                <th>
+                    Thời gian kết thúc
+                </th>
+                <th>
+                    Thao tác
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
-
-<div class="pt-3" id='calendar'></div>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SchedulesID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShiftName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LocationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.SchedulesID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.SchedulesID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.SchedulesID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="table-responsive pt-3" id='calendar'></div>
 @section Scripts {
     <script src="~/lib/fullcalender-6.1.11/index.global.min.js"></script>
     <script src="~/lib/es5/rrule.min.js"></script>

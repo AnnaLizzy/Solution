@@ -26,7 +26,11 @@ namespace WebApplicationAPI.Service
             });
             return await query.ToListAsync();
         }
-
+        /// <summary>
+        /// Get doorpower manager
+        /// </summary>
+        /// <param name="bgId"></param>
+        /// <returns></returns>
         public async Task<List<DoorPowerManageDTO>> GetDoorPowerManager(int bgId)
         {
             var query = await _context2.DoorPowerManage
@@ -46,9 +50,6 @@ namespace WebApplicationAPI.Service
                           EnglishPicture = x.EnglishPicture,
                       }).ToListAsync();
             return query;
-
         }
-
-
     }
 }

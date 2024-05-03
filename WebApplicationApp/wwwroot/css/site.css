@@ -1,6 +1,10 @@
 ﻿html {
   font-size: 14px;
 }
+
+.hight{
+    height: 15vh;
+}
 ::-webkit-scrollbar{
   width: 8px;
   height: 8px;

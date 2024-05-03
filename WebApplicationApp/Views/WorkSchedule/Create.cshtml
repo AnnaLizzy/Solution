@@ -14,87 +14,82 @@
 </button>
 <form class="row g-3" asp-action="Create" method="post" enctype="multipart/form-data">
     <h5>I.Thông tin cơ bản :</h5>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Tên  :</label>
-            <input  />
-        </div>
+    <div class="col-6 input-group input-group-dynamic mb-4">
+        <label class="control-label pt-2">Tên  :</label>
+            <input class="form-control" />       
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Mã thẻ :</label>
-            <input  />
-        </div>
+    <div class="col-6 input-group input-group-dynamic mb-4">
+        <label class="control-label pt-2">Mã thẻ :</label>
+            <input class="form-control"  />       
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Số điện thoại :</label>
-            <input />
-        </div>
+    <div class="col-6 input-group input-group-dynamic mb-4">
+        <label class="control-label pt-2">Số điện thoại :</label>
+         <input class="form-control" />
+      
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Mail :</label>
-            <input />
-        </div>
+    <div class="col-md-6 input-group input-group-dynamic mb-4">
+
+        <label class="control-label pt-2">Mail :</label>
+        <input class="form-control"  />
+      
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Bộ phận :</label>
-            <input />
-        </div>
+    <div class="col-md-6 input-group input-group-dynamic mb-4">
+
+        <label class="control-label pt-2" >Bộ phận :</label>
+            <input class="form-control" />
+       
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Khu vực làm việc :</label>
+    <div class="col-md-6 input-group input-group-dynamic mb-4">
+    
+            <label class="control-label pt-2">Khu vực làm việc :</label>
             <select id="areaDropdown" asp-for="@Model.AreaID" asp-items="@ViewBag.GetAreaList" class="form-control" required>
                 <option disabled selected>Select Area</option>
             </select>
-        </div>
+       
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
+    <div class="col-md-6 input-group input-group-dynamic mb-4">
+      
             <label class="control-label">Vị trí làm việc :</label>
             <select id="locationDropdown" class="form-control" asp-for="LocationID" required>
                 <option disabled selected>Select Location</option>
             </select>
-        </div>
+      
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Mã chi phí :</label>
-            <input placeholder="Nhập mã chi phí" />
-        </div>
+    <div class="col-md-6 input-group input-group-dynamic mb-4">       
+            <label class="control-label pt-2">Mã chi phí :</label>
+            <input class="form-control" placeholder="Nhập mã chi phí ví dụ: BU12FT" />
+       
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Chi tiết vị trí làm việc :</label>
+    <h5>Ⅱ. Thông tin cơ bản :</h5>
+    <div class=" input-group input-group-dynamic">
+      
+            <label class="control-label pt-2">Chi tiết vị trí làm việc :</label>
             <select id="listLocationDropDown" asp-items="@ViewBag.GetLocationList" class="form-control" required>
                 <option disabled selected>Select Location Detail</option>
             </select>
-        </div>
+       
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Ca làm việc :</label>
+    <div class=" input-group  input-group-dynamic">
+        
+            <label class="control-label pt-2">Ca làm việc :</label>
             <select asp-for="ShiftID" asp-items="@ViewBag.GetShiftList" class="form-control" required>
                 <option disabled selected>Select Work Shift</option>
             </select>
-        </div>
+       
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Nhân viên  :</label>
+    <div class=" input-group input-group-dynamic">
+       
+            <label class="control-label pt-2">Nhân viên  :</label>
             <select asp-for="EmployeeID" asp-items="@ViewBag.GetEmployeeList" class="form-control" required>
                 <option disabled selected>Select Employee</option>
             </select>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Chu kỳ lặp :</label>
-            <input type="number" class="form-control" asp-for="Interval" />
-        </div>
+     </div>
+ 
+    <div class="input-group input-group-dynamic">
+       
+            <label class="control-label pt-2">Chu kỳ lặp :</label>
+            <input type="number" class="form-control" asp-for="Interval" placeholder="Điền số nguyên ví dụ : 1;2;.." />
+        
     </div>
     <div class="form-group row ">
         <div class="col-md-2">
@@ -168,36 +163,38 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Ngày bắt đầu :</label>
-            <input asp-for="StartTime" class="form-control" type="date" required />
-            <span asp-validation-for="StartTime" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-4 input-group input-group-dynamic">
+       
+                <label class="control-label pt-2">Ngày bắt đầu :</label>
+            <input id="datepicker" asp-for="StartTime" class="form-control" type="date" required />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+     
+        </div>
+        <div class="col-md-4 input-group input-group-dynamic">
+      
+                <label class="control-label pt-2">Ngày kết thúc :</label>
+                <input asp-for="EndTime" type="date" class="form-control" required />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+        
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="control-label">Ngày kết thúc :</label>
-            <input asp-for="EndTime" type="date" class="form-control" required />
-            <span asp-validation-for="StartTime" class="text-danger"></span>
-        </div>
+    <div class="input-group input-group-dynamic">
+      
+        <label class="control-label pt-2">Ghi chú :</label>
+            <input  class="form-control" />
+      
     </div>
-    <div class="col">
-        <div class="form-group">
-        <label class="control-label">Ghi chú :</label>
-            <textarea  class="form-control" rows="4"></textarea>
-        </div>
-    </div>
-    <div>
-        <div>
-            <label class="control-label">Người ký duyệt :</label>
+    <div class="input-group input-group-dynamic">
+       
+            <label class="control-label pt-2">Người ký duyệt :</label>
             <select class="form-control">
                 <option selected disabled>Chọn người ký duyệt </option>
                 <option>Nguyễn Văn A</option>
                 <option>Nguyễn Văn B</option>
                 <option>Nguyễn Văn C</option>
             </select>
-        </div>
+       
     </div>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />
@@ -208,11 +205,29 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Launch demo modal
     </button>
-    <partial name="_Dialog" id="dialog" />
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Your modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Society has put up so many boundaries, so many limitations on what’s right and wrong that it’s almost impossible to get a pure thought out.
+                    <br><br>
+                    It’s like a little kid, a little boy, looking at colors, and no one told him what colors are good, before somebody tells you you shouldn’t like pink because that’s for girls, or you’d instantly become a gay two-year-old.
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn bg-gradient-dark" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn bg-gradient-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @section Scripts {
     <script>
-      
+        
         $(document).ready(function () {          
             $('#areaDropdown').change(function () {
                 var areaId = $(this).val();
@@ -237,86 +252,12 @@
                     }
                 });
             });
-        });
-        // FullCalendar
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-
-                initialDate: '2024-03-12',
-                initialView: 'timeGridWeek',
-                nowIndicator: true,
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                },
-                navLinks: true, // can click day/week names to navigate views
-                editable: true,
-                selectable: true,
-                selectMirror: true,
-                dayMaxEvents: true, // allow "more" link when too many events
-                events: [
-                    {
-                        title: 'CA_HC',
-                        start: '2024-03-01',
-                    },
-                    {
-                        title: 'CA_CHIEU - NGUYEN THI THANH',
-                        start: '2024-03-07',
-                        end: '2024-03-10'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2024-03-09T16:00:00'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2024-03-16T16:00:00'
-                    },
-                    {
-                        title: 'Conference',
-                        start: '2024-03-11',
-                        end: '2024-03-13'
-                    },
-                    {
-                        title: 'CA_SANG - Nguyen Van A',
-                        start: '2024-03-12T07:30:00',
-                        end: '2024-03-12T16:30:00'
-                    },
-                    {
-                        title: 'CA_CHIEU - Nguyen Van B',
-                        start: '2024-03-12T12:00:00'
-                    },
-                    {
-                        title: 'CA_TOI - Nguyen Van C',
-                        start: '2024-03-12T14:30:00'
-                    },
-                    {
-                        title: 'Happy Hour',
-                        start: '2024-03-12T17:30:00'
-                    },
-                    {
-                        title: 'Dinner',
-                        start: '2024-03-12T20:00:00'
-                    },
-                    {
-                        title: 'Birthday Party',
-                        start: '2024-03-13T07:00:00'
-                    },
-                    {
-                        title: 'Click for Google',
-                        url: 'http://google.com/',
-                        start: '2024-03-28',
-                        end: '2024-04-02'
-                    }
-                ]
+            $('#datepicker').datepicker({
+                format: 'dd/mm/yyyy', // Định dạng ngày tháng năm: ngày/tháng/năm
+                autoclose: true
             });
-
-            calendar.render();
-
         });
+      
+        
     </script>
 }

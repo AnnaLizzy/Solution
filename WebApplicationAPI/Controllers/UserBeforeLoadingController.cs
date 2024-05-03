@@ -19,7 +19,8 @@ namespace WebApplicationAPI.Controllers
             var data = await _userBeforeLoadingService.GetUserBeforeLoading();
             return Ok(data);
         }
-        [HttpGet("/bgId")]
+        [HttpGet]
+        [Route("{bgId}")]
         public async Task<IActionResult> GetUserBeforeLoading(int bgId)
         {
             if(!ModelState.IsValid)

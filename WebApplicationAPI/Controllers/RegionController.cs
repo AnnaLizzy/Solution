@@ -8,6 +8,10 @@ namespace WebApplicationAPI.Controllers
     public class RegionController(IRegionService region) : Controller
     {
         private readonly IRegionService _region = region;
+        /// <summary>
+        /// Get all regions
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetRegions")]
         public async Task<IActionResult> GetRegions()
@@ -15,6 +19,12 @@ namespace WebApplicationAPI.Controllers
             var data = await _region.GetRegions();
             return Ok(data);
         }
+        /// <summary>
+        /// get region by area id 
+        /// ex: GetRegion/3/byAreaID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetRegion/{id}/byAreaID")]
         public async Task<IActionResult> GetRegion(int id)
