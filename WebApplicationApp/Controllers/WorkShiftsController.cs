@@ -107,12 +107,12 @@ namespace WebApplicationApp.Controllers
             var result = await workShiftApiClient.UpdateWorkShift(request);
             if(result)
             {
-                TempData["Message"] = "Work Shift updated successfully.";
+                TempData["success"] = "Work Shift updated successfully.";
                 return RedirectToAction(nameof(Index));
             }
             else
             {
-                TempData["Message"] = "Failed to update work shift.";
+                TempData["error"] = "Failed to update work shift.";
                 return View(request);
             }
             

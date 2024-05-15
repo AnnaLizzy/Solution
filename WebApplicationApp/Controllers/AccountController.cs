@@ -32,10 +32,14 @@ namespace WebApplicationApp.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Index(LoginDTO request)
+        public async Task<IActionResult> Index(LoginDTO request, string? returnUrl = null)
         {
+            returnUrl ??= Url.Content("~/");
             if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return View(request);
+            }
             var result = await _accountApiClient.Authenticate(request);
             if (result == null || string.IsNullOrEmpty(result.ResultObj))
             {
@@ -55,17 +59,17 @@ namespace WebApplicationApp.Controllers
                         userPrincipal,
                         authProperties);
             TempData["success"] = "Đăng nhập thành công";
-            return RedirectToAction("Index", "Home");
+            return LocalRedirect(returnUrl);
         }
         /// <summary>
         ///  Logout
         /// </summary>
-        /// <returns></returns>
-        [HttpPost]
+        /// <returns></returns>      
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Remove("Token");
             return RedirectToAction("Index", "Home");
         }
         private ClaimsPrincipal ValidateToken(string jwtToken)
@@ -75,9 +79,9 @@ namespace WebApplicationApp.Controllers
             {
                 ValidateLifetime = true,
 
-                ValidAudience = _configuration["Tokens:Issuer"],
-                ValidIssuer = _configuration["Tokens:Issuer"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"] ?? ""))
+                ValidAudience = _configuration[SystemConstants.AppSetting.TokenIssuer],
+                ValidIssuer = _configuration[SystemConstants.AppSetting.TokenIssuer],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[SystemConstants.AppSetting.TokenKey] ?? ""))
             };
 
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out _);

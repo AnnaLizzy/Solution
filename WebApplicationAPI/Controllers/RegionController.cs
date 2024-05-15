@@ -3,6 +3,10 @@ using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="region"></param>
     [Route("api/[controller]")]
     [ApiController]
     public class RegionController(IRegionService region) : Controller
@@ -21,8 +25,13 @@ namespace WebApplicationAPI.Controllers
         }
         /// <summary>
         /// get region by area id 
-        /// ex: GetRegion/3/byAreaID
         /// </summary>
+        /// <remarks>
+        /// example: id = 3 QV3
+        ///    [
+        ///    
+        ///    ]
+        /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
@@ -30,6 +39,22 @@ namespace WebApplicationAPI.Controllers
         public async Task<IActionResult> GetRegion(int id)
         {
             var data = await _region.GetRegion(id);
+            return Ok(data);
+        }
+        /// <summary>
+        /// get region by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetRegionById/{id}")]
+        public async Task<IActionResult> GetRegionByID (int id)
+        {
+            var data = await _region.GetRegionByID(id);
+            if(data == null)
+            {
+                return BadRequest();
+            }
             return Ok(data);
         }
     }

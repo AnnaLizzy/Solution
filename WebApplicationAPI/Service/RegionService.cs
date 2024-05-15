@@ -38,6 +38,24 @@ namespace WebApplicationAPI.Service
             return await data.ToListAsync();
         }
         /// <summary>
+        /// get region by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<RegionDTO> GetRegionByID(int id)
+        {
+            var query = from r in _context2.Region
+                        where r.RegionID == id
+                        select new RegionDTO
+                        {
+                            RegionID = r.RegionID,
+                            RegionName = r.RegionName
+                        };
+            var result = await query.FirstOrDefaultAsync();
+            return result!;
+        }
+
+        /// <summary>
         /// Get all regions
         /// </summary>
         /// <returns></returns>

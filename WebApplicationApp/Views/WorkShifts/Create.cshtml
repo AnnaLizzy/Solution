@@ -15,22 +15,22 @@
 <form asp-action="Create" enctype="multipart/form-data" method="post">
     <div class="row">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="col-md-4 input-group input-group-dynamic mb-4">
+        <div class="col-md-4 input-group input-group-static mb-4">
             <label asp-for="NameShift" class="control-label pt-2"></label>
             <input asp-for="NameShift" class="form-control pas-2" />
             <span asp-validation-for="NameShift" class="text-danger"></span>
         </div>
-        <div class="col-md-6 input-group input-group-dynamic mb-4">
+        <div class="col-md-6 input-group input-group-static mb-4">
             <label asp-for="DescriptionShift" class="control-label pt-2 "></label>
             <input asp-for="DescriptionShift" class="form-control ps-2" />
             <span asp-validation-for="DescriptionShift" class="text-danger"></span>
         </div>
-        <div class="col-md-4 input-group input-group-dynamic mb-4">
+        <div class="col-md-4 input-group input-group-static mb-4">
             <label asp-for="StartTime" class="control-label pt-2"></label>
             <input asp-for="StartTime" type="time" class="form-control" />
             <span asp-validation-for="StartTime" class="text-danger"></span>
         </div>
-        <div class="col-md-4 input-group input-group-dynamic mb-4">
+        <div class="col-md-4 input-group input-group-static mb-4">
             <label asp-for="EndTime" class="control-label pt-2"></label>
             <input asp-for="EndTime" type="time" class="form-control" />
             <span asp-validation-for="EndTime" class="text-danger"></span>

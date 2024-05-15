@@ -3,13 +3,8 @@ using ApiLibrary.Interfaces;
 using Azure.Core;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using WebApplicationAPI.Constants;
 using WebApplicationAPI.DTOs;
 using WebApplicationAPI.ViewModels;
@@ -23,11 +18,11 @@ namespace ApiLibrary
         public async Task<ApiResult<string>> Authenticate(LoginDTO model)
         {
             var json = JsonConvert.SerializeObject(model);
-            var httpContent = new StringContent(json, Encoding.UTF8, ApiConst.Setting.StringContent);
+            var httpContent = new StringContent(json, Encoding.UTF8, SystemApiConst.Setting.StringContent);
 
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_baseUrl);
-            var response = await client.PostAsync(ApiConst.Url.LoginUrl, httpContent);
+            var response = await client.PostAsync(SystemApiConst.Account.LoginUrl, httpContent);
             if (response.IsSuccessStatusCode)
             {
                 return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(await response.Content.ReadAsStringAsync())!;
@@ -40,8 +35,8 @@ namespace ApiLibrary
         {
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_baseUrl);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(ApiConst.Setting.Bearer, token);
-            var response = await client.GetAsync(ApiConst.Url.GetEmployees);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(SystemApiConst.Setting.Bearer, token);
+            var response = await client.GetAsync(SystemApiConst.Account.GetEmployees);
             if (response.IsSuccessStatusCode)
             {
                 return JsonConvert.DeserializeObject<List<EmployeeDTO>>(await response.Content.ReadAsStringAsync())!;

@@ -3,6 +3,10 @@ using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="listLocationService"></param>
     [Route("api/[controller]")]
     [ApiController]
     public class ListLocationsController(IListLocationService listLocationService

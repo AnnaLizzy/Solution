@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplicationAPI.Controllers
 {
+    /// <summary>
+    /// Employees
+    /// </summary>
+    /// <param name="employeeService"></param>
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]

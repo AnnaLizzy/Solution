@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.DTOs;
 using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Controllers
 {
+    /// <summary>
+    /// Locations
+    /// </summary>
+    /// <param name="locationService"></param>
     [Route("api/[controller]")]
     [ApiController]
     public class LocationController(ILocationService locationService) : ControllerBase
@@ -19,9 +24,7 @@ namespace WebApplicationAPI.Controllers
         /// examlpe :
         ///     get All location
         /// </remarks>
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet] 
         public async Task<IActionResult> GetLocations()
         {
             var data = await _locationService.GetLocations();
@@ -40,7 +43,7 @@ namespace WebApplicationAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetLocationByAreaID(int id)
+        public async Task<IActionResult> GetLocationByID(int id)
         {
             var data = await _locationService.GetLocation(id);
             if (data == null)
@@ -49,23 +52,48 @@ namespace WebApplicationAPI.Controllers
             }
             return Ok(data);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateLocation([FromBody] LocationDTO model)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Consumes("multipart/form-data")]        
+        public async Task<IActionResult> CreateLocation([FromForm] LocationDTO model)
         {
-            await _locationService.CreateLocation(model);
+            if (model == null)
+            {
+                return BadRequest("Please enter Location");
+            }
+           var result = await _locationService.CreateLocation(model);
+            if(result == 0)
+            {
+                return BadRequest("Create failed. Please check your input.");
+            }
             return Ok();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Authorize]
         [HttpPatch("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateLocation(int id, [FromBody] LocationDTO model)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateLocation([FromRoute]int id, [FromForm] LocationDTO model)
         {
             await _locationService.UpdateLocation(id, model);
             return Ok();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

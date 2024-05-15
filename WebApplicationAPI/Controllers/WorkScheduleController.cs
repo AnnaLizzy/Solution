@@ -4,6 +4,10 @@ using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="workScheduleService"></param>
     [Route("api/[controller]")]
     [ApiController]
     public class WorkScheduleController(IWorkScheduleService workScheduleService) : ControllerBase
@@ -39,6 +43,11 @@ namespace WebApplicationAPI.Controllers
             }
             return Ok(data);
         }
+        /// <summary>
+        /// Get work schedule by employee id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("employee/{id}")]
         public async Task<ActionResult<WorkScheduleDTO>> GetWorkScheduleByEmployeeId(int id)
         {
@@ -49,6 +58,11 @@ namespace WebApplicationAPI.Controllers
             }
             return Ok(data);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("location/{id}")]
         public async Task<ActionResult<WorkScheduleDTO>> GetWorkScheduleByLocationId(string id)
         {

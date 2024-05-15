@@ -1,7 +1,13 @@
 ﻿namespace WebApplicationAPI.Constants
 {
+    /// <summary>
+    /// All constants in system
+    /// </summary>
     public class SystemConstants
     {
+        /// <summary>
+        ///  Constants
+        /// </summary>
         public class AppSetting()
         {
             /// <summary>
@@ -20,10 +26,25 @@
             /// issure
             /// </summary>
             public const string TokenIssuer = "Tokens:Issuer";
+            /// <summary>
+            /// 
+            /// </summary>
             public const string TokenKey = "Tokens:Key";
+            /// <summary>
+            /// 
+            /// </summary>
             public const string SecretKey = "SecretKey";
+            /// <summary>
+            /// 
+            /// </summary>
             public const string ConnectionStringDB1 = "DefaultConnection";
+            /// <summary>
+            /// 
+            /// </summary>
             public const string ConnectionStringDB2 = "Database2Connection";
+            /// <summary>
+            /// 
+            /// </summary>
             public const string ConnectionString = "Data Source=10.224.69.61;Initial Catalog=CertificateDB;User ID=formsign;Password=1234567Aa;TrustServerCertificate=True;";
         }
         /// <summary>
@@ -45,9 +66,21 @@
         /// </summary>
         public class Parametters()
         {
+            /// <summary>
+            /// Mã thẻ nhân viên : biến run store proceduce
+            /// </summary>
             public const string EmployeeNo = "@EmployeeNo";
+            /// <summary>
+            /// mật khẩu : biến run store proceduce
+            /// </summary>
             public const string Password = "@password";
+            /// <summary>
+            /// mã thẻ nhân viên 
+            /// </summary>
             public const string empNo = "EmployeeNo";
+            /// <summary>
+            /// mật khẩu
+            /// </summary>
             public const string pass = "Password";
         }
         /// <summary>
@@ -55,6 +88,9 @@
         /// </summary>
         public class StoreProceduces()
         {
+            /// <summary>
+            /// store proceduce check login
+            /// </summary>
             public const string CheckLogin = "UP_UserBeforeLoding_loding";
         }
         /// <summary>
@@ -66,7 +102,13 @@
             /// Account
             /// </summary>
             public const string LoginError = "Không tìm thấy người dùng hoặc mật khẩu không chính xác";
+            /// <summary>
+            /// 
+            /// </summary>
             public const string EmployeeErrorExist = "Employee already exist in Database.";
+            /// <summary>
+            /// 
+            /// </summary>
             public const string EmployeeErrorNotExist = "Employee doesn't exist in database.";
             /// <summary>
             /// Area

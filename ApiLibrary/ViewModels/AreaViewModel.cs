@@ -10,6 +10,7 @@ namespace ApiLibrary.ViewModels
     {
         public int AreaID { get; set; }
         public string? AreaName { get; set; }
-    
+        public string? ShortName { get; set; }
+
     }
 }

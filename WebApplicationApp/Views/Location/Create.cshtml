@@ -1,23 +1,44 @@
 ﻿@model ListLocationVM
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create Locations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h4>Tao moi dia diem truc</h4>
+<h4 class="text-center">Tạo mới địa điểm trực </h4>
 <hr />
 <button type="button" class="btn btn-sm">
     <a asp-action="Index"><i class="bi bi-chevron-left"></i>Back to List</a>
 </button>
 <div class="container-fluid">
-    <form class="row g-2" asp-action="Create" method="post">
+    <form class="row g-2" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="col-6">
-            <div class="input-group input-group-dynamic">
-                <label class="control-label pt-2">Ten vị trí làm việc :</label>
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Mã nhân viên : </label>
+                <input type="hidden" asp-for="EmployeeNo" value="@ViewBag.UserNO" />
+                <input class="form-control" type="text" disabled  value="@ViewBag.UserNO" />
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Tên người làm đơn : </label>
+                <input class="form-control" type="text" disabled value="@ViewBag.UserName" />
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Địa chỉ mail </label>
+                <input class="form-control" type="text" disabled value="@ViewBag.Notes" />
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Tên vị trí làm việc :</label>
                 <input class="form-control" type="text" asp-for="LocationName" />
+                <span class="text-danger" asp-validation-for="LocationName"></span>
             </div>
          </div>
         <div class="col-6">
-            <div class="input-group input-group-dynamic">
+            <div class="input-group input-group-static">
                 <label class="control-label pt-2">Khu vực làm việc :</label>
                 <select id="areaDropdown" asp-for="@Model.Area" asp-items="@ViewBag.GetAreas" class="form-control" required>
                     <option disabled selected>Select Area</option>
@@ -25,7 +46,7 @@
             </div>
         </div>
         <div class="col-6" >
-            <div class="input-group input-group-dynamic">
+            <div class="input-group input-group-static">
                 <label class="control-label pt-2">Khu :</label>
                 <select id="regionDropdown" class="form-control" asp-for="Region" required>
                     <option disabled selected>Select Region</option>
@@ -33,28 +54,56 @@
             </div>
         </div>
         <div class="col-6">
-                    <div class="form-group">
-                        <label for="choices-remove-button" class="control-label"
-                            >Hướng :</label
-                        >
-                        <select
-                            name="choices-remove-button"
-                            id="choices-remove-button"
-                            multiple
-                            class="form-control choices"
-                            required
-                        >                        
-                            <option value="East">Đông</option>
-                            <option value="West">Tây</option>
-                            <option value="South">Nam</option>
-                            <option value="North">Bắc</option>
-                        </select>
-                    </div>
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Tòa nhà :</label>
+               <input class="form-control" type="text" asp-for="Building" />
             </div>
+        </div>
         <div class="col-6">
-            <div class="input-group input-group-dynamic ">
-                <label class="control-label pt-2">Floors :</label>
-                <input class="form-control" type="text" asp-for="Floors" />
+                <div class="input-group input-group-static">
+                    <label  class="control-label" >Hướng :</label>
+                    <input class="form-control" type="text" asp-for="Azimuth" />
+                </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static ">
+                <label class="control-label pt-2">Tầng :</label>
+                <input class="form-control" type="text" asp-for="Floors" >
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static ">
+                <label class="control-label pt-2">Station type :</label>
+                <select class="form-control" type="text" asp-for="StationType" >
+                    <option value="1 ca">1 ca</option>
+                    <option value="2 ca">2 ca</option>
+                    <option value="3 ca">3 ca</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static ">
+                <label class="control-label pt-2">Khác :</label>
+                <input class="form-control" placeholder="Limit 100 characters" type="text" asp-for="Other">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static ">
+                <label class="control-label pt-2">Ngày bắt đầu:</label>
+                <input class="form-control" type="date" asp-for="StartTime">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static ">
+                <label class="control-label pt-2">Ngày kết thúc :</label>
+                <input class="form-control" type="date" asp-for="EndTime">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static ">
+                <label class="control-label pt-2">Người phê duyệt :</label>
+                <input class="form-control" placeholder="Eg: V012345" type="text" asp-for="SignUser">
+                <span class="text-danger" asp-validation-for="SignUser" ></span>
             </div>
         </div>
         <div class="form-group pt-3">
@@ -78,7 +127,7 @@
                     success: function (data) {
                         $('#regionDropdown').empty();
                         if (data.length === 0) {
-                            $('#regionDropdown').append($('<option></option>').text('No data').val(''));
+                            $('#regionDropdown').append($('<option></option>').text('No data').val('no data'));
                         } else {
                             $.each(data, function (index, region) {
                                 $('#regionDropdown').append($('<option></option>').attr('value', region.regionID).text(region.regionName));
@@ -91,11 +140,25 @@
                 });
             });
         });
-         document.addEventListener("DOMContentLoaded", function () {
-                const choicesBasic = new Choices("#choices-remove-button", {
-                    allowHTML: true,                 
-                });
-                
+        document.addEventListener("DOMContentLoaded", function () {
+            // Lấy thẻ input bằng ID hoặc class, trong ví dụ này là class "form-control"
+            var locationInput = document.querySelector('.form-control');
+
+            // Thêm sự kiện "input" cho thẻ input
+            locationInput.addEventListener('input', function () {
+                // Lấy phần tử span hiển thị thông báo lỗi
+                var errorSpan = document.querySelector('.text-danger');
+
+                // Nếu người dùng đã nhập liệu vào trường
+                if (locationInput.value.trim() !== '') {
+                    // Ẩn đi phần tử hiển thị thông báo lỗi
+                    errorSpan.style.display = 'none';
+                } else {
+                    // Hiển thị lại phần tử hiển thị thông báo lỗi
+                    errorSpan.style.display = 'inline';
+                }
             });
+        });
     </script>
+
 }

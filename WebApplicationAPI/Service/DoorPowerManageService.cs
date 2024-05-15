@@ -5,9 +5,17 @@ using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Service
 {
+    /// <summary>
+    /// Door power manager
+    /// </summary>
+    /// <param name="appDbContext2"></param>
     public class DoorPowerManageService(AppDbContext2 appDbContext2) : IDoorPowerMangeService
     {
         private readonly AppDbContext2 _context2 = appDbContext2;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<DoorPowerManageDTO>> GetDoorPowerManager()
         {
            var query  =  _context2.DoorPowerManage.Select(x => new DoorPowerManageDTO
@@ -51,5 +59,20 @@ namespace WebApplicationAPI.Service
                       }).ToListAsync();
             return query;
         }
+        /// <summary>
+        /// get by empno
+        /// </summary>
+        /// <param name="empNo"></param>
+        /// <returns></returns>
+        //public async Task<DoorPowerManageDTO> GetDoorPowerManagerByEmp(string empNo)
+        //{
+        //    var query = await _context2.DoorPowerManage
+        //                .Where(x => x.EmployeeNo == empNo)
+        //                .Select(x => new DoorPowerManageDTO
+        //                {
+        //                    EmployeeName = x.EmployeeName,
+        //                }).ToListAsync();
+            
+        //}
     }
 }

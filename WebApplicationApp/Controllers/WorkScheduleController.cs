@@ -1,9 +1,14 @@
-﻿using ApiLibrary.Interfaces;
+﻿using ApiLibrary;
+using ApiLibrary.Interfaces;
 using ApiLibrary.ViewModels;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using WebApplicationAPI.Constants;
 
 namespace WebApplicationApp.Controllers
@@ -13,7 +18,9 @@ namespace WebApplicationApp.Controllers
             IListLocationApiClient listLocationApiClient,IAreaApiClient areaApiClient,
             IWorkShiftApiClient shiftApiClient,
             IAccountApiClient accountApiClient,
-            IHttpContextAccessor accessor
+            IHttpContextAccessor accessor,
+            IUserBeforeLoadingApiClient userBeforeLoading,
+            IConfiguration configuration
             ) : Controller
     {
         private readonly IWorkScheduleApiClient workScheduleApi = workScheduleApi;
@@ -22,7 +29,8 @@ namespace WebApplicationApp.Controllers
         private readonly IWorkShiftApiClient shiftApi = shiftApiClient;
         private readonly IAccountApiClient accountApi = accountApiClient;
         private readonly IHttpContextAccessor _httpContextAccessor = accessor;
-        
+        private readonly IUserBeforeLoadingApiClient _userBeforeLoadingApi = userBeforeLoading;
+        private readonly IConfiguration _configuration = configuration;
         public async Task<IActionResult> Index()
         {
 
@@ -60,7 +68,7 @@ namespace WebApplicationApp.Controllers
             var getShiftList = await shiftApi.GetWorkShifts();
             var shiftData = getShiftList.Select(s => new SelectListItem
             {
-                Text = s.NameShift,
+                Text = s.DescriptionShift,
                 Value = s.ShiftID.ToString()
             });
             return shiftData;
@@ -75,17 +83,52 @@ namespace WebApplicationApp.Controllers
             });
             return locationData;
         }
-      
+        private async Task<UserBeforeLoadingViewModel> GetUserInfor()
+        {
+            // Lấy userId từ HttpContextAccessor
+            var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Chuyển đổi userIdString sang kiểu int bằng int.Parse()
+            int userIdInt = int.Parse(userIdString!);
+
+            // Thực hiện truy vấn data
+            var data = await _userBeforeLoadingApi.GetById(userIdInt);
+            return data;
+        }
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             string? token = _httpContextAccessor?.HttpContext?.Session.GetString(SystemConstants.AppSetting.Token);
+            // Lấy thông tin người dùng
+            var userInfo = await GetUserInfor();
+            if (userInfo != null)
+            {
+                ViewBag.UserNO = userInfo.EmployeeNo;
+                ViewBag.UserName = userInfo.EmployeeName;
+                ViewBag.Notes = userInfo.Notes;
+                ViewBag.BU = userInfo.BUCode;
+                ViewBag.BG = userInfo.BGID switch
+                {
+                    2 => "FIH",
+                    16 => "FIT",
+                    18 => "Fii-CNS",
+                    39 => "TW",
+                    1039 => "B事业群",
+                    1040 => "HONYAOFU",
+                    1041 => "KCT",
+                    1042 => "FuShan",
+                    1043 => "C事業群",
+                    1044 => "中央採購-機構採購",
+                    _ => string.Empty
+                };
+            }
 
             ViewBag.GetAreaList = await GetAreasAsync();
 
             ViewBag.GetShiftList = await GetWorkShifts();
-           
+
             ViewBag.GetLocationList = await GetListLocations();
+
 
             if (token != null)
             {
@@ -98,11 +141,12 @@ namespace WebApplicationApp.Controllers
                 });
                 ViewBag.GetEmployeeList = employeeData;
             }
-            else {
+            else
+            {
                 TempData["Error"] = "Please login to continue";
                 return RedirectToAction("Index", "Account");
             }
-           
+
             return View();
         }
 
@@ -110,6 +154,15 @@ namespace WebApplicationApp.Controllers
        // [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm]CreateWorkScheduleViewModel workSchedule)
         {
+            // Lấy thông tin người dùng
+            var userInfo = await GetUserInfor();
+            if (userInfo != null)
+            {
+                ViewBag.UserNO = userInfo.EmployeeNo;
+                ViewBag.UserName = userInfo.EmployeeName;
+                ViewBag.Notes = userInfo.Notes;
+                ViewBag.BU = userInfo.BUCode;
+            }
             if (!ModelState.IsValid)
             {
                 // ModelState không hợp lệ, hiển thị lại form tạo công việc với thông báo lỗi

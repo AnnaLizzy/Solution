@@ -11,5 +11,6 @@ namespace ApiLibrary.Interfaces
     {
         Task<List<RegionsViewModel>> GetRegions();
         Task<RegionsViewModel> GetRegion(int id);
+        Task<RegionsViewModel> GetRegionByID(int id);
     }
 }

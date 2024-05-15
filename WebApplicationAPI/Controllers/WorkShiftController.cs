@@ -5,6 +5,10 @@ using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="workShiftService"></param>
     [Route("api/[controller]")]
     [ApiController]
     public class WorkShiftController(IWorkShiftService workShiftService) : ControllerBase

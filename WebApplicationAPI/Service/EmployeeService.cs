@@ -17,17 +17,25 @@ using WebApplicationAPI.ViewModels;
 
 namespace WebApplicationAPI.Service
 {
-    public class EmployeeService(AppDbContext context, IConfiguration configuration) : IEmployeeService
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="appDbContext2"></param>
+    /// <param name="configuration"></param>
+    public class EmployeeService(AppDbContext context,
+        AppDbContext2 appDbContext2,
+        IConfiguration configuration) : IEmployeeService
     {
         private readonly AppDbContext _context = context;
-
+        private readonly AppDbContext2 _context2 = appDbContext2;
         private readonly IConfiguration _configuration = configuration;
         /// <summary>
         /// Get User Before Loading
         /// </summary>
         /// <param name="employeeNo"></param>
         /// <param name="password"></param>
-        /// <returns></returns>
+        /// <returns>List user</returns>
         public async Task<List<UserBeforeLoading>> GetUserBeforeLoding_loding(string employeeNo, string password)
         {
             var parameters = new[]
@@ -67,7 +75,21 @@ namespace WebApplicationAPI.Service
         {
             // Gọi stored procedure từ DbContext
             var user = await GetUserBeforeLoding_loding(model.UserName ?? string.Empty, model.Password ?? string.Empty);
+            //ktra qua trinh dang nhap
+            var userBeforeLoadingID = await _context2.UserBeforeLoding
+                                   .Where( x => x.EmployeeNo == model.UserName)
+                                   .Select(x => x.UserBeforeLodingID)
+                                   .FirstOrDefaultAsync();
+           var email = from e in _context2.UserBeforeLoding
+                       where e.EmployeeNo == model.UserName
+                       select e.Notes;
+            var emailResult = await email.FirstOrDefaultAsync();
 
+            var emp = from e in _context.Employee
+                            where e.EmployeeNo == model.UserName && e.Password == model.Password
+                            select e;
+            var results = await emp.FirstOrDefaultAsync();
+           
             // Kiểm tra kết quả trả về
             if (user == null || user.Count == 0)
             {
@@ -80,6 +102,12 @@ namespace WebApplicationAPI.Service
             {
                 return new ApiErrorResult<string>(SystemConstants.MessageError.LoginError);
             }
+            // Kiểm tra xem có người dùng nào tồn tại không
+            if (user == null || emp == null)
+            {
+                return new ApiErrorResult<string>(SystemConstants.MessageError.LoginError);
+            }
+
 
             // Generate JWT token
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -92,7 +120,9 @@ namespace WebApplicationAPI.Service
                 Issuer = _configuration[SystemConstants.AppSetting.TokenIssuer],
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                        new(ClaimTypes.Name, userInfo.EmployeeNo?.ToString() ?? string.Empty)
+                    new(ClaimTypes.Name, userInfo.EmployeeNo?.ToString() ?? string.Empty),
+                    new(ClaimTypes.NameIdentifier, userBeforeLoadingID.ToString() ?? string.Empty),
+                    new(ClaimTypes.Email, emailResult?.ToString() ?? string.Empty)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(
@@ -101,7 +131,7 @@ namespace WebApplicationAPI.Service
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return new ApiSuccessResult<string>(tokenHandler.WriteToken(token));
-        }
+        }   
         /// <summary>
         /// Tạo nhân viên mới
         /// </summary>
@@ -115,6 +145,7 @@ namespace WebApplicationAPI.Service
             {
                 throw new Exception(SystemConstants.MessageError.EmployeeErrorExist);
             }
+            
             var newEmp = new Employee
             {
                 EmployeeNo = employee.EmployeeNo,
@@ -131,7 +162,11 @@ namespace WebApplicationAPI.Service
             _context.Employee.Add(newEmp);
             await _context.SaveChangesAsync();
         }
-
+        /// <summary>
+        /// Delete employee by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task DeleteEmployee(int id)
         {
             var emp = await _context.Employee.FindAsync(id);
@@ -141,7 +176,12 @@ namespace WebApplicationAPI.Service
                 await _context.SaveChangesAsync();
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<EmployeeDTO> GetEmployee(int id)
         {
             var emp = await _context.Employee
@@ -161,7 +201,10 @@ namespace WebApplicationAPI.Service
             };
             return data;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<EmployeeDTO>> GetEmployees()
         {
             var query = _context.Employee.Select(e => new EmployeeDTO
@@ -179,7 +222,13 @@ namespace WebApplicationAPI.Service
             var data = await query.ToListAsync();
             return data;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="employee"></param>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public async Task UpdateEmployee(int id, EmployeeDTO employee)
         {
             var emp = await _context.Employee.FirstOrDefaultAsync(e => e.EmployeeID == id);

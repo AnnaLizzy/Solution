@@ -12,25 +12,19 @@
         <thead>
             <tr>
                 <th>
-                    List ID
+                    ID
+                </th>               
+                <th>
+                    Tên địa điểm
+                </th>              
+                <th>
+                    Ngày tạo đơn 
                 </th>
                 <th>
-                    Location ID
+                    Trạng thái 
                 </th>
                 <th>
-                    Location Name
-                </th>
-                <th>
-                    Floors
-                </th>
-                <th>
-                    Area
-                </th>
-                <th>
-                    Region
-                </th>
-                <th>
-                    Thao tac
+                    Thao tác 
                 </th>
             </tr>
         </thead>
@@ -40,29 +34,67 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.ListID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LocationID)
-                    </td>
+                    </td>                    
                     <td>
                         @Html.DisplayFor(modelItem => item.LocationName)
+                    </td>                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateTime)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Floors)
+                        @switch (item.SignStatus)
+                        {
+                            case Status.TAM_LUU:
+                                <text>Tạm lưu</text>
+                                break;
+                            case Status.CHO_KY:
+                                <text>Chờ ký</text>
+                                break;
+                            case Status.DA_KY:
+                                <text>Đã ký</text>
+                                break;
+                            default:
+                                <text>Trạng thái không xác định</text>
+                                break;
+                        }
                     </td>
+
                     <td>
-                        @Html.DisplayFor(modelItem => item.Area)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Region)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ListID">Edit</a> |
+                        <a asp-action="Update" asp-route-id="@item.ListID">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.ListID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ListID">Delete</a>
+                       @*  <a asp-action="Delete" asp-route-id="@item.ListID">Delete</a> *@
+                        <a asp-route-id="@item.ListID" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Delete
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                 <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are you sure delete this ?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn bg-gradient-dark" data-bs-dismiss="modal">Close</button>
+
+                        <button type="button"  asp-action="Delete" asp-controller="Location" class="btn bg-gradient-primary">Save changes</button>
+
+                    </div>
+               
+            </div>
+
+        </div>
+    </div>
+</div>
+          
+
+           

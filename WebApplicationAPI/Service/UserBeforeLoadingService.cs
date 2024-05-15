@@ -54,5 +54,25 @@ namespace WebApplicationAPI.Service
                 }).ToListAsync();
             return data;
         }
+        /// <summary>
+        /// get User by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<UserBeforeLodingDTO> GetUserBeforeLoadingById(int id)
+        {
+            var query = await _context.UserBeforeLoding
+                .Select(x => new UserBeforeLodingDTO
+                {
+                    UserBeforeLodingID = x.UserBeforeLodingID,
+                    BGID = x.BGID,
+                    EmployeeNo = x.EmployeeNo,
+                    EmployeeName = x.EmployeeName,
+                    BUCode = x.BUCode == null || x.BUCode == "1" ? "N/A" : x.BUCode.ToString(),
+                    Notes = x.Notes,
+                    CreateTime = x.CreateTime,
+                }).FirstOrDefaultAsync(x => x.UserBeforeLodingID == id) ?? throw new System.Exception($"Cannot found User id :{id}");
+            return query;
+        }
     }
 }

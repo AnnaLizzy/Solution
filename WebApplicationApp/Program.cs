@@ -15,6 +15,8 @@ builder.Services.AddScoped<IAreaApiClient, AreaApiClient>();
 builder.Services.AddScoped<IWorkScheduleApiClient, WorkScheduleApiClient>();
 builder.Services.AddScoped<IAccountApiClient, AccountApiClient>();
 builder.Services.AddScoped<IRegionApiClient, RegionApiClient>();
+builder.Services.AddScoped<IEmployeeApiClient, EmployeeApiClient>();
+builder.Services.AddScoped<IUserBeforeLoadingApiClient, UserBeforeLoadingApiClient>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();

@@ -58,7 +58,7 @@ namespace ApiLibrary
                 { new StringContent(workShift.StartTime.ToString()), "StartTime" },
                 { new StringContent(workShift.EndTime.ToString()), "EndTime" }
             };
-            var response = await client.PutAsync($"/api/WorkShift/{id}", requestContent);
+            var response = await client.PutAsync($"api/WorkShift/{id}", requestContent);
             return response.IsSuccessStatusCode;
         }
     }

@@ -6,6 +6,12 @@ using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="areaService"></param>
+    /// <param name="locationService"></param>
+    /// <param name="workScheduleService"></param>
     [Route("api/[controller]")]
     [ApiController]
     

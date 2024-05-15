@@ -1,4 +1,5 @@
-﻿using ApiLibrary.Interfaces;
+﻿using ApiLibrary.Constants;
+using ApiLibrary.Interfaces;
 using ApiLibrary.ViewModels;
 using WebApplicationAPI.Constants;
 
@@ -57,13 +58,13 @@ namespace ApiLibrary
 
         public async Task<WorkScheduleViewModel> GetWorkSchedule(int? id)
         {
-            return await GetAsync<WorkScheduleViewModel>($"api/WorkSchedule/{id}")
+            return await GetAsync<WorkScheduleViewModel>(SystemApiConst.WorkSchedule.GetWorkSchedule+id)
                 ?? throw new Exception("Cannot find work schedule");
         }
 
         public async Task<List<WorkScheduleViewModel>> GetWorkSchedules()
         {
-            return await GetAsync<List<WorkScheduleViewModel>>("api/WorkSchedule")
+            return await GetAsync<List<WorkScheduleViewModel>>(SystemApiConst.WorkSchedule.GetWorkSchedule)
                 ?? throw new Exception("Error occurred");
         }
 

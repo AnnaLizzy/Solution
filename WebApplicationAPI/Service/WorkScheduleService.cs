@@ -8,10 +8,19 @@ using WebApplicationAPI.ViewModels;
 
 namespace WebApplicationAPI.Service
 {
+    /// <summary>
+    /// work schedule service
+    /// </summary>
+    /// <param name="appDb"></param>
     public class WorkScheduleService(AppDbContext appDb) : IWorkScheduleService
     {
         private readonly AppDbContext _context = appDb;
-
+        /// <summary>
+        /// create work schedule
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public async Task<ApiResult<bool>> CreateWorkSchedule(WorkScheduleDTO model)
         {
             var shift = _context.WorkShift.FirstOrDefault(x => x.ShiftID == model.ShiftID) ?? throw new AppException("Khong ton tai ca lam viec nay");
@@ -41,7 +50,12 @@ namespace WebApplicationAPI.Service
                 Message = result > 0 ? "Tạo lịch làm việc thành công" : "Tạo lịch làm việc thất bại"
             };  
         }
-
+        /// <summary>
+        /// delete work schedule by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public Task DeleteWorkSchedule(int id)
         {
             var query = _context.WorkSchedules.FirstOrDefault(x => x.SchedulesID == id) ;
@@ -52,7 +66,12 @@ namespace WebApplicationAPI.Service
             }
             throw new AppException("Khong ton tai lich lam viec nay");
         }
-
+        /// <summary>
+        /// get work schedule by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public async Task<WorkScheduleDTO> GetWorkSchedule(int id)
         {
             var query = await _context.WorkSchedules.FirstOrDefaultAsync(x => x.SchedulesID == id) ?? throw new AppException("Khong ton tai lich lam viec nay");
@@ -76,7 +95,12 @@ namespace WebApplicationAPI.Service
                         };
             return model.FirstOrDefault() ?? throw new AppException("No data");
         }
-
+        /// <summary>
+        /// get work schedule by employee id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public async Task<WorkScheduleDTO> GetWorkScheduleByEmployeeId(int id)
         {
             var query =  _context.WorkSchedules.FirstOrDefault(x => x.EmployeeID == id) 
@@ -101,7 +125,12 @@ namespace WebApplicationAPI.Service
                         }).ToListAsync();
             return model.FirstOrDefault() ?? throw new AppException("No data");
         }
-
+        /// <summary>
+        /// get work schedule by location id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public async Task<List<WorkScheduleDTO>> GetWorkScheduleByLocationId(string id)
         {
            var query =  _context.WorkSchedules.Where(x => x.LocationID == id) ?? throw new AppException("Khong ton tai lich lam viec nay");
@@ -125,7 +154,10 @@ namespace WebApplicationAPI.Service
                         }).ToListAsync();
             return model ?? throw new AppException("No data");
         }
-
+        /// <summary>
+        /// get all work schedules
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<WorkScheduleDTO>> GetWorkSchedules()
         {
             
@@ -148,7 +180,13 @@ namespace WebApplicationAPI.Service
                         };
             return await query.ToListAsync();
         }
-
+        /// <summary>
+        /// update work schedule by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="AppException"></exception>
         public async Task UpdateWorkSchedule(int id, WorkScheduleDTO model)
         {
             var query = _context.WorkSchedules.FirstOrDefault(x => x.SchedulesID == id) ?? throw new AppException("Khong ton tai lich lam viec nay");
