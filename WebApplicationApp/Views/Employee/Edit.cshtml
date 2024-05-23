@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4 class="text-center">Edit</h4>
+<form method="post" >
+    <div class="row g-2">
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Mã nhân viên :</label>
+                <input class="form-control" type="text" value="@Model.EmployeeNo"  >
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Họ tên :</label>
+                <input class="form-control" type="text" value="@Model.EmployeeName"  >
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Giới tính :</label>
+                <input class="form-control" type="text" value="@Model.Gender"  >
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Phone number :</label>
+                <input class="form-control" type="text" value="@Model.PhoneNumber"  >
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Date of birth :</label>
+                <input class="form-control" type="text" value="@Model.DateOfBirth"  >
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Address :</label>
+                <input class="form-control" type="text" value="@Model.EmpAddress"  >
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Date of birth :</label>
+                <input class="form-control" type="text" value="@Model.Company"  >
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary">Submit</button>
+</form>

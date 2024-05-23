@@ -23,7 +23,7 @@ namespace WebApplicationAPI.Service.Interfaces
         /// </summary>
         /// <param name="empNo"></param>
         /// <returns></returns>
-        //Task<DoorPowerManageDTO> GetDoorPowerManagerByEmp(string empNo);
+        Task<DoorPowerManageDTO> GetDoorPowerManagerByEmp(string empNo);
         
     }
 }

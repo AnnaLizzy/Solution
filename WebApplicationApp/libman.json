@@ -21,6 +21,18 @@
     {
       "library": "intro.js@7.2.0",
       "destination": "wwwroot/lib/"
+    },
+    {
+      "library": "font-awesome@6.5.2",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "material-design-icons@4.0.0",
+      "destination": "wwwroot/lib/material-design-icons/"
+    },
+    {
+      "library": "i18next@23.11.5",
+      "destination": "wwwroot/lib/i18next/"
     }
   ]
 }

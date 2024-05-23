@@ -1,0 +1,19 @@
+{
+
+    "title": "Địa điểm trực",
+    "create_new": "Tạo mới",
+    "id": "ID",
+    "location_name": "Tên địa điểm",
+    "create_date": "Ngày tạo",
+    "status": "Trạng thái",
+    "actions": "Thao tác",
+    "temp_save": "Tạm lưu",
+    "waiting_for_signature": "Chờ ký",
+    "signed": "Đã ký",
+    "undefined_status": "Trạng thái không xác định",
+    "edit": "Chỉnh sửa",
+    "details": "Chi tiết",
+    "delete": "Xóa"
+  
+}
+

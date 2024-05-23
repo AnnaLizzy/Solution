@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.DTOs;
 using WebApplicationAPI.Service.Interfaces;
@@ -10,12 +10,13 @@ namespace WebApplicationAPI.Controllers
     /// Locations
     /// </summary>
     /// <param name="locationService"></param>
+    /// <param name="emailSender"></param>
     [Route("api/[controller]")]
     [ApiController]
-    public class LocationController(ILocationService locationService) : ControllerBase
+    public class LocationController(ILocationService locationService,IEmailSender emailSender) : ControllerBase
     {
         private readonly ILocationService _locationService = locationService;
-
+        private readonly IEmailSender _emailService = emailSender;
         /// <summary>
         /// Get all locations
         /// </summary>
@@ -68,12 +69,37 @@ namespace WebApplicationAPI.Controllers
             {
                 return BadRequest("Please enter Location");
             }
-           var result = await _locationService.CreateLocation(model);
-            if(result == 0)
+            var result = await _locationService.CreateLocation(model);        
+
+            if (result == 0)
             {
                 return BadRequest("Create failed. Please check your input.");
             }
-            return Ok();
+            return Ok(result);
+        }
+        /// <summary>
+        /// Sign 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Route("SignLocation/{id}")]
+        public async Task<IActionResult> SignLocation(int id,[FromForm] LocationDTO location)
+        {
+            try
+            {
+                var result = await _locationService.SignLocation(id,location);
+                if (result == 0)
+                {
+                    return BadRequest("Sign failed. Please check your input.");
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to delete location with id: {id}. Error: {ex.Message}");
+            }
         }
         /// <summary>
         /// 
@@ -109,5 +135,6 @@ namespace WebApplicationAPI.Controllers
                 return BadRequest($"Failed to delete location with id: {id}. Error: {ex.Message}");
             }
         }
+       
     }
 }

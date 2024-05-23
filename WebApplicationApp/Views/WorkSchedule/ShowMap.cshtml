@@ -3,73 +3,69 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "ShowMap";
 }
-<style>
-    .map-height{
-        width:1120px;
-        height: 980px;
-    }
-</style>
-<h4>Xem chi tiet vi tri theo ban do</h4>
-<div class="row">
-    <div class="form-group col-md-6">
-        <select  asp-items="@ViewBag.GetLocationList" id="location" class="form-control">
-           <option selected disabled> Selected</option>
-           
-        </select>
+<h4 class="text-center">Xem chi tiet vi tri theo ban do</h4>
+<div class="row pb-3">
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Location : </label>
+            <select  asp-items="@ViewBag.GetLocationList" id="location" class="form-control">
+               <option selected disabled> Selected</option>           
+            </select>
+        </div>
     </div>
-    <div class="form-group col-md-6">
-    <select id="areaDropdown" asp-items="@ViewBag.GetAreaList" class="form-control">
-        <option selected disabled>Selected Area</option>
-    </select>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Khu vực : </label>
+            <select id="areaDropdown" asp-items="@ViewBag.GetAreaList" class="form-control">
+                <option selected disabled>Selected Area</option>
+            </select>
+        </div>
     </div>
 </div>
-<div  >
-    <canvas id="myCanvas" class="map-height" ></canvas>
+<div class="d-flex justify-content-center">
+    <img id="myCanvas" src="~/Images/no-data.svg" alt="Select area to show map" class="img-fluid img-thumbnail" >
 </div>
 @section Scripts{
     <script>
         // Lắng nghe sự kiện khi người dùng thay đổi giá trị trong dropdown
         document.getElementById("areaDropdown").addEventListener("change", function () {
             // Lấy giá trị được chọn
-            var selectedAreaId = this.value;
-
-            // Lấy canvas
+            var selectedAreaId = this.value;   
             var canvas = document.getElementById("myCanvas");
-
             // Thay đổi hình nền của canvas dựa trên giá trị được chọn
             switch (selectedAreaId) {
                 case "3":
-                    canvas.style.background = "url('../Images/mapQv.png')";
+                    canvas.src = "../Images/mapQv.png";  
                     break;
                 case "99":
-                    canvas.style.background = "url('../Images/DongVang.jpg')";
+                    canvas.src = "../Images/DongVang.jpg";                 
                     break;
                 case "5":
-                    canvas.style.background = "url('../Images/QuangChauFM.PNG')";
+                    canvas.src = "../Images/QuangChauFM.PNG";                   
                     break;
                 case "101":
-                    canvas.style.background = "url('../Images/QuangChauKhuP.PNG')";
+                    canvas.src = "../Images/QuangChauKhuP.PNG";                 
                     break;
                 case "106":
-                    canvas.style.background = "url('../Images/BanDothienKim.png')";
+                    canvas.src = "../Images/BanDothienKim.png";                   
                     break;
                 case "10":
-                    canvas.style.background = "url('../Images/MAPQCKHUI.png')";
+                    canvas.src = "../Images/MAPQCKHUI.png";                   
                     break;
                 case "8":
-                    canvas.style.background = "url('../Images/MapBN3.png')";
+                    canvas.src = "../Images/MapBN3.png";                  
                     break;
                 default:
-                    canvas.style.background = "url('../Images/mapQv.png')"; // Hình mặc định khi không có khu vực nào được chọn
+                    canvas.src = "../Images/no-data.svg";             
                     break;
             }
 
-        });
-        
-        
-      
-
-        
-       
+        });       
     </script>
 }
+
+    <style>
+        .img-thumbnail {
+            border: none;
+        }
+    </style>

@@ -38,7 +38,7 @@ namespace WebApplicationAPI.DTOs
         /// <summary>
         /// Mã vùng
         /// </summary>
-        public int RegionID{ get; set;}
+        public long RegionID{ get; set;}
         /// <summary>
         /// Huong
         /// </summary>

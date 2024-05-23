@@ -1,4 +1,5 @@
 ﻿using ApiLibrary.Interfaces;
+using ApiLibrary.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPI.Constants;
 
@@ -17,6 +18,28 @@ namespace WebApplicationApp.Controllers
                 return RedirectToAction("Index", "Account");
             }
             var data = await _employeeApiClient.GetEmployees(token);
+            return View(data);
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            string? token = _httpContextAccessor?.HttpContext?.Session.GetString(SystemConstants.AppSetting.Token);
+            if (token == null)
+            {
+                TempData["Error"] = "Please login to continue";
+                return RedirectToAction("Index", "Account");
+            }
+            var data = await _employeeApiClient.GetEmployee(id,token);
+            return View(data);
+        }
+        public async Task<IActionResult> Edit(EmployeeViewModel request)
+        {
+            string? token = _httpContextAccessor?.HttpContext?.Session.GetString(SystemConstants.AppSetting.Token);
+            if (token == null)
+            {
+                TempData["Error"] = "Please login to continue";
+                return RedirectToAction("Index", "Account");
+            }
+            var data = await _employeeApiClient.UpdateEmployee(request);
             return View(data);
         }
     }

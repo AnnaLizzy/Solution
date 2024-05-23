@@ -1,12 +1,8 @@
-﻿using ApiLibrary;
-using ApiLibrary.Interfaces;
+﻿using ApiLibrary.Interfaces;
 using ApiLibrary.ViewModels;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApplicationAPI.Constants;
@@ -106,7 +102,7 @@ namespace WebApplicationApp.Controllers
                 ViewBag.UserNO = userInfo.EmployeeNo;
                 ViewBag.UserName = userInfo.EmployeeName;
                 ViewBag.Notes = userInfo.Notes;
-                ViewBag.BU = userInfo.BUCode;
+                ViewBag.BUCode = userInfo.BUCode;
                 ViewBag.BG = userInfo.BGID switch
                 {
                     2 => "FIH",
@@ -121,6 +117,11 @@ namespace WebApplicationApp.Controllers
                     1044 => "中央採購-機構採購",
                     _ => string.Empty
                 };
+            }
+            else
+            {
+                TempData["Error"] = "Please login to continue";
+                return RedirectToAction("Index", "Account");
             }
 
             ViewBag.GetAreaList = await GetAreasAsync();
@@ -200,7 +201,7 @@ namespace WebApplicationApp.Controllers
         //[Consumes("multipart/form-data")]
         public async Task<IActionResult> Edit(int id, WorkScheduleViewModel workSchedule)
         {
-            if (id != workSchedule.SchedulesID)
+            if (id != workSchedule.ScheduleID)
             {
                 return NotFound();
             }

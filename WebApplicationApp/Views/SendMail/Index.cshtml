@@ -1,0 +1,11 @@
+﻿@model SendMailViewModel
+@{
+    ViewData["Title"] = "TEST";
+}
+<h4>Webtest</h4>
+<form method="post" asp-action="Sign">
+<label >Gửi đến :</label>
+<input asp-for="To" />
+<label >Nội dung : </label>
+<input asp-for="Body"/>
+</form>

@@ -8,6 +8,8 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using WebApplicationAPI.Constants;
 using System.Reflection;
+using WebApplicationAPI.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -96,7 +98,9 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
-
+//DI Mail
+builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IEmailSender, MailSender>();
 //DI
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IAreaService, AreaService>();

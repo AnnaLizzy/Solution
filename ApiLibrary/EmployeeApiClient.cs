@@ -41,12 +41,12 @@ namespace ApiLibrary
 
         public async Task<bool> DeleteEmployee(int? id)
         {
-            return await DeleteAsync($"api/Employee/{id}");
+            return await DeleteAsync($"api/Account/{id}");
         }
 
-        public async Task<EmployeeViewModel> GetEmployee(int? id)
+        public async Task<EmployeeViewModel> GetEmployee(int? id, string token)
         {
-            return await GetAsync<EmployeeViewModel>($"api/Account/{id}") ?? throw new Exception("Error occured");
+            return await GetAsyncToken<EmployeeViewModel>($"api/Account/{id}",token) ?? throw new Exception("Error occured");
         }
 
         public async Task<List<EmployeeViewModel>> GetEmployees(string token)
@@ -71,7 +71,7 @@ namespace ApiLibrary
                 { new StringContent(employee.CreateTime.ToString()), "CreateTime" },
                 { new StringContent(employee.Company?.ToString() ?? string.Empty), "Company" }
             };
-            var response = client.PutAsync($"/api/Employee/{id}", requestContent).Result;
+            var response = client.PutAsync($"/api/Account/{id}", requestContent).Result;
             return Task.FromResult(response.IsSuccessStatusCode);
         }
     }

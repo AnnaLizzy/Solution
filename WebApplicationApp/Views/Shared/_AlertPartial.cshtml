@@ -1,12 +1,17 @@
-﻿@if (TempData["success"] != null)
+﻿<style>
+    .btn-close{
+        background-color: red;
+    }
+</style>
+@if (TempData["success"] != null)
 {
     <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
 
         <!-- Then put toasts within -->
         <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
             <div class="toast-header">
-
-                <strong class="me-auto">OK</strong>
+                <i class="fa-solid fa-circle-check "></i>
+                <strong class="me-auto ps-2">OK</strong>
                 <small>now</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
@@ -33,15 +38,45 @@
 
 }
 
-@if (TempData["error"] != null)
+@if (TempData["infor"] != null)
 {
     <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
 
         <!-- Then put toasts within -->
         <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
             <div class="toast-header">
+                <i class="fa-solid fa-circle-info"></i>
+                <strong class="me-auto ps-2"> Infor</strong>
+                <small>now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
 
-                <strong class="me-auto">Error</strong>
+            <div class="toast-body">@TempData["infor"]</div>
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var errorToast = document.querySelector('.toast');
+            var bsToast = new bootstrap.Toast(errorToast, { autohide: false });
+            if ('@TempData["infor"]' !== '') {
+                bsToast.show();
+                setTimeout(function () {
+                    bsToast.hide();
+                }, 5000);
+            }            
+        });
+    </script>
+}
+@if (TempData["error"] != null)
+{
+    <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100 pt-3">
+
+        <!-- Then put toasts within -->
+        <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
+            <div class="toast-header">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <strong class="me-auto ps-2"> Error</strong>
                 <small>now</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
@@ -59,7 +94,7 @@
                 setTimeout(function () {
                     bsToast.hide();
                 }, 5000);
-            }            
+            }
         });
     </script>
 }

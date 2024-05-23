@@ -11,6 +11,10 @@
         public class AppSetting()
         {
             /// <summary>
+            /// regrex mail
+            /// </summary>
+            public const string regexPattern = @"\r\n?|\n";
+            /// <summary>
             /// Default language id
             /// </summary>
             public const string DefaultLanguageId = "DefaultLanguageId";
@@ -35,15 +39,15 @@
             /// </summary>
             public const string SecretKey = "SecretKey";
             /// <summary>
-            /// 
+            /// Database Tesstat
             /// </summary>
             public const string ConnectionStringDB1 = "DefaultConnection";
             /// <summary>
-            /// 
+            /// Database CertificateDB
             /// </summary>
             public const string ConnectionStringDB2 = "Database2Connection";
             /// <summary>
-            /// 
+            /// connection string
             /// </summary>
             public const string ConnectionString = "Data Source=10.224.69.61;Initial Catalog=CertificateDB;User ID=formsign;Password=1234567Aa;TrustServerCertificate=True;";
         }

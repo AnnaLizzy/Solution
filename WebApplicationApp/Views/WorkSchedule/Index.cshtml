@@ -6,7 +6,7 @@
 <a asp-action="Create">Create</a>
 <h3>Bảng sắp xếp ca tổng hợp</h3>
 <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>
@@ -36,28 +36,28 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SchedulesID)
+                    <td class="text-center align-middle">
+                        @Html.DisplayFor(modelItem => item.ScheduleID)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.EmployeeName)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.ShiftName)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.LocationName)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.StartTime)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.EndTime)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.SchedulesID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.SchedulesID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.SchedulesID">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.ScheduleID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ScheduleID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ScheduleID">Delete</a>
                     </td>
                 </tr>
             }

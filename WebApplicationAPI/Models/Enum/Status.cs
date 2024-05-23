@@ -1,24 +1,28 @@
 ﻿namespace WebApplicationAPI.Models.Enum
 {
     /// <summary>
-    /// trang thai 
+    /// Trạng thái của một đối tượng
     /// </summary>
     public enum Status
     {
         /// <summary>
-        /// tạm lưu
+        /// Tạm lưu
         /// </summary>
         TAM_LUU = 0,
         /// <summary>
-        /// dang chờ duyệt
+        /// Đang chờ duyệt
         /// </summary>
         CHO_KY = 1,
         /// <summary>
-        /// da duyệt
+        /// Đã duyệt
         /// </summary>
         DA_KY = 2,
         /// <summary>
-        /// gia tri null
+        /// Trả lại 
+        /// </summary>
+        TRA_LAI =3,
+        /// <summary>
+        /// Giá trị mặc định, không xác định
         /// </summary>
         Unknown = 999
     }

@@ -76,9 +76,7 @@ html {
 body {
   margin-bottom: 60px;
 }
-canvas {
-    border: 1px solid black;
-}
+
 .fixed-column {
     position: sticky;
     left: 0;
@@ -87,9 +85,6 @@ canvas {
 }
 .day {
    text-align: center;
-}
-.main{
-    padding-top: 5rem;
 }
 .table-custome{
     width: 1100px;

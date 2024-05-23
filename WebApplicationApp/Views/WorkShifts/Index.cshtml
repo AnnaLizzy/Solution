@@ -14,22 +14,22 @@
     <table class="table table-hover table-bordered ">
         <thead>
             <tr>
-                <th>
+                <th class="text-center align-middle">
                     Mã ca
                 </th>
-                <th>
+                <th class="text-center align-middle">
                     Tên ca
                 </th>
-                <th>
+                <th class="text-center align-middle">
                     Miêu tả
                 </th>
-                <th>
+                <th class="text-center align-middle">
                     Thời gian bắt đầu
                 </th>
-                <th>
+                <th class="text-center align-middle">
                     Thời gian kết thúc
                 </th>
-                <th>
+                <th class="text-center align-middle">
                     Hành động
                 </th>
             </tr>
@@ -38,22 +38,22 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.ShiftID)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.NameShift)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.DescriptionShift)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.StartTime)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         @Html.DisplayFor(modelItem => item.EndTime)
                     </td>
-                    <td>
+                    <td class="text-center align-middle">
                         
                         <a asp-action="Edit" asp-route-id="@item.ShiftID">Edit</a>|
                                                           

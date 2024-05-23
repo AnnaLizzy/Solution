@@ -1,0 +1,21 @@
+﻿@model SendMailViewModel
+@{
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Email Template</title>
+</head>
+<body>
+    <h1>Hello @Model.To,</h1>
+    <p>This is a test email sent to you.</p>
+    <p>Here is some important information:</p>
+    <ul>
+        <li>Email: @Model.Body</li>
+        <li>Message: @Model.</li>
+    </ul>
+    <p>Best regards,<br>Your Company</p>
+</body>
+</html>

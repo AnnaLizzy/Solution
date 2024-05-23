@@ -1,0 +1,60 @@
+﻿@model EmployeeViewModel
+@{
+    ViewData["Title"] = "index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4 class="text-center">Thông tin chi tiết</h4>
+<hr />
+<button type="button" class="btn btn-sm">
+    <a asp-action="Index"><i class="bi bi-chevron-left"></i>Back to List</a> |  <a asp-action="Update" asp-route-id="@Model.EmployeeID"><i class="fa-solid fa-pen"></i>Sửa </a>
+</button>
+<div class="row g-2">
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Mã nhân viên :</label>
+            <input class="form-control" type="text" value="@Model.EmployeeNo" disabled>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Họ tên :</label>
+            <input class="form-control" type="text" value="@Model.EmployeeName" disabled>
+        </div>
+    </div>
+     <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Giới tính :</label>
+            <input class="form-control" type="text" value="@Model.Gender" disabled>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Phone number :</label>
+            <input class="form-control" type="text" value="@Model.PhoneNumber" disabled>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Date of birth :</label>
+            <input class="form-control" type="text" value="@Model.DateOfBirth.ToShortDateString()" disabled>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Address :</label>
+            <input class="form-control" type="text" value="@Model.EmpAddress" disabled>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Company :</label>
+            <input class="form-control" type="text" value="@Model.Company" disabled>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Create time :</label>
+            <input class="form-control" type="text" value="@Model.CreateTime" disabled>
+        </div>
+    </div>
+</div>

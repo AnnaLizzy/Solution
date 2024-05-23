@@ -1,0 +1,16 @@
+{  
+    "title": "This is Location",
+    "create_new": "Create New",
+    "id": "ID",
+    "location_name": "Location Name",
+    "create_date": "Create Date",
+    "status": "Status",
+    "actions": "Actions",
+    "temp_save": "Temp Save",
+    "waiting_for_signature": "Waiting for Signature",
+    "signed": "Signed",
+    "undefined_status": "Undefined Status",
+    "edit": "Edit",
+    "details": "Details",
+    "delete": "Delete"
+}

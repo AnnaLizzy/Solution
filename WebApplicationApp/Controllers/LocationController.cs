@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ApiLibrary.ViewModels;
 using System.Security.Claims;
 using WebApplicationApp.ViewModels;
+using ApiLibrary.Constants;
 
 
 
@@ -13,13 +14,15 @@ namespace WebApplicationApp.Controllers
         , IAreaApiClient areaApiClient,
         IRegionApiClient regionApiClient,
         IHttpContextAccessor ContextAccessor,
-        IUserBeforeLoadingApiClient loadingApiClient) : Controller
+        IUserBeforeLoadingApiClient loadingApiClient
+       ) : Controller
     {
         private readonly IListLocationApiClient _listLocationApiClient = listLocationApiClient;
         private readonly IAreaApiClient _areaApiClient = areaApiClient;
         private readonly IRegionApiClient _regionApiClient = regionApiClient;
         private readonly IHttpContextAccessor httpContextAccessor = ContextAccessor;
         private readonly IUserBeforeLoadingApiClient userBeforeLoadingApiClient = loadingApiClient;
+      
         public async Task<IActionResult> Index()
         {
 
@@ -40,7 +43,7 @@ namespace WebApplicationApp.Controllers
         }
       
        
-        private async Task<UserBeforeLoadingViewModel> GetUserInfor()
+        private async Task<UserBeforeLoadingViewModel?> GetUserInfor()
         {
             // Lấy userId từ HttpContextAccessor
             var userIdString = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -58,23 +61,29 @@ namespace WebApplicationApp.Controllers
         }      
         public async Task<IActionResult> Create()
         {
-            // Lấy thông tin người dùng
-            var userInfo = await GetUserInfor();
-            if (userInfo != null)
+            var session = httpContextAccessor?.HttpContext?.Session.GetString(SystemApiConst.Setting.Token);
+            if (ModelState.IsValid && session != null)
             {
-                ViewBag.UserNO = userInfo.EmployeeNo;
-                ViewBag.UserName = userInfo.EmployeeName;
-                ViewBag.Notes = userInfo.Notes;
-                ViewBag.BU = userInfo.BUCode;
+                // Lấy thông tin người dùng
+                var userInfo = await GetUserInfor();
+                if (userInfo != null)
+                {
+                    ViewBag.UserNO = userInfo.EmployeeNo;
+                    ViewBag.UserName = userInfo.EmployeeName;
+                    ViewBag.Notes = userInfo.Notes;
+                    ViewBag.BU = userInfo.BUCode;
+                }
+                else
+                {
+                    TempData["Error"] = "Please login to continue";
+                    return RedirectToAction("Index", "Account");
+                }
+
+                ViewBag.GetAreas = await GetAreasAsync();
+                return View();
             }
-            else
-            {
-                TempData["Error"] = "Please login to continue";
-                return RedirectToAction("Index","Account");
-            }
-              
-            ViewBag.GetAreas = await GetAreasAsync();
-            return View();
+            TempData["Error"] = "Please login to continue";
+            return RedirectToAction("Index", "Account");
         }
         [HttpPost]
         [Consumes("multipart/form-data")]
@@ -112,69 +121,103 @@ namespace WebApplicationApp.Controllers
             var data = await _listLocationApiClient.GetLocationById(id);
             if(data == null)
             {
-                return BadRequest("không có dữ liệu");
+                TempData["Error"] = "Không có dữ liệu";
+                return RedirectToAction("Index");
             }
             return View(data);
 
         }      
         public async Task<IActionResult> Update(int id)
         {
-            ViewBag.GetAreas = await GetAreasAsync();
-            var userInfo = await GetUserInfor();
-            if (userInfo != null)
+            var session = httpContextAccessor?.HttpContext?.Session.GetString(SystemApiConst.Setting.Token);
+            if(session != null)
             {
-                ViewBag.UserNO = userInfo.EmployeeNo;
-                ViewBag.UserName = userInfo.EmployeeName;
-                ViewBag.Notes = userInfo.Notes;
-                ViewBag.BU = userInfo.BUCode;
+                ViewBag.GetAreas = await GetAreasAsync();
+                var userInfo = await GetUserInfor();
+                if (userInfo != null)
+                {
+                    ViewBag.UserNO = userInfo.EmployeeNo;
+                    ViewBag.UserName = userInfo.EmployeeName;
+                    ViewBag.Notes = userInfo.Notes;
+                    ViewBag.BU = userInfo.BUCode;
+                }
+                var data = await _listLocationApiClient.GetLocationById(id);
+                return View(data);
             }
-            var data = await _listLocationApiClient.GetLocationById(id);
-            var result = new LocationsViewModel
+           
+           
+            else
             {
-                LocationID = data.LocationID,
-                LocationName = data.LocationName,
-                Area = data.Area,
-                Floors = data.Floors,
-                Region = data.Region,
-                Building = data.Building,
-                Azimuth = data.Azimuth,
-                StationType = data.StationType,
-                Other = data.Other,
-                StartTime = data.StartTime,
-                EndTime = data.EndTime,
-                SignUser = data.SignUser,
-                EmployeeNo = data.EmployeeNo
-            };
-            if (result == null)
-            {
-                return BadRequest("không có dữ liệu");
+                TempData["Error"] = "Please login to continue";
+                return RedirectToAction("Index", "Account");
             }
-            return View(result);
+            
+         
+           
         }
         [HttpPost]
-        public async Task<IActionResult> Update([FromRoute]int id,[FromForm]ListLocationVM location)
+        public async Task<IActionResult> Update(int id,[FromForm]ListLocationVM location)
         {
-            if (location == null)
+            var session = httpContextAccessor?.HttpContext?.Session.GetString(SystemApiConst.Setting.Token);            
+            if (ModelState.IsValid && session != null)
             {
-                return BadRequest("không có dữ liệu");
+                // Kiểm tra nếu người dùng không thay đổi giá trị
+                if (string.IsNullOrEmpty(location.Area) || string.IsNullOrEmpty(location.Region))
+                {
+                    // Lấy giá trị cũ từ cơ sở dữ liệu và gán lại cho model
+                    var existingLocation = await _listLocationApiClient.GetLocationById(id);
+                    location.Area = existingLocation.AreaID.ToString();
+                    location.Region = existingLocation.RegionID.ToString();
+                }
+
+                var result = await _listLocationApiClient.UpdateLocation(id, location);
+                if (result)
+                {
+                    TempData["Success"] = "Update successful";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["Error"] = "Update failed. Please try later";
+                }
             }
-            var data = await _listLocationApiClient.UpdateLocation(id,location);
-            if (data == false)
-            {
-                return BadRequest("không có dữ liệu");
-            }
-            return View(data);
+            TempData["Error"] = "Please login to continue";
+            return View(location);
+        
         }
         public async Task<IActionResult> Delete(int id)
         {
             var data = await _listLocationApiClient.DeleteLocation(id);
             if (data == false)
             {
-                ViewData["error"] = "Xóa không thành công";
+                ViewData["Error"] = "Xóa không thành công";
                 return RedirectToAction("Index");
 
             }
-            ViewData["success"] = "Xóa thành công";
+            ViewData["Success"] = "Xóa thành công";
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Sign(int id)
+        {
+            var data = await _listLocationApiClient.GetLocationById(id);
+            if(data == null)
+            {
+                ViewData["Error"] = "Không có dữ liệu";
+                return RedirectToAction("Index");
+            }
+            ViewData["Success"] = "Ký thành công";
+            return View(data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> SignLocation(int id, ListLocationVM model)
+        {
+            var data = await _listLocationApiClient.SignLocation(id,model);
+            if (data == false)
+            {
+                TempData["Error"] = "Ký không thành công";
+                return RedirectToAction("Index");
+            }
+            TempData["Success"] = "Ký thành công";
             return RedirectToAction("Index");
         }
     }

@@ -30,12 +30,19 @@ namespace WebApplicationAPI.Service.Interfaces
         /// <param name="id"></param>
         /// <param name="locationDTO"></param>
         /// <returns></returns>
-        Task<bool> UpdateLocation(int id, LocationDTO locationDTO);
+        Task<int> UpdateLocation(int id, LocationDTO locationDTO);
         /// <summary>
         /// delete location
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         Task<int> DeleteLocation(int id);
+        /// <summary>
+        /// Sign location
+        /// </summary>
+        /// <param name="id"></param>    
+        /// <param name="location"></param>
+        /// <returns></returns>
+        Task<int> SignLocation(int id,LocationDTO location);
     }
 }

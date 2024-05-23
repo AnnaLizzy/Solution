@@ -3,115 +3,124 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Create - Tạo mới lịch làm việc";
 }
-<style>
-    .form-control {
-        margin-bottom: 20px;
-    }
-</style>
 <h4 class="text-center">Create - tạo mới lịch làm việc</h4>
 <button type="button" class="btn btn-sm">
     <a asp-action="Index"><i class="bi bi-chevron-left"></i>Back to List</a>
 </button>
 <form class="row g-3" asp-action="Create" method="post" enctype="multipart/form-data">
     <h5>I.Thông tin cơ bản :</h5>
-   
-            <div class="col-6 input-group input-group-static mb-4">
-                <label class="control-label pt-2">Tên  :</label>
-        <input type="text" class="form-control" value="@ViewBag.EmployeeName" />
+           <div class="col-6">
+                <div class="input-group input-group-static">
+                    <label class="control-label pt-2">Tên  :</label>
+                    <input type="text" class="form-control" value="@ViewBag.UserName" />
+                </div>
             </div>
-            <div class="col-6 input-group input-group-static mb-4">
-                <label class="control-label pt-2">Mã thẻ :</label>
-                <input type="hidden" />
-                <input type="text" class="form-control" value="@ViewBag.UserNO" />
+           <div class="col-6">
+                <div class="col-6 input-group input-group-static">
+                    <label class="control-label pt-2">Mã thẻ :</label>
+                    <input type="hidden" />
+                    <input type="text" class="form-control" value="@ViewBag.UserNO" />
+                </div>
+           </div>
+           <div class="col-6">
+                <div class="col-6 input-group input-group-static">
+                    <label class="control-label pt-2">Số điện thoại :</label>
+                    <input type="text" class="form-control" />
+                </div>
+           </div>
+           <div class="col-6">
+                <div class="col-6 input-group input-group-static">
+                    <label class="control-label pt-2">Mail :</label>
+                    <input type="text" class="form-control" value="@ViewBag.Notes" />
+                </div>
+           </div>
+           <div class="col-6">
+                <div class="col-6 input-group input-group-static">
+                    <label class="control-label pt-2">Bộ phận :</label>
+                    <input type="text" class="form-control" asp-for="BG" value="@ViewBag.BG" />
+                </div>
+           </div>
+            <div class="col-6">
+                <div class="col-6 input-group input-group-static">
+                    <label class="control-label pt-2">BU :</label>
+                    <input type="text" class="form-control" asp-for="BU" value="@ViewBag.BU"/>
+                </div>
             </div>
-            <div class="col-6 input-group input-group-static mb-4">
-                <label class="control-label pt-2">Số điện thoại :</label>
-                <input type="text"  class="form-control" />
-            </div>
-            <div class="col-6 input-group input-group-static mb-4">
-                <label class="control-label pt-2">Mail :</label>
-                <input type="text"  class="form-control" value="@ViewBag.Notes"/>
-            </div>
-            <div class="col-6 input-group input-group-static mb-4">
-                <label class="control-label pt-2">Bộ phận :</label>
-                <input type="text"  class="form-control" />
-            </div>
-     
-    <div class="col-md-6 input-group input-group-static mb-4">
-    
-            <label class="control-label pt-2">Khu vực làm việc :</label>
-            <select id="areaDropdown" asp-for="@Model.AreaID" asp-items="@ViewBag.GetAreaList" class="form-control" required>
-                <option disabled selected>Select Area</option>
-            </select>
-       
-    </div>
-    <div class="col-md-6 input-group input-group-static mb-4">
-      
-            <label class="control-label">Vị trí làm việc :</label>
-            <select id="locationDropdown" class="form-control" asp-for="LocationID" required>
-                <option disabled selected>Select Location</option>
-            </select>
-      
-    </div>
-    <div class="col-md-6 input-group input-group-static mb-4">       
-            <label class="control-label pt-2">Mã chi phí :</label>
-            <input class="form-control" placeholder="Nhập mã chi phí ví dụ: BU12FT" />
-       
-    </div>
-    <h5>Ⅱ. Thông tin cơ bản :</h5>
-    <div class=" input-group input-group-static">
-      
-            <label class="control-label pt-2">Chi tiết vị trí làm việc :</label>
-            <select id="listLocationDropDown" asp-items="@ViewBag.GetLocationList" class="form-control" required>
-                <option disabled selected>Select Location Detail</option>
-            </select>
-       
-    </div>
-    <div class=" input-group  input-group-static">
-        
-            <label class="control-label pt-2">Ca làm việc :</label>
-            <select asp-for="ShiftID" asp-items="@ViewBag.GetShiftList" class="form-control" required>
-                <option disabled selected>Select Work Shift</option>
-            </select>
-       
-    </div>
-    <div class=" input-group input-group-static">
-       
-            <label class="control-label pt-2">Nhân viên  :</label>
-            <select asp-for="EmployeeID" asp-items="@ViewBag.GetEmployeeList" class="form-control" required>
-                <option disabled selected>Select Employee</option>
-            </select>
-     </div>
- 
-    <div class="input-group input-group-static">
-       
-            <label class="control-label pt-2">Chu kỳ lặp :</label>
-            <input type="number" class="form-control" asp-for="Interval" placeholder="Điền số nguyên ví dụ : 1;2;.." />
-        
-    </div>
-    <div class="form-group row ">
-        <div class="col-md-2">
-            <p>Lặp theo :</p>
-            <div class="form-check ">
-                <input class="form-check-input" type="radio" asp-for="Frequency" value="daily" id="flexRadioDefault1">
-                <label class="form-check-label" for="flexRadioDefault1">
-                    Theo ngày
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" asp-for="Frequency" value="weekly" id="flexRadioDefault2" checked>
-                <label class="form-check-label" for="flexRadioDefault2">
-                    Theo tuần
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" asp-for="Frequency" value="monthly" id="flexRadioDefault3" />
-                <label class="form-check-label" for="flexRadioDefault3">
-                    Theo tháng
-                </label>
+           <div class="col-6">
+                <div class="col-md-6 input-group input-group-static">
+                    <label class="control-label pt-2">Mã chi phí :</label>
+                    <input class="form-control" value="@ViewBag.BuCode" />
+                </div>
+           </div>
+
+    <h5>Ⅱ. Thông tin chi tiết về ca làm việc :</h5>
+        <div class="col-4">
+            <div class=" input-group input-group-static">
+                <label class="control-label pt-2">Chi tiết vị trí làm việc :</label>
+                <select id="listLocationDropDown" asp-items="@ViewBag.GetLocationList" class="form-control" required>
+                    <option disabled selected>Select Location Detail</option>
+                </select>
             </div>
         </div>
-        <div class=" col-md-9">
+        <div class="col-4">
+            <div class=" input-group  input-group-static">
+                <label class="control-label pt-2">Ca làm việc :</label>
+                <select asp-for="ShiftID" asp-items="@ViewBag.GetShiftList" class="form-control" required>
+                    <option disabled selected>Select Work Shift</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class=" input-group input-group-static">
+                <label class="control-label pt-2">Nhân viên  :</label>
+                <select asp-for="EmployeeID" asp-items="@ViewBag.GetEmployeeList" class="form-control" required>
+                    <option disabled selected>Select Employee</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+        <div class="col-md-4 input-group input-group-static mb-4">
+                <label class="control-label pt-2">Ngày bắt đầu :</label>
+                <input id="datepicker" asp-for="StartTime" class="form-control" type="date" required />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-4">
+        <div class="col-md-4 input-group input-group-static mb-4">
+                <label class="control-label pt-2">Ngày kết thúc :</label>
+                <input asp-for="EndTime" type="date" class="form-control" required />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+        </div>
+    <div class="col-4 mb-4">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Chu kỳ lặp :</label>
+                <input type="number" class="form-control" asp-for="Interval" placeholder="Điền số nguyên ví dụ : 1;2;.." />
+            </div>
+        </div>
+        <div class="form-group row ">
+        <div class="col-md-2 mb-4">
+                <p>Lặp theo :</p>
+                <div class="form-check ">
+                    <input class="form-check-input" type="radio" asp-for="Frequency" value="daily" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Theo ngày
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="Frequency" value="weekly" id="flexRadioDefault2" checked>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Theo tuần
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="Frequency" value="monthly" id="flexRadioDefault3" />
+                    <label class="form-check-label" for="flexRadioDefault3">
+                        Theo tháng
+                    </label>
+                </div>
+            </div>
+            <div class=" col-md-9">
 
             <p>Ngày làm việc trên tuần :</p>
             <div class="row">
@@ -161,37 +170,24 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4 input-group input-group-static">
-       
-                <label class="control-label pt-2">Ngày bắt đầu :</label>
-            <input id="datepicker" asp-for="StartTime" class="form-control" type="date" required />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-     
-        </div>
-        <div class="col-md-4 input-group input-group-static">
-      
-                <label class="control-label pt-2">Ngày kết thúc :</label>
-                <input asp-for="EndTime" type="date" class="form-control" required />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-        
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Ghi chú :</label>
+            <input type="text" asp-for="Notes" class="form-control" placeholder="Limit 200 charecter " />
         </div>
     </div>
-    <div class="input-group input-group-static">
-      
-        <label class="control-label pt-2">Ghi chú :</label>
-            <input type="text"  class="form-control" />
-      
-    </div>
-    <div class="input-group input-group-static">
-       
+    <div class="col-6">
+        <div class="input-group input-group-static">
             <label class="control-label pt-2">Người ký duyệt :</label>
-             <input class="from-control" type="text"  />
-       
+            <input class="form-control" type="text" placeholder="Eg: V0123456" />
+        </div>
     </div>
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+    <div class="col justify-content-center">
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
     </div>
+    
 </form>
 <div id='calendar'></div>
 @section Scripts {

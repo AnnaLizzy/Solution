@@ -3,38 +3,39 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApplication</title>   
+    <title>@ViewData["Title"] - WebApplication</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
-     <link href="~/css/material-kit.css" rel="stylesheet" />
+    <link href="~/css/material-kit.css" rel="stylesheet" />
     <link href="~/css/material-icon.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+ 
 </head>
 <body>
-   
-    <partial name="_Header" />     
-      <header class="header-2 hight">
-          @*
+    <partial name="_Header" />
+    <header class="header-2 hight">
+        @*
         <div class="page-header min-vh-75 relative" >
-          <span class="mask bg-gradient-primary opacity-4"></span>
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-7 text-center mx-auto">
-                <h1 class="text-white pt-3 mt-n5">Web Application</h1>
-                <p class="lead text-white mt-3">Free & Open Source Web UI Kit built over Bootstrap 5. <br /> Join over 1.6
-                  million developers around the world. </p>
-              </div>
-            </div>
-          </div
+        <span class="mask bg-gradient-primary opacity-4"></span>
+        <div class="container">
+        <div class="row">
+        <div class="col-lg-7 text-center mx-auto">
+        <h1 class="text-white pt-3 mt-n5">Web Application</h1>
+        <p class="lead text-white mt-3">Free & Open Source Web UI Kit built over Bootstrap 5. <br /> Join over 1.6
+        million developers around the world. </p>
+        </div>
+        </div>
+        </div
         </div> *@
-      </header>
-    <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6">
-        <div class="container ">
-            <main role="main" class="pb-3 main">
-             <partial name="_AlertPartial" />
+    </header>
+    <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6">        
+        <div class="container ">           
+            <main role="main" class="pb-3 pt-7">
+                <partial name="_AlertPartial" />
                 @RenderBody()
             </main>
-        </div>
+        </div>       
     </div>
     <partial name="_footer" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -42,7 +43,10 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/material-kit.min.js"></script>
-   
+    <script src="~/lib/font-awesome/js/solid.js"></script>
+    <script src="~/lib/font-awesome/js/fontawesome.js"></script>
+    <script src="~/lib/font-awesome/js/brands.js"></script>
+    <script src="~/lib/font-awesome/js/regular.js"></script>    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

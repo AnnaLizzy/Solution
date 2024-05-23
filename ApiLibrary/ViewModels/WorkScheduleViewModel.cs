@@ -9,7 +9,7 @@ namespace ApiLibrary.ViewModels
 {
     public class WorkScheduleViewModel
     {
-        public int SchedulesID { get; set; }
+        public int ScheduleID { get; set; }
         public int EmployeeID { get; set; }
         public string? EmployeeName { get; set; }
         public int ShiftID { get; set; }

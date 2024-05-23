@@ -3,7 +3,8 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h4>This is Location Địa điểm trực </h4>
+<h4>This is Location Địa điểm trực</h4>
+<h4 data-i18n="title"></h4>
 <div>
     <a asp-action="Create"><i class="bi bi-plus"></i>Create New</a>
 </div>
@@ -11,90 +12,126 @@
     <table class="table table-hover table-bordered">
         <thead>
             <tr>
-                <th>
-                    ID
-                </th>               
-                <th>
-                    Tên địa điểm
-                </th>              
-                <th>
-                    Ngày tạo đơn 
-                </th>
-                <th>
-                    Trạng thái 
-                </th>
-                <th>
-                    Thao tác 
-                </th>
+                <th class="text-center align-middle">ID</th>
+                <th class="text-center align-middle">Tên địa điểm</th>
+                <th class="text-center align-middle">Ngày tạo đơn</th>
+                <th class="text-center align-middle">Trạng thái</th>
+                <th class="text-center align-middle">Thao tác</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ListID)
-                    </td>                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LocationName)
-                    </td>                   
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreateTime)
-                    </td>
-                    <td>
-                        @switch (item.SignStatus)
-                        {
-                            case Status.TAM_LUU:
-                                <text>Tạm lưu</text>
-                                break;
-                            case Status.CHO_KY:
-                                <text>Chờ ký</text>
-                                break;
-                            case Status.DA_KY:
-                                <text>Đã ký</text>
-                                break;
-                            default:
-                                <text>Trạng thái không xác định</text>
-                                break;
-                        }
-                    </td>
-
-                    <td>
-                        <a asp-action="Update" asp-route-id="@item.ListID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ListID">Details</a> |
-                       @*  <a asp-action="Delete" asp-route-id="@item.ListID">Delete</a> *@
-                        <a asp-route-id="@item.ListID" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Delete
-                        </a>
-                    </td>
-                </tr>
-            }
+        <tbody id="locationTableBody">
+            <!-- Nội dung bảng sẽ được tạo bằng JavaScript -->
         </tbody>
     </table>
 </div>
-<div class="container">
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-
-            <div class="modal-content">
-                 <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Are you sure delete this ?</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn bg-gradient-dark" data-bs-dismiss="modal">Close</button>
-
-                        <button type="button"  asp-action="Delete" asp-controller="Location" class="btn bg-gradient-primary">Save changes</button>
-
-                    </div>
-               
-            </div>
-
+<div class="col-lg-4 mx-auto">
+    <div class="d-flex justify-content-center mt-3">
+        <li class="page-item">
+            <a id="previousPage" class="page-link"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
+        </li>
+        <ul id="pagination" class="pagination pagination-primary m-4">           
+        </ul>
+        <li class="page-item">
+           <a id="nextPage" class="page-link"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+        </li>
+        <div class="input-group input-group-static">
+            <label class="control-label">Go to:</label>
+            <input id="goToPage" type="number" min="1" style="width: 50px; height:30px;" />
         </div>
     </div>
 </div>
-          
 
-           
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+            var currentPage = 1;
+            var itemsPerPage = 10;
+
+            function renderTable(data) {
+                $('#locationTableBody').empty();
+                $.each(data, function (index, item) {
+                    var statusText;
+                    switch (item.SignStatus) {
+                        case 0:
+                            statusText = 'Tạm lưu';
+                            break;
+                        case 1:
+                            statusText = 'Chờ ký';
+                            break;
+                        case 2:
+                            statusText = 'Đã ký';
+                            break;
+                        default:
+                            statusText = 'Trạng thái không xác định';
+                            break;
+                    }
+
+                    var row = `<tr>
+                                        <td class="text-center align-middle">${item.ListID}</td>
+                                        <td class="text-center align-middle">${item.LocationName}</td>
+                                        <td class="text-center align-middle">${item.CreateTime}</td>
+                                        <td class="text-center align-middle">${statusText}</td>
+                                        <td class="text-center align-middle">
+                                            <a href="/Location/Update/${item.ListID}">Edit</a> |
+                                            <a href="/Location/Details/${item.ListID}">Details</a> |
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="${item.ListID}">Delete</a>
+                                        </td>
+                                    </tr>`;
+                    $('#locationTableBody').append(row);
+                });
+            }
+
+            function displayPage(page) {
+                if (page < 1) page = 1;
+                if (page > pageCount) page = pageCount;
+                var start = (page - 1) * itemsPerPage;
+                var end = start + itemsPerPage;
+                var pageItems = data.slice(start, end);
+                renderTable(pageItems);
+
+                $('#pagination li').removeClass('active');
+                $('#pagination li').eq(page - 1).addClass('active');
+                currentPage = page;
+            }
+
+            function setupPagination() {
+                $('#pagination').empty();
+                pageCount = Math.ceil(data.length / itemsPerPage);
+                for (var i = 1; i <= pageCount; i++) {
+                    $('#pagination').append(`<li class="page-item"><a class="page-link" href="#">${i}</a></li>`);
+                }
+
+                $('#pagination li').click(function (event) {
+                    event.preventDefault();
+                    var page = $(this).text();
+                    displayPage(parseInt(page));
+                });
+            }
+
+            $('#previousPage').click(function () {
+                if (currentPage > 1) {
+                    displayPage(currentPage - 1);
+                }
+            });
+
+            $('#nextPage').click(function () {
+                if (currentPage < pageCount) {
+                    displayPage(currentPage + 1);
+                }
+            });
+
+            $('#goToPage').keypress(function (event) {
+                if (event.which == 13) {
+                    var page = parseInt($(this).val());
+                    if (page >= 1 && page <= pageCount) {
+                        displayPage(page);
+                    }
+                }
+            });
+
+            setupPagination();
+            displayPage(currentPage);
+        });
+    </script>
+}

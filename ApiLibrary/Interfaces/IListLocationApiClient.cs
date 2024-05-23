@@ -11,5 +11,6 @@ namespace ApiLibrary.Interfaces
         Task<bool> CreateLocation(ListLocationVM location);
         Task<bool> DeleteLocation(int id);
         Task<bool> UpdateLocation(int id,ListLocationVM location);
+        Task<bool> SignLocation(int id,ListLocationVM locationVM);
     }
 }

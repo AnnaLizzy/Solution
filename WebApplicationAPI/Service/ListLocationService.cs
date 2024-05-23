@@ -5,19 +5,38 @@ using WebApplicationAPI.Service.Interfaces;
 
 namespace WebApplicationAPI.Service
 {
+    /// <summary>
+    /// List location from OndytyListLocation
+    /// </summary>
+    /// <param name="appDb"></param>
     public class ListLocationService(AppDbContext2 appDb) : IListLocationService
     {
         private readonly AppDbContext2 _context2 = appDb;
+        /// <summary>
+        /// create location
+        /// </summary>
+        /// <param name="listlocationDTO"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<ListLocationDTO> CreateLocation(ListLocationDTO listlocationDTO)
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// delete location
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task DeleteLocation(int id)
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// get location by area id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<List<ListLocationDTO>> GetLocationByAreaID(int id)
         {
             var query = from l in _context2.OndutyListLocations
@@ -36,7 +55,10 @@ namespace WebApplicationAPI.Service
             var data = await query.ToListAsync();
             return data;
         }
-
+        /// <summary>
+        /// get all locations
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<ListLocationDTO>> GetLocations()
         {
             var query = _context2.OndutyListLocations.Select(x => new ListLocationDTO
@@ -54,7 +76,13 @@ namespace WebApplicationAPI.Service
             var data = await query.ToListAsync();
             return data;
         }
-
+        /// <summary>
+        /// update location
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="listlocationDTO"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task UpdateLocation(int id, ListLocationDTO listlocationDTO)
         {
             throw new NotImplementedException();

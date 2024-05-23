@@ -17,6 +17,7 @@ builder.Services.AddScoped<IAccountApiClient, AccountApiClient>();
 builder.Services.AddScoped<IRegionApiClient, RegionApiClient>();
 builder.Services.AddScoped<IEmployeeApiClient, EmployeeApiClient>();
 builder.Services.AddScoped<IUserBeforeLoadingApiClient, UserBeforeLoadingApiClient>();
+//builder.Services.AddScoped<IMailSenderApiClient, IMailSenderApiClient>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
@@ -43,7 +44,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // add session and use session
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 

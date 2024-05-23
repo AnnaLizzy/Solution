@@ -197,7 +197,9 @@ namespace WebApplicationAPI.Service
                 Password = emp.Password,
                 PhoneNumber = emp.PhoneNumber,
                 Company = emp.Company,
-                IsDeleted = emp.IsDeleted
+                IsDeleted = emp.IsDeleted,
+                CreatedDate = emp.CreateTime,
+                EmpAddress = emp.EmpAddress
             };
             return data;
         }

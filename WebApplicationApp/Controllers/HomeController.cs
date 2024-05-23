@@ -23,7 +23,8 @@ namespace WebApplicationApp.Controllers
         }
         public IActionResult DrawPoints()
         {
-            return View();
+            var img = DrawPointsOnImage();
+            return View(img);
         }
         public IActionResult DrawPointsOnImage()
         {
@@ -46,8 +47,8 @@ namespace WebApplicationApp.Controllers
                 paint.IsAntialias = true; // Chế độ làm mịn
 
                 // Vẽ các điểm lên ảnh
-                DrawPoint(canvas, 100, 100, paint); // Vẽ điểm tại tọa độ (100, 100)
-                DrawPoint(canvas, 200, 200, paint); // Vẽ điểm tại tọa độ (200, 200)
+                DrawPoint(canvas, 907, 419, paint); // Vẽ điểm tại tọa độ (100, 100)
+                DrawPoint(canvas, 798, 100, paint); // Vẽ điểm tại tọa độ (200, 200)
                                                     // Thêm các điểm khác tùy ý
             }
 
@@ -64,7 +65,7 @@ namespace WebApplicationApp.Controllers
 
         private static void DrawPoint(SKCanvas canvas, float x, float y, SKPaint paint)
         {
-            canvas.DrawCircle(x, y, 5, paint); // Vẽ một điểm chấm tại tọa độ (x, y)
+            canvas.DrawCircle(x, y, 15, paint); // Vẽ một điểm chấm tại tọa độ (x, y)
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

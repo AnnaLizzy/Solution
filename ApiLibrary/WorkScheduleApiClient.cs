@@ -70,7 +70,7 @@ namespace ApiLibrary
 
         public async Task<bool> UpdateWorkSchedule(WorkScheduleViewModel workSchedule)
         {
-            var id = workSchedule.SchedulesID;
+            var id = workSchedule.ScheduleID;
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(SystemConstants.Url.BaseApiUrl);
             var requestContent = new MultipartFormDataContent

@@ -50,7 +50,7 @@ namespace WebApplicationApp.Controllers
             var userPrincipal = this.ValidateToken(result.ResultObj);
             var authProperties = new AuthenticationProperties
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
                 IsPersistent = false
             };
             HttpContext.Session.SetString(SystemConstants.AppSetting.Token, result.ResultObj);

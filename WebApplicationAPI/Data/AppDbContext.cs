@@ -26,6 +26,10 @@ namespace WebApplicationAPI.Data
         /// </summary>
         public DbSet<WorkSchedules> WorkSchedules { get; set; }
         /// <summary>
+        /// ghi log khi người dùng ký
+        /// </summary>
+        public DbSet<LogSignUser> LogSignUser { get; set; }
+        /// <summary>
         /// Fluent API
         /// </summary>
         /// <param name="modelBuilder"></param>
@@ -33,6 +37,9 @@ namespace WebApplicationAPI.Data
         {
             modelBuilder.Entity<Locations>()
                 .Property(p => p.ListID)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<LogSignUser>()
+                .Property(p => p.SignID)
                 .ValueGeneratedOnAdd();
         }
 

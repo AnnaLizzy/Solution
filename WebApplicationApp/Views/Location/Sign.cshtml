@@ -1,0 +1,97 @@
+﻿@model ListLocationVM
+@{
+    ViewBag.Title = "Sign";
+}
+<h3>Sign</h3>
+<div class="row g-2">
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Tên vị trí làm việc :</label>
+            <input class="form-control" type="text" value="@Model.LocationName" disabled>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Khu vực làm việc :</label>
+            <input class="form-control" value="@Model.Area" disabled />
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Khu :</label>
+            <input class="form-control" value="@Model.Region" disabled />
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Tòa nhà :</label>
+            <input class="form-control" type="text" value="@Model.Building" disabled />
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static">
+            <label class="control-label pt-2">Hướng :</label>
+            <input class="form-control" value="@Model.Azimuth" disabled />
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static ">
+            <label class="control-label pt-2">Tầng :</label>
+            <input class="form-control" type="text" value="@Model.Floors" disabled />
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static ">
+            <label class="control-label pt-2">Station type :</label>
+            <input class="form-control" type="text" value="@Model.StationType" disabled>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static ">
+            <label class="control-label pt-2">Khác :</label>
+            <input class="form-control" type="text" value="@Model.Other" disabled>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static ">
+            <label class="control-label pt-2">Ngày bắt đầu:</label>
+            <input class="form-control" value="@Model.StartTime" disabled />
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static ">
+            <label class="control-label pt-2">Ngày kết thúc :</label>
+            <input class="form-control" value="@Model.EndTime" disabled />
+        </div>
+    </div>    
+    <div class="col-6">
+        <div class="input-group input-group-static ">
+            <label class="control-label pt-2">Ngày tạo :</label>
+            <input class="form-control" type="text" value="@Model.CreateTime" disabled />
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="input-group input-group-static ">
+            <label class="control-label pt-2">Người làm đơn :</label>
+            <input class="form-control" type="text" value="@Model.EmployeeNo" disabled />
+        </div>
+    </div>
+    <form method="post" asp-action="">       
+        <div class="col-6">
+            <div class="input-group input-group-static">
+                <label class="control-label pt-2">Xac nhan :</label>
+                <select asp-for="@Model.SignStatus" id="areaDropdown" class="form-control" required>
+                    <option disabled selected>Select </option>                   
+                    <option value="2">OK</option>
+                    <option value="3">Từ chối</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group input-group-static ">
+                <label class="control-label pt-2">Ghi chu :</label>
+                <input class="form-control" type="text" />
+            </div>
+        </div>
+    </form>
+</div>

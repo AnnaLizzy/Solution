@@ -3,6 +3,7 @@ using WebApplicationAPI.Data;
 using WebApplicationAPI.DTOs;
 using WebApplicationAPI.Exceptions;
 using WebApplicationAPI.Models;
+using WebApplicationAPI.Models.Enum;
 using WebApplicationAPI.Service.Interfaces;
 using WebApplicationAPI.ViewModels;
 
@@ -23,23 +24,32 @@ namespace WebApplicationAPI.Service
         /// <exception cref="AppException"></exception>
         public async Task<ApiResult<bool>> CreateWorkSchedule(WorkScheduleDTO model)
         {
-            var shift = _context.WorkShift.FirstOrDefault(x => x.ShiftID == model.ShiftID) ?? throw new AppException("Khong ton tai ca lam viec nay");
-            var location = _context.Locations.FirstOrDefault(x => x.LocationID == model.LocationID) ?? throw new AppException("Khong ton tai vi tri lam viec nay");
-            //var dataLocation = await _context.Locations
-            //    .Where(locations => locations.ListID == model.ListId)
-            //    .Select(locations => locations.LocationID)
-            //    .FirstOrDefaultAsync();
-            var employee = _context.Employee.FirstOrDefault(x => x.EmployeeID == model.EmployeeID) ?? throw new AppException("Khong ton tai nhan vien nay");
+            var shift = _context.WorkShift.FirstOrDefault(x => x.ShiftID == model.ShiftID) 
+                ?? throw new AppException("Does not exist this work shift");
+            var location = _context.Locations.FirstOrDefault(x => x.ListID == model.ListID)
+                ?? throw new AppException("Does not exist this location");
+            var employee = _context.Employee.FirstOrDefault(x => x.EmployeeID == model.EmployeeID) 
+                ?? throw new AppException("Does not exist this employee");
             var newWorkSchedule = new WorkSchedules
             {
-                EmployeeID = model.EmployeeID,
+                ScheduleID = model.ScheduleID,
                 ShiftID = model.ShiftID,
-                LocationID = model.LocationID,
+                ListID = model.ListID,
+                EmployeeName = employee.EmployeeName,
+                BG = model.BG,
+                BU = model.BU,
+                PhoneNumber = model.PhoneNumber,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
                 Frequency = model.Frequency,
                 Interval = model.Interval,
                 ByWeekday = model.ByWeekday,
+                BUCode = model.BUCode,
+                Notes = model.Notes,
+                DateCreated = DateTime.Now,
+                SignStatus = Status.CHO_KY,
+                IsDeleted = false,
+                SignBy = model.SignBy
             };
             _context.WorkSchedules.Add(newWorkSchedule);
             var result = await _context.SaveChangesAsync();
@@ -58,13 +68,13 @@ namespace WebApplicationAPI.Service
         /// <exception cref="AppException"></exception>
         public Task DeleteWorkSchedule(int id)
         {
-            var query = _context.WorkSchedules.FirstOrDefault(x => x.SchedulesID == id) ;
+            var query = _context.WorkSchedules.FirstOrDefault(x => x.ScheduleID == id) ;
            if(query != null)
             {
                 _context.WorkSchedules.Remove(query);
                 return _context.SaveChangesAsync();
             }
-            throw new AppException("Khong ton tai lich lam viec nay");
+            throw new AppException("Does not exist this work schedule !");
         }
         /// <summary>
         /// get work schedule by id
@@ -74,24 +84,36 @@ namespace WebApplicationAPI.Service
         /// <exception cref="AppException"></exception>
         public async Task<WorkScheduleDTO> GetWorkSchedule(int id)
         {
-            var query = await _context.WorkSchedules.FirstOrDefaultAsync(x => x.SchedulesID == id) ?? throw new AppException("Khong ton tai lich lam viec nay");
+            var query = await _context.WorkSchedules.FirstOrDefaultAsync(x => x.ScheduleID == id)
+                ?? throw new AppException("Does not exist this work schedule !");
             var model = from workSchedule in _context.WorkSchedules
                         join employee in _context.Employee on workSchedule.EmployeeID equals employee.EmployeeID
                         join workShift in _context.WorkShift on workSchedule.ShiftID equals workShift.ShiftID
-                        join location in _context.Locations on workSchedule.LocationID equals location.LocationID
-                        where workSchedule.SchedulesID == id
+                        join location in _context.Locations on workSchedule.ListID equals location.ListID
+                        where workSchedule.ScheduleID == id
                         select new WorkScheduleDTO
                         {
-                            SchedulesID = workSchedule.SchedulesID,
-                            EmployeeName = employee.EmployeeName,
+                            ScheduleID = workSchedule.ScheduleID,                          
+                            ListID = workSchedule.ListID,
+                            EmployeeID = workSchedule.EmployeeID,
                             ShiftName = workShift.NameShift,
-                            LocationID = workSchedule.LocationID,
-                            LocationName = location.LocationName,
+                            BG = workSchedule.BG,
+                            BU = workSchedule.BU,
+                            PhoneNumber = workSchedule.PhoneNumber,
                             StartTime = workSchedule.StartTime,
                             EndTime = workSchedule.EndTime,
                             Frequency = workSchedule.Frequency,
                             Interval = workSchedule.Interval,
-                            ByWeekday = workSchedule.ByWeekday
+                            ByWeekday = workSchedule.ByWeekday,
+                            BUCode = workSchedule.BUCode,
+                            Notes = workSchedule.Notes,
+                            SignBy = workSchedule.SignBy,
+                            SignStatus = workSchedule.SignStatus,
+                            DateCreated = workSchedule.DateCreated,
+                            EmployeeNo = workSchedule.EmployeeNo,
+                            IsDeleted = workSchedule.IsDeleted,
+                            DateModified = workSchedule.DateModified,
+                           
                         };
             return model.FirstOrDefault() ?? throw new AppException("No data");
         }
@@ -104,24 +126,32 @@ namespace WebApplicationAPI.Service
         public async Task<WorkScheduleDTO> GetWorkScheduleByEmployeeId(int id)
         {
             var query =  _context.WorkSchedules.FirstOrDefault(x => x.EmployeeID == id) 
-                ?? throw new AppException("Khong ton tai lich lam viec nay");
+                ?? throw new AppException("Does not exist this work schedule !");
             var model = await( from workSchedule in _context.WorkSchedules
                         join employee in _context.Employee on workSchedule.EmployeeID equals employee.EmployeeID
                         join workShift in _context.WorkShift on workSchedule.ShiftID equals workShift.ShiftID
-                        join location in _context.Locations on workSchedule.LocationID equals location.LocationID
+                        join location in _context.Locations on workSchedule.ListID equals location.ListID
                         where workSchedule.EmployeeID == id
                         select new WorkScheduleDTO
                         {
-                            SchedulesID = workSchedule.SchedulesID,
+                            ScheduleID = workSchedule.ScheduleID,
                             EmployeeName = employee.EmployeeName,
-                            ShiftName = workShift.NameShift,
-                            LocationID = workSchedule.LocationID,
-                            LocationName = location.LocationName,
+                            EmployeeNo = workSchedule.EmployeeNo,
+                            BG = workSchedule.BG,
+                            BU = workSchedule.BU,
+                            PhoneNumber = workSchedule.PhoneNumber,
                             StartTime = workSchedule.StartTime,
                             EndTime = workSchedule.EndTime,
                             Frequency = workSchedule.Frequency,
                             Interval = workSchedule.Interval,
-                            ByWeekday = workSchedule.ByWeekday
+                            ByWeekday = workSchedule.ByWeekday,
+                            BUCode = workSchedule.BUCode,
+                            Notes = workSchedule.Notes,
+                            SignBy = workSchedule.SignBy,
+                            SignStatus = workSchedule.SignStatus,
+                            DateCreated = workSchedule.DateCreated,
+                            IsDeleted = workSchedule.IsDeleted,
+                            DateModified = workSchedule.DateModified,
                         }).ToListAsync();
             return model.FirstOrDefault() ?? throw new AppException("No data");
         }
@@ -133,24 +163,30 @@ namespace WebApplicationAPI.Service
         /// <exception cref="AppException"></exception>
         public async Task<List<WorkScheduleDTO>> GetWorkScheduleByLocationId(string id)
         {
-           var query =  _context.WorkSchedules.Where(x => x.LocationID == id) ?? throw new AppException("Khong ton tai lich lam viec nay");
+           var query =  _context.WorkSchedules.Where(x => x.ListID.ToString() == id)
+                ?? throw new AppException("Does not exist !");
             var model = await (from workSchedule in _context.WorkSchedules
                         join employee in _context.Employee on workSchedule.EmployeeID equals employee.EmployeeID
                         join workShift in _context.WorkShift on workSchedule.ShiftID equals workShift.ShiftID
-                        join location in _context.Locations on workSchedule.LocationID equals location.LocationID
-                        where workSchedule.LocationID == id
+                        join location in _context.Locations on workSchedule.ListID equals location.ListID
+                        where workSchedule.ListID.ToString() == id
                         select new WorkScheduleDTO
                         {
-                            SchedulesID = workSchedule.SchedulesID,
-                            EmployeeName = employee.EmployeeName,
-                            ShiftName = workShift.NameShift,
-                            LocationID = workSchedule.LocationID,
-                            LocationName = location.LocationName,
+                            ScheduleID = workSchedule.ScheduleID,
+                            EmployeeID = workSchedule.EmployeeID,
+                            EmployeeNo = workSchedule.EmployeeNo,
+                            BG = workSchedule.BG,
+                            BU = workSchedule.BU,
+                            PhoneNumber = workSchedule.PhoneNumber,
                             StartTime = workSchedule.StartTime,
                             EndTime = workSchedule.EndTime,
                             Frequency = workSchedule.Frequency,
                             Interval = workSchedule.Interval,
-                            ByWeekday = workSchedule.ByWeekday
+                            ByWeekday = workSchedule.ByWeekday,
+                            BUCode = workSchedule.BUCode,
+                            Notes = workSchedule.Notes,
+                            SignBy = workSchedule.SignBy,
+                            SignStatus = workSchedule.SignStatus,
                         }).ToListAsync();
             return model ?? throw new AppException("No data");
         }
@@ -164,13 +200,12 @@ namespace WebApplicationAPI.Service
             var query = from workSchedule in _context.WorkSchedules
                         join employee in _context.Employee on workSchedule.EmployeeID equals employee.EmployeeID
                         join workShift in _context.WorkShift on workSchedule.ShiftID equals workShift.ShiftID
-                        join location in _context.Locations on workSchedule.LocationID equals location.LocationID
+                        join location in _context.Locations on workSchedule.ListID equals location.ListID
                         select new WorkScheduleDTO
                         {
-                            SchedulesID = workSchedule.SchedulesID,
+                            ScheduleID = workSchedule.ScheduleID,
                             EmployeeName = employee.EmployeeName,
-                            ShiftName = workShift.NameShift,
-                            LocationID = workSchedule.LocationID,
+                            ShiftName = workShift.NameShift,                        
                             LocationName = location.LocationName,
                             StartTime = workSchedule.StartTime,
                             EndTime = workSchedule.EndTime,
@@ -189,13 +224,17 @@ namespace WebApplicationAPI.Service
         /// <exception cref="AppException"></exception>
         public async Task UpdateWorkSchedule(int id, WorkScheduleDTO model)
         {
-            var query = _context.WorkSchedules.FirstOrDefault(x => x.SchedulesID == id) ?? throw new AppException("Khong ton tai lich lam viec nay");
-            var shift = _context.WorkShift.FirstOrDefault(x => x.ShiftID == model.ShiftID) ?? throw new AppException("Khong ton tai ca lam viec nay");
-            var location = _context.Locations.FirstOrDefault(x => x.LocationID == model.LocationID) ?? throw new AppException("Khong ton tai vi tri lam viec nay");
-            var employee = _context.Employee.FirstOrDefault(x => x.EmployeeID == model.EmployeeID) ?? throw new AppException("Khong ton tai nhan vien nay");
+            var query = _context.WorkSchedules.FirstOrDefault(x => x.ScheduleID == id) 
+                ?? throw new AppException("Does not exist this work schedule");
+            var shift = _context.WorkShift.FirstOrDefault(x => x.ShiftID == model.ShiftID) 
+                ?? throw new AppException("Does not exist this work shift");
+            var location = _context.Locations.FirstOrDefault(x => x.ListID == model.ListID)
+                ?? throw new AppException("Does not exist this location");
+            var employee = _context.Employee.FirstOrDefault(x => x.EmployeeID == model.EmployeeID) 
+                ?? throw new AppException("Does not exist this employee");
             query.EmployeeID = model.EmployeeID;
             query.ShiftID = model.ShiftID;
-            query.LocationID = model.LocationID;
+           // query.LocationID = model.LocationID;
             query.StartTime = model.StartTime;
             query.EndTime = model.EndTime;
             query.Frequency = model.Frequency;

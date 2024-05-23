@@ -1,10 +1,7 @@
-﻿@using WebApplicationApp.ViewModels
-@model LocationsViewModel
-
+﻿@model ListLocationVM
 @{
-    ViewBag.Title = "Update";
+    ViewBag.Title = "Update - Locations";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
 <h4 class="text-center">Update Location</h4>
 <button type="button" class="btn btn-sm">
@@ -12,7 +9,7 @@
 </button>
 
 <div class="container-fluid">
-    <form class="row g-2" asp-action="Update" method="post" enctype="multipart/form-data">
+    <form class="row g-2" asp-action="Update" method="post" enctype="multipart/form-data">        
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="col-6">
             <div class="input-group input-group-static">
@@ -42,17 +39,17 @@
         </div>
         <div class="col-6">
             <div class="input-group input-group-static">
-                <label class="control-label pt-2">Khu vực làm việc :</label>                
-                <select id="areaDropdown" asp-for="@Model.Area" asp-items="@ViewBag.GetAreas" class="form-control" required>
-                    <option disabled selected>@Model.Area</option>
+                <label class="control-label pt-2">Khu vực làm việc :</label>  
+                <select id="areaDropdown" asp-for="Area" asp-items="@ViewBag.GetAreas" class="form-control" required>          
+                    <option disabled value="@Model.AreaID" selected>@Model.Area</option>                   
                 </select>
             </div>
         </div>
         <div class="col-6">
             <div class="input-group input-group-static">
-                <label class="control-label pt-2">Khu :</label>           
-                <select id="regionDropdown" class="form-control" asp-for="Region" required>
-                    <option disabled selected>@Model.Region</option>
+                <label class="control-label pt-2">Khu :</label>
+                <select id="regionDropdown" class="form-control" asp-for="Region" required>                   
+                    <option value="@Model.RegionID" disabled selected>@Model.Region</option>
                 </select>
             </div>
         </div>
