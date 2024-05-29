@@ -1,7 +1,4 @@
-﻿using ApiLibrary.Interfaces;
-using ApiLibrary.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using WebApplicationAPI.Constants;
+﻿using ApiLibrary.ViewModels;
 
 namespace WebApplicationApp.Controllers
 {

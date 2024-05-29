@@ -1,6 +1,4 @@
-﻿using WebApplicationAPI.DTOs;
-
-namespace WebApplicationAPI.Service.Interfaces
+﻿namespace WebApplicationAPI.Service.Interfaces
 {
     /// <summary>
     /// 

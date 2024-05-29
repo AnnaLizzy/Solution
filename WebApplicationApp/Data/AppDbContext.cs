@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApplicationApp.Models;
-
-namespace WebApplicationApp.Data
+﻿namespace WebApplicationApp.Data
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {

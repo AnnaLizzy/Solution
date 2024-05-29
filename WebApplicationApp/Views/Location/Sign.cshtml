@@ -1,8 +1,9 @@
 ﻿@model ListLocationVM
 @{
     ViewBag.Title = "Sign";
+    
 }
-<h3>Sign</h3>
+<h3 class="text-center">Chi tiết đơn </h3>
 <div class="row g-2">
     <div class="col-6">
         <div class="input-group input-group-static">
@@ -76,11 +77,11 @@
             <input class="form-control" type="text" value="@Model.EmployeeNo" disabled />
         </div>
     </div>
-    <form method="post" asp-action="">       
+    <form class="row" method="post" asp-action="Sign" enctype="multipart/form-data">       
         <div class="col-6">
             <div class="input-group input-group-static">
                 <label class="control-label pt-2">Xac nhan :</label>
-                <select asp-for="@Model.SignStatus" id="areaDropdown" class="form-control" required>
+                <select asp-for="SignStatus" class="form-control" required>
                     <option disabled selected>Select </option>                   
                     <option value="2">OK</option>
                     <option value="3">Từ chối</option>
@@ -90,8 +91,11 @@
         <div class="col-6">
             <div class="input-group input-group-static ">
                 <label class="control-label pt-2">Ghi chu :</label>
-                <input class="form-control" type="text" />
+                <input class="form-control"asp-for="Notes" type="text" />
             </div>
+        </div>
+        <div class="form-group pt-3">
+            <button id="signUser" type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
 </div>

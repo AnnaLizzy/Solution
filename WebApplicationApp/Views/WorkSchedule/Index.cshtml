@@ -132,40 +132,76 @@
                     var shiftName = arg.event.extendedProps.shiftName;
                     var frequency = arg.event.extendedProps.frequency;
                     var interval = arg.event.extendedProps.interval;
-                    var weekdays = arg.event.extendedProps.weekdays;
-                    var startTime = arg.event.extendedProps.startTime;
-                    var endTime = arg.event.extendedProps.endTime;
+                    var weekdaysArray = arg.event.extendedProps.weekdays;
+                    var weekdays = weekdaysArray.map(function (day) {
+                        switch (day) {
+                            case "mo":
+                                return "Thứ Hai";
+                            case "tu":
+                                return "Thứ Ba";
+                            case "we":
+                                return "Thứ Tư";
+                            case "th":
+                                return "Thứ Năm";
+                            case "fr":
+                                return "Thứ Sáu";
+                            case "sa":
+                                return "Thứ Bảy";
+                            case "su":
+                                return "Chủ Nhật";
+                            default:
+                                return day;
+                        }
+                    }).join(', ');
+                    var startTime = new Date(arg.event.extendedProps.startTime).toLocaleDateString('vi-VN');
+                    var endTime = new Date(arg.event.extendedProps.endTime).toLocaleDateString('vi-VN');
                     var locationName = arg.event.extendedProps.description;
+                    var frequencyVi;
+                    switch (frequency) {
+                        case "daily":
+                            frequencyVi = "Hàng ngày";
+                            break;
+                        case "weekly":
+                            frequencyVi = "Hàng tuần";
+                            break;
+                        case "monthly":
+                            frequencyVi = "Hàng tháng";
+                            break;
+                        case "yearly":
+                            frequencyVi = "Hàng năm";
+                            break;
+                        default:
+                            frequencyVi = "Không xác định";
+                            break;
+                    }
                     modal.classList.add("modal");
                     modal.innerHTML = `
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Detail : ${title}</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>Tên nhân viên: ${employeeName}</p>
-                                                    <p>Ca làm việc: ${shiftName}</p>
-                                                    <p>Lặp lại sau : ${interval} lần </p>
-                                                    <p>Lặp theo: ${frequency}</p>
-                                                    <p>Ngày trong tuần : ${weekdays}</p>
-                                                    <p>Ngày bắt đầu: ${startTime}</p>
-                                                    <p>Ngày kết thúc : ${endTime}</p>
-                                                    <p>Tên địa điểm: ${locationName}</p>                                                    
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Detail: ${title}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Tên nhân viên: ${employeeName}</p>
+                                                        <p>Ca làm việc: ${shiftName}</p>
+                                                        <p>Lặp lại sau: ${interval} lần</p>
+                                                        <p>Lặp theo: ${frequencyVi}</p>
+                                                        <p>Ngày trong tuần: ${weekdays}</p>
+                                                        <p>Ngày bắt đầu: ${startTime}</p>
+                                                        <p>Ngày kết thúc: ${endTime}</p>
+                                                        <p>Tên địa điểm: ${locationName}</p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    `;
+                                        `;
                     document.body.appendChild(modal);
                     var bootstrapModal = new bootstrap.Modal(modal);
                     bootstrapModal.show();
                 },
             });
 
-            calendar.render();
-            // var eventSources = calendar.getEvents();
-            // console.log(eventSources);
+            calendar.render();           
         });
     </script>
 }

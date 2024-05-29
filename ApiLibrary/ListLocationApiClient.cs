@@ -97,9 +97,9 @@ namespace ApiLibrary
             var requestContent = new MultipartFormDataContent
             {
                 {new StringContent(locationVM.SignStatus.ToString() ),"SignStatus"},
-               
+                {new StringContent(locationVM.SignUser ?? "N/a"),"SignUser"}
             };      
-            var response = await client.PostAsync($"api/Location/SignLocation/{id}", requestContent);
+            var response = await client.PatchAsync($"api/Location/SignLocation/{id}", requestContent);
 
             return response.IsSuccessStatusCode;
         }
@@ -121,10 +121,6 @@ namespace ApiLibrary
             return await GetAsync<ListLocationVM>($"api/Location/{id}")
                 ?? throw new Exception(SystemApiConst.MessageError.Error);
         }
-
-       
-
-       
         public async Task<bool> UpdateLocation(int id, ListLocationVM location)
         {
             var sessions = _httpContextAccessor.HttpContext?.Session.GetString(SystemApiConst.Setting.Token);

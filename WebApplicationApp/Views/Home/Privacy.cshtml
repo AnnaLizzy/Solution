@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<style>
+@* <style>
     .marker {
         position: absolute;
         width: 10px;
@@ -12,7 +12,7 @@
         border-radius: 50%;
         /* Bo tròn để tạo hình dạng điểm */
     }
-</style>
+</style> *@
 <h1>@ViewData["Title"]</h1>
 <partial name="_ListPatialView" />
 @* <div class="map-container">
@@ -25,28 +25,11 @@
     <script src="~/lib/fullcalender-6.1.11/packages/timegrid/index.global.js"></script>
     <script src="~/lib/fullcalender-6.1.11/packages/rrule/index.global.js"> </script>   
     <script>
-        // const x = [720, 665, 650, 460, 470]; // Sử dụng phần trăm (%) thay vì pixel (px)
-        // const y = [258, 270, 227, 50, 230]; // Sử dụng phần trăm (%) thay vì pixel (px)
-        // const urls = ["https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/1"
-        //     , "https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/2", 
-        //     "https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/3",
-        //     "https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/4", "https://3t1g2t2p-44334.asse.devtunnels.ms/WorkShifts/Details/5"];
-         
-        // for (let i = 0; i < x.length; i++) {
-        //     const marker = document.createElement("a"); // Thay đổi div thành thẻ anchor (a)
-        //     marker.href = urls[i]; // Đặt URL cho mỗi điểm đánh dấu
-        //     marker.className = "marker";
-        //     marker.style.left = x[i] + "%"; // Sử dụng phần trăm (%) thay vì pixel (px)
-        //     marker.style.top = y[i] + "%"; // Sử dụng phần trăm (%) thay vì pixel (px)
-        //     document.querySelector(".map-container").appendChild(marker);
-        // }
-        //************************************************************************************* */
-       
         // FullCalendar
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-
+                locale:'zh',
                 initialDate: '2024-03-12',
                 initialView: 'timeGridWeek',
                 nowIndicator: true,
@@ -118,7 +101,7 @@
                     },
                     {
                         title: 'Click for Google',
-                        url: 'http://google.com/',
+                        url: 'http://example.com/',
                         start: '2024-03-28',
                         end: '2024-04-02'
                     }

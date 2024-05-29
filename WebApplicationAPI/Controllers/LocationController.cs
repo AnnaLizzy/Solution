@@ -1,31 +1,48 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Service.Interfaces;
-
-namespace WebApplicationAPI.Controllers
+﻿namespace WebApplicationAPI.Controllers
 {
     /// <summary>
     /// Locations
     /// </summary>
-    /// <param name="locationService"></param>
-    /// <param name="emailSender"></param>
+    /// <param name="locationService"></param>  
     [Route("api/[controller]")]
     [ApiController]
-    public class LocationController(ILocationService locationService,IEmailSender emailSender) : ControllerBase
+    public class LocationController(ILocationService locationService) : ControllerBase
     {
         private readonly ILocationService _locationService = locationService;
-        private readonly IEmailSender _emailService = emailSender;
+        //private readonly IEmailSender _emailService = emailSender;
         /// <summary>
         /// Get all locations
         /// </summary>
         /// <returns>Returns all locations</returns>
         /// <remarks>
         /// examlpe :
-        ///     get All location
+        ///     [
+        ///     {
+        ///"listID": 1,
+        ///  "locationID": "QV-B01",
+        ///  "locationName": "Cổng bảo vệ A1",
+        ///  "area": "QV桂武",
+        ///  "floors": "tầng 1",
+        ///  "region": "1",
+        ///  "areaID": 0,
+        ///  "regionID": 0,
+        ///  "azimuth": "Đông Bắc",
+        ///  "stationType": "3 ca",
+        ///  "building": "tòa B01",
+        ///  "other": "ghi chú",
+        ///  "startTime": "2024-05-01T00:00:00",
+        ///  "endTime": "2024-05-31T00:00:00",
+        ///  "signStatus": 2,
+        ///  "signUser": null,
+        ///  "signUserID": null,
+        ///  "signDate": "0001-01-01T00:00:00",
+        ///  "updateTime": "0001-01-01T00:00:00",
+        ///  "createTime": "2024-05-17T09:44:00.7197493",
+        ///  "employeeNo": null,
+        ///  "notes": null
+        ///},]
         /// </remarks>
-        [HttpGet] 
+        [HttpGet]
         public async Task<IActionResult> GetLocations()
         {
             var data = await _locationService.GetLocations();
@@ -35,15 +52,12 @@ namespace WebApplicationAPI.Controllers
             }
             return Ok(data);
         }
-
         /// <summary>
         /// Get location by ID
         /// </summary>
         /// <param name="id">The ID of the location</param>
         /// <returns>Returns the location with the specified ID</returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("{id}")]    
         public async Task<IActionResult> GetLocationByID(int id)
         {
             var data = await _locationService.GetLocation(id);
@@ -62,14 +76,14 @@ namespace WebApplicationAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Consumes("multipart/form-data")]        
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateLocation([FromForm] LocationDTO model)
         {
             if (model == null)
             {
                 return BadRequest("Please enter Location");
             }
-            var result = await _locationService.CreateLocation(model);        
+            var result = await _locationService.CreateLocation(model);
 
             if (result == 0)
             {
@@ -85,11 +99,11 @@ namespace WebApplicationAPI.Controllers
         /// <returns></returns>
         [HttpPatch]
         [Route("SignLocation/{id}")]
-        public async Task<IActionResult> SignLocation(int id,[FromForm] LocationDTO location)
+        public async Task<IActionResult> SignLocation([FromRoute] int id, [FromForm] SignLocationDTO location)
         {
             try
             {
-                var result = await _locationService.SignLocation(id,location);
+                var result = await _locationService.SignLocation(id, location);
                 if (result == 0)
                 {
                     return BadRequest("Sign failed. Please check your input.");
@@ -102,7 +116,7 @@ namespace WebApplicationAPI.Controllers
             }
         }
         /// <summary>
-        /// 
+        /// Update
         /// </summary>
         /// <param name="id"></param>
         /// <param name="model"></param>
@@ -110,19 +124,17 @@ namespace WebApplicationAPI.Controllers
         [Authorize]
         [HttpPatch("{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UpdateLocation([FromRoute]int id, [FromForm] LocationDTO model)
+        public async Task<IActionResult> UpdateLocation([FromRoute] int id, [FromForm] LocationDTO model)
         {
             await _locationService.UpdateLocation(id, model);
             return Ok();
         }
         /// <summary>
-        /// 
+        /// Delete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteLocation(int id)
         {
             try
@@ -135,6 +147,6 @@ namespace WebApplicationAPI.Controllers
                 return BadRequest($"Failed to delete location with id: {id}. Error: {ex.Message}");
             }
         }
-       
+
     }
 }

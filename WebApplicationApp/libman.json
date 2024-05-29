@@ -33,6 +33,10 @@
     {
       "library": "i18next@23.11.5",
       "destination": "wwwroot/lib/i18next/"
+    },
+    {
+      "library": "typed.js@2.1.0",
+      "destination": "wwwroot/lib/typed.js/"
     }
   ]
 }

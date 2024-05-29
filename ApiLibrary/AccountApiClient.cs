@@ -30,7 +30,21 @@ namespace ApiLibrary
 
             return JsonConvert.DeserializeObject<ApiErrorResult<string>>(await response.Content.ReadAsStringAsync())!;
         }
+        public async Task<ApiResult<string>> RefreshToken(LoginDTO model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var httpContent = new StringContent(json, Encoding.UTF8, SystemApiConst.Setting.StringContent);
 
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_baseUrl);
+            var response = await client.PostAsync(SystemApiConst.Account.LoginUrl, httpContent);
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ApiSuccessResult<string>>(await response.Content.ReadAsStringAsync())!;
+            }
+
+            return JsonConvert.DeserializeObject<ApiErrorResult<string>>(await response.Content.ReadAsStringAsync())!;
+        }
         public async Task<List<EmployeeDTO>> GetEmployees(string token)
         {
             var client = _httpClientFactory.CreateClient();

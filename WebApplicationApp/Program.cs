@@ -40,11 +40,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Index";
         options.AccessDeniedPath = "/User/Forbidden/";
+        options.ExpireTimeSpan = TimeSpan.FromDays(5); // Thời gian sống của cookie
+        options.SlidingExpiration = true; // Gia hạn thời gian sống của cookie khi người dùng hoạt động
+        options.Cookie.HttpOnly = true;
     });
 // add session and use session
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.IdleTimeout = TimeSpan.FromDays(5);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });

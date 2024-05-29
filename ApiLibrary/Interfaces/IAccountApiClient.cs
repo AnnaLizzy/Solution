@@ -11,6 +11,7 @@ namespace ApiLibrary.Interfaces
     public interface IAccountApiClient
     {
         Task<ApiResult<string>> Authenticate(LoginDTO model);
+        Task<ApiResult<string>> RefreshToken(LoginDTO model);
         Task<List<EmployeeDTO>> GetEmployees(string token);
     }
 }

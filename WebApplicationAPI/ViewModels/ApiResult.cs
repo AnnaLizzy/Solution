@@ -18,5 +18,13 @@
         /// result object
         /// </summary>
         public T? ResultObj { get; set; }
+        /// <summary>
+        /// token
+        /// </summary>
+        public T? Token { get; set; }
+        /// <summary>
+        /// refresh token
+        /// </summary>
+        public T? RefreshToken { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using WebApplicationAPI.DTOs;
-using WebApplicationAPI.ViewModels;
-namespace WebApplicationAPI.Service.Interfaces
+﻿namespace WebApplicationAPI.Service.Interfaces
 {
     /// <summary>
     /// Get all employees
@@ -10,7 +8,7 @@ namespace WebApplicationAPI.Service.Interfaces
         /// <summary>
         /// Authenticate
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model"></param>      
         /// <returns></returns>
         Task<ApiResult<string>> Authenticate(LoginDTO model);
         /// <summary>

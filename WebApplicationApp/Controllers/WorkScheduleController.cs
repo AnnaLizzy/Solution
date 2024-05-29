@@ -1,11 +1,4 @@
-﻿using ApiLibrary.Interfaces;
-using ApiLibrary.ViewModels;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Security.Claims;
-using System.Text;
-using WebApplicationAPI.Constants;
+﻿using ApiLibrary.ViewModels;
 
 namespace WebApplicationApp.Controllers
 {
@@ -29,15 +22,19 @@ namespace WebApplicationApp.Controllers
         private readonly IConfiguration _configuration = configuration;
         public async Task<IActionResult> Index()
         {
-
             var data = await workScheduleApi.GetWorkSchedules();
             return View(data);
         }
        
         public async Task<IActionResult> ShowMap()
         {        
+             ViewBag.GetAreaList = await GetAreasAsync();
+            
+
+
+
+
             ViewBag.GetLocationList = await GetListLocations();
-            ViewBag.GetAreaList = await GetAreasAsync();
             return View();
         }
         public async Task<IActionResult> Details(int id)
@@ -95,6 +92,11 @@ namespace WebApplicationApp.Controllers
         public async Task<IActionResult> Create()
         {
             string? token = _httpContextAccessor?.HttpContext?.Session.GetString(SystemConstants.AppSetting.Token);
+            if(token == null)
+            {
+                TempData["Error"] = "Please login to continue";
+                return RedirectToAction("Index", "Account");
+            }
             // Lấy thông tin người dùng
             var userInfo = await GetUserInfor();
             if (userInfo != null)
@@ -115,6 +117,8 @@ namespace WebApplicationApp.Controllers
                     1042 => "FuShan",
                     1043 => "C事業群",
                     1044 => "中央採購-機構採購",
+                    1045 => "CCTV",
+                    1047 => "A事業群",
                     _ => string.Empty
                 };
             }

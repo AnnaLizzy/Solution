@@ -1,8 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Data;
-using WebApplicationAPI.Constants;
-
-namespace WebApplicationAPI
+﻿namespace WebApplicationAPI
 {
     /// <summary>
     /// build query command
@@ -16,7 +12,7 @@ namespace WebApplicationAPI
             SqlCommand command = new(storedProcName, connection)
             {
                 CommandType = CommandType.StoredProcedure,
-                CommandTimeout = 12000
+                CommandTimeout = 20000
             };
             return command;
         }

@@ -173,14 +173,8 @@ namespace WebApplicationAPI.Service
                               })
                               .ToListAsync();
 
-            if (query == null || !query.Any())
-            {
-                throw new AppException("No data available");
-            }
-
-            return query;
+            return query ?? throw new AppException("No data available");
         }
-
         /// <summary>
         /// Sign location
         /// </summary>
@@ -188,7 +182,7 @@ namespace WebApplicationAPI.Service
         /// <param name="location"></param>
         /// <returns></returns>
         /// <exception cref="AppException"></exception>
-        public async Task<int> SignLocation(int id, LocationDTO location)
+        public async Task<int> SignLocation(int id, SignLocationDTO location)
         {
             // Kiểm tra đầu vào
             ArgumentNullException.ThrowIfNull(location);
@@ -201,14 +195,13 @@ namespace WebApplicationAPI.Service
             var log = new LogSignUser
             {
                 SignUser = location.SignUser,
-                EMail = "thienthantihon29@gmail.com", // Địa chỉ email cần thay đổi tùy theo ngữ cảnh
+                EMail = "", // Địa chỉ email cần thay đổi tùy theo ngữ cảnh
                 Body = "this is body", // Nội dung body cần thay đổi tùy theo ngữ cảnh
                 SignSubject = "Tieu de", // Tiêu đề cần thay đổi tùy theo ngữ cảnh
                 SignStatus = location.SignStatus,
-                Notes = "ghi chú", // Ghi chú cần thay đổi tùy theo ngữ cảnh
+                Notes = location.Notes, // Ghi chú cần thay đổi tùy theo ngữ cảnh
                 ListID = id,
             };
-
             try
             {
                 // Thêm bản ghi log vào bảng LogSignUser

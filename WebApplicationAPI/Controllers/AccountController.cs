@@ -16,7 +16,6 @@ namespace WebApplicationAPI.Controllers
     public class AccountController(IEmployeeService employeeService)  : ControllerBase
     {
         private readonly IEmployeeService _employeeService = employeeService;
-
         /// <summary>
         /// Login
         /// </summary>
@@ -31,23 +30,18 @@ namespace WebApplicationAPI.Controllers
         [AllowAnonymous]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
-        {
-            
+        {            
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var result = await _employeeService.Authenticate(model);
-            if (result == null || string.IsNullOrEmpty(result.ResultObj))
+            if (result == null)
             {
-                return BadRequest(result);
+                return Unauthorized();
             }
             return Ok(result);
-
-        }
-
-  
-
+        } 
         /// <summary>
         /// Get all employees
         /// </summary>
@@ -68,8 +62,7 @@ namespace WebApplicationAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-     
+        [HttpGet("{id}")]     
         public async Task<IActionResult> GetEmployeeByID(int id)
         {
             if (!ModelState.IsValid)
@@ -84,8 +77,7 @@ namespace WebApplicationAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{id}")]
-       
+        [HttpDelete("{id}")]       
         public async Task<IActionResult> DeleteEmployeeByID(int id)
         {
             await _employeeService.DeleteEmployee(id);
@@ -96,8 +88,7 @@ namespace WebApplicationAPI.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
-       
+        [HttpPost]       
         public async Task<IActionResult> PostEmployee([FromForm] EmployeeDTO model)
         {
             if (!ModelState.IsValid)
@@ -113,8 +104,7 @@ namespace WebApplicationAPI.Controllers
             {
                
                 return StatusCode(500, new { message = ex.Message });
-            }
-            
+            }            
         }
         /// <summary>
         /// Update employee
@@ -134,10 +124,8 @@ namespace WebApplicationAPI.Controllers
                 await _employeeService.UpdateEmployee(id, model);
                 return Ok("Success");
             }
-            catch(Exception ex) { return StatusCode(500, new { message = ex.Message }); }
-            
-        }
-      
+            catch(Exception ex) { return StatusCode(500, new { message = ex.Message }); }            
+        }     
         
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApplicationApp.Data;
+﻿using WebApplicationApp.Data;
 using WebApplicationApp.Repository.Interface;
 using WebApplicationApp.ViewModels;
 

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WebApplicationAPI.Service.Interfaces;
-
-namespace WebApplicationAPI.Controllers
+﻿namespace WebApplicationAPI.Controllers
 {
     /// <summary>
     /// 

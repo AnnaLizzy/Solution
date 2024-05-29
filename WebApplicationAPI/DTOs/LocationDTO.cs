@@ -91,5 +91,9 @@ namespace WebApplicationAPI.DTOs
         /// Employee No
         /// </summary>
         public string? EmployeeNo { get; set; }
+        /// <summary>
+        /// Ghi chu   
+        /// </summary>
+        public string? Notes { get;set; }
     }
 }

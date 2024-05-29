@@ -3,5 +3,27 @@
 }
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>    
+    <h2 class="text-dark">Work with an amazing <span class="text-dark" id="typed"></span></h2>
+    <div id="typed-strings">
+        <h1>team</h1>
+        <h1>design</h1>
+        <h1>tool</h1>
+    </div>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> 
+    
 </div>
+<script src="~/lib/typed.js/typed.umd.js"></script>
+@section Scripts{
+    <script type="text/javascript">
+        if (document.getElementById('typed')) {
+            var typed = new Typed("#typed", {
+                stringsElement: '#typed-strings',
+                typeSpeed: 90,
+                backSpeed: 90,
+                backDelay: 200,
+                startDelay: 500,
+                loop: true
+            });
+        }
+    </script>
+}

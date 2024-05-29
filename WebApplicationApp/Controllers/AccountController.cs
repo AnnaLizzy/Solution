@@ -1,16 +1,4 @@
-﻿using ApiLibrary.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using WebApplicationAPI.Constants;
-using WebApplicationAPI.DTOs;
-
-namespace WebApplicationApp.Controllers
+﻿namespace WebApplicationApp.Controllers
 {
     public class AccountController(IAccountApiClient accountApi,IConfiguration configuration) : Controller
     {
@@ -41,23 +29,38 @@ namespace WebApplicationApp.Controllers
                 return View(request);
             }
             var result = await _accountApiClient.Authenticate(request);
-            if (result == null || string.IsNullOrEmpty(result.ResultObj))
+            if (result == null || string.IsNullOrEmpty(result.Token))
             {
                 
                 TempData["error"] = "Đăng nhập thất bại : Tài khoản hoặc mật khẩu không đúng";
                 return View(request);
             }
-            var userPrincipal = this.ValidateToken(result.ResultObj);
+
+            var userPrincipal = ValidateToken(result.Token);
+            if (userPrincipal == null)
+            {
+                var refreshTokenResult = await _accountApiClient.RefreshToken(new RefreshTokenRequest { RefreshToken = result.RefreshToken });
+                if (refreshTokenResult == null || string.IsNullOrEmpty(refreshTokenResult.Token))
+                {
+                    TempData["error"] = "Phiên đăng nhập đã hết hạn và không thể làm mới token. Vui lòng đăng nhập lại.";
+                    return View(request);
+                }
+
+                userPrincipal = ValidateToken(refreshTokenResult.Token);
+                result.Token = refreshTokenResult.Token;
+            }
+
             var authProperties = new AuthenticationProperties
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
-                IsPersistent = false
+                IsPersistent = request.RememberMe
             };
-            HttpContext.Session.SetString(SystemConstants.AppSetting.Token, result.ResultObj);
+
+            HttpContext.Session.SetString(SystemConstants.AppSetting.Token, result.Token);
             await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        userPrincipal,
-                        authProperties);
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                userPrincipal,
+                authProperties);
             TempData["success"] = "Đăng nhập thành công";
             return LocalRedirect(returnUrl);
         }
@@ -78,7 +81,6 @@ namespace WebApplicationApp.Controllers
             TokenValidationParameters validationParameters = new()
             {
                 ValidateLifetime = true,
-
                 ValidAudience = _configuration[SystemConstants.AppSetting.TokenIssuer],
                 ValidIssuer = _configuration[SystemConstants.AppSetting.TokenIssuer],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration[SystemConstants.AppSetting.TokenKey] ?? ""))
@@ -89,5 +91,10 @@ namespace WebApplicationApp.Controllers
             return principal;
         }
 
+    }
+
+    internal class RefreshTokenRequest : LoginDTO
+    {
+        public string? RefreshToken { get; set; }
     }
 }

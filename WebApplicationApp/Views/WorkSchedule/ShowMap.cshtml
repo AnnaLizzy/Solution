@@ -1,7 +1,7 @@
 ﻿@model List<WorkScheduleViewModel>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "ShowMap";
+    ViewBag.Title = "Maps";
 }
 <h4 class="text-center">Xem chi tiet vi tri theo ban do</h4>
 <div class="row pb-3">
@@ -32,6 +32,7 @@
             // Lấy giá trị được chọn
             var selectedAreaId = this.value;   
             var canvas = document.getElementById("myCanvas");
+            var notes = document.getElementById("notes");
             // Thay đổi hình nền của canvas dựa trên giá trị được chọn
             switch (selectedAreaId) {
                 case "3":
@@ -56,14 +57,13 @@
                     canvas.src = "../Images/MapBN3.png";                  
                     break;
                 default:
-                    canvas.src = "../Images/no-data.svg";             
-                    break;
+                    canvas.src = "../Images/no-data.svg"; 
+                    canavs.innerHTML = "<div class='text-center'>No data</div>";
+                break;
             }
-
         });       
     </script>
 }
-
     <style>
         .img-thumbnail {
             border: none;

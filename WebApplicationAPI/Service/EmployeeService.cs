@@ -1,11 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Data;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using WebApplicationAPI.Exceptions;
+﻿using WebApplicationAPI.Exceptions;
 using WebApplicationAPI.Constants;
 using WebApplicationAPI.Data;
 using WebApplicationAPI.DTOs;
@@ -13,6 +6,8 @@ using WebApplicationAPI.Models;
 using WebApplicationAPI.Models.Certificate;
 using WebApplicationAPI.Service.Interfaces;
 using WebApplicationAPI.ViewModels;
+using System.Security.Cryptography;
+
 
 
 namespace WebApplicationAPI.Service
@@ -74,64 +69,136 @@ namespace WebApplicationAPI.Service
         public async Task<ApiResult<string>> Authenticate(LoginDTO model)
         {
             // Gọi stored procedure từ DbContext
-            var user = await GetUserBeforeLoding_loding(model.UserName ?? string.Empty, model.Password ?? string.Empty);
-            //ktra qua trinh dang nhap
-            var userBeforeLoadingID = await _context2.UserBeforeLoding
-                                   .Where( x => x.EmployeeNo == model.UserName)
+             var user = await GetUserBeforeLoding_loding(model.UserName ?? string.Empty, model.Password ?? string.Empty);
+            var userID = await _context2.UserBeforeLoding
+                                   .Where(x => x.EmployeeNo == model.UserName)
                                    .Select(x => x.UserBeforeLodingID)
                                    .FirstOrDefaultAsync();
-           var email = from e in _context2.UserBeforeLoding
-                       where e.EmployeeNo == model.UserName
-                       select e.Notes;
-            var emailResult = await email.FirstOrDefaultAsync();
-
-            var emp = from e in _context.Employee
-                            where e.EmployeeNo == model.UserName && e.Password == model.Password
-                            select e;
-            var results = await emp.FirstOrDefaultAsync();
-           
-            // Kiểm tra kết quả trả về
             if (user == null || user.Count == 0)
             {
-                return new ApiErrorResult<string>(SystemConstants.MessageError.LoginError);
+                return new ApiErrorResult<string>("Login Error : User or pass incorect");
             }
 
-            var userInfo = user.FirstOrDefault();
-
-            if (userInfo == null)
+            var userInfoResult = user.FirstOrDefault();
+            var userInfo = new LoginDTO
             {
-                return new ApiErrorResult<string>(SystemConstants.MessageError.LoginError);
-            }
-            // Kiểm tra xem có người dùng nào tồn tại không
-            if (user == null || emp == null)
+                UserName = userInfoResult?.EmployeeNo,
+                Password = userInfoResult?.Password,
+                RememberMe = model.RememberMe,
+            };
+            var token = GenerateJwtToken(userInfo).Result;
+            var refreshToken = GenerateRefreshToken();
+           
+            // Lưu refresh token vào cơ sở dữ liệu
+             var newRefreshToken = await SaveRefreshToken(userID, refreshToken, model.RememberMe);
+            if(newRefreshToken == null)
             {
-                return new ApiErrorResult<string>(SystemConstants.MessageError.LoginError);
+                return new ApiErrorResult<string>("Login Error: Can't save refresh token");
+            }
+            return new ApiSuccessResult<string>(token,newRefreshToken,"Login successfuly");
+
+        }
+        private async Task<string> SaveRefreshToken(int userID, string newRefreshToken, bool remember)
+        {
+            var existingToken = await _context.UserToken
+                                              .Where(x => x.UserID == userID)
+                                              .SingleOrDefaultAsync();
+
+            if (existingToken != null)
+            {
+                // Nếu token còn hạn, trả về token hiện tại
+                if (existingToken.ExpiryDate > DateTime.UtcNow)
+                {
+                    return existingToken.RefreshToken ?? "";
+                }
+
+                // Nếu token hết hạn, xóa token hiện tại
+                _context.UserToken.Remove(existingToken);
             }
 
+            // Tạo và lưu refresh token mới
+            var userToken = new UserToken
+            {
+                UserID = userID,
+                RefreshToken = newRefreshToken,
+                ExpiryDate = remember ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddHours(3)
+            };
+            _context.UserToken.Add(userToken);
+            await _context.SaveChangesAsync();
 
-            // Generate JWT token
+            return newRefreshToken;
+        }
+
+
+        private static string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        private async Task<string> GenerateJwtToken(LoginDTO model)
+        {
+            //ktra qua trinh dang nhap
+            var userInfo = await _context2.UserBeforeLoding
+                                   .Where(x => x.EmployeeNo == model.UserName)
+                                   .Select(x => x.UserBeforeLodingID)
+                                   .FirstOrDefaultAsync();
+            var email = from e in _context2.UserBeforeLoding
+                        where e.EmployeeNo == model.UserName
+                        select e.Notes;
+            var emailResult = await email.FirstOrDefaultAsync();
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration[SystemConstants.AppSetting.TokenKey]!);
-
-
+            var remember = model.RememberMe;
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Audience = _configuration[SystemConstants.AppSetting.TokenIssuer],
                 Issuer = _configuration[SystemConstants.AppSetting.TokenIssuer],
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new(ClaimTypes.Name, userInfo.EmployeeNo?.ToString() ?? string.Empty),
-                    new(ClaimTypes.NameIdentifier, userBeforeLoadingID.ToString() ?? string.Empty),
-                    new(ClaimTypes.Email, emailResult?.ToString() ?? string.Empty)
+                    new(ClaimTypes.Name, model.UserName ?? "Not given"),
+                    new(ClaimTypes.NameIdentifier, userInfo.ToString() ),
+                    new(ClaimTypes.Email,emailResult ?? "Not given")
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Expires = remember ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddHours(3),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+        /// <summary>
+        /// refresh token
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ApiResult<string>> GetRefreshToken(LoginDTO model)
+        {
+            var user = await GetUserBeforeLoding_loding(model.UserName ?? string.Empty, model.Password ?? string.Empty);
+            if (user == null || user.Count == 0)
+            {
+                return new ApiErrorResult<string>("Login Error: User or password incorrect");
+            }
 
-            return new ApiSuccessResult<string>(tokenHandler.WriteToken(token));
-        }   
+            var userID = await _context2.UserBeforeLoding
+                                       .Where(x => x.EmployeeNo == model.UserName)
+                                       .Select(x => x.UserBeforeLodingID)
+                                       .FirstOrDefaultAsync();
+
+            var refreshToken = await _context.UserToken
+                                              .Where(x => x.UserID == userID && x.ExpiryDate > DateTime.UtcNow)
+                                              .Select(x => x.RefreshToken)
+                                              .FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return new ApiErrorResult<string>("No valid refresh token found");
+            }
+
+            return new ApiSuccessResult<string>(refreshToken,"Ok");
+        }
+
         /// <summary>
         /// Tạo nhân viên mới
         /// </summary>

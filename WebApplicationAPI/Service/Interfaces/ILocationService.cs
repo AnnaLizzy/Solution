@@ -1,6 +1,4 @@
-﻿using WebApplicationAPI.DTOs;
-
-namespace WebApplicationAPI.Service.Interfaces
+﻿namespace WebApplicationAPI.Service.Interfaces
 {
     /// <summary>
     /// Interface for LocationService
@@ -43,6 +41,6 @@ namespace WebApplicationAPI.Service.Interfaces
         /// <param name="id"></param>    
         /// <param name="location"></param>
         /// <returns></returns>
-        Task<int> SignLocation(int id,LocationDTO location);
+        Task<int> SignLocation(int id,SignLocationDTO location);
     }
 }

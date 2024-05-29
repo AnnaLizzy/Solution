@@ -1,7 +1,4 @@
-﻿using WebApplicationAPI.DTOs;
-using WebApplicationAPI.ViewModels;
-
-namespace WebApplicationAPI.Service.Interfaces
+﻿namespace WebApplicationAPI.Service.Interfaces
 {
     /// <summary>
     /// work schedule service

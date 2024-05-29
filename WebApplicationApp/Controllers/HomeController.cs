@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using System.Drawing.Imaging;
-using System.Drawing;
-using WebApplicationApp.Models;
-using SkiaSharp;
+﻿using SkiaSharp;
 
 namespace WebApplicationApp.Controllers
 {

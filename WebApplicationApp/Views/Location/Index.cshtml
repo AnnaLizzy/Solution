@@ -3,8 +3,18 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h4>This is Location Địa điểm trực</h4>
-<h4 data-i18n="title"></h4>
+<style>
+    .page-item{list-style:none;}
+</style>
+<h4 class="text-center pb-3">This is Location Địa điểm trực</h4>
+<div class="mb-4 w-100 w-md-50 w-lg-25">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item text-dark "><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item text-dark opacity-5" aria-current="page">Locations</li>
+        </ol>
+    </nav>
+</div>
 <div>
     <a asp-action="Create"><i class="bi bi-plus"></i>Create New</a>
 </div>
@@ -26,21 +36,20 @@
 </div>
 <div class="col-lg-4 mx-auto">
     <div class="d-flex justify-content-center mt-3">
-        <li class="page-item">
+       @*  <li class="page-item">
             <a id="previousPage" class="page-link"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
-        </li>
+        </li> *@
         <ul id="pagination" class="pagination pagination-primary m-4">           
         </ul>
-        <li class="page-item">
+       @*  <li class="page-item">
            <a id="nextPage" class="page-link"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-        </li>
-        <div class="input-group input-group-static">
-            <label class="control-label">Go to:</label>
-            <input id="goToPage" type="number" min="1" style="width: 50px; height:30px;" />
+        </li> *@
+        <div class="input-group input-group-static pt-4">
+            <label class="control-label pe-2">Go to:</label>
+            <input class="form-control" id="goToPage" type="number" min="1" style="width: 50px; height:30px;flex:none;" />
         </div>
     </div>
 </div>
-
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -62,26 +71,29 @@
                         case 2:
                             statusText = 'Đã ký';
                             break;
+                        case 3:
+                            statusText = 'Trả lại ';
+                            break;
                         default:
                             statusText = 'Trạng thái không xác định';
                             break;
                     }
+                    var createTime = new Date(item.CreateTime).toLocaleString('vi-VN');
 
                     var row = `<tr>
-                                        <td class="text-center align-middle">${item.ListID}</td>
-                                        <td class="text-center align-middle">${item.LocationName}</td>
-                                        <td class="text-center align-middle">${item.CreateTime}</td>
-                                        <td class="text-center align-middle">${statusText}</td>
-                                        <td class="text-center align-middle">
-                                            <a href="/Location/Update/${item.ListID}">Edit</a> |
-                                            <a href="/Location/Details/${item.ListID}">Details</a> |
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="${item.ListID}">Delete</a>
-                                        </td>
-                                    </tr>`;
+                                    <td class="text-center align-middle">${item.ListID}</td>
+                                    <td class="text-center align-middle">${item.LocationName}</td>
+                                    <td class="text-center align-middle">${item.CreateTime}</td>
+                                    <td class="text-center align-middle">${statusText}</td>
+                                    <td class="text-center align-middle">
+                                        <a href="/Location/Update/${item.ListID}">Edit</a> |
+                                        <a href="/Location/Details/${item.ListID}">Details</a> |
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="${item.ListID}">Delete</a>
+                                    </td>
+                                </tr>`;
                     $('#locationTableBody').append(row);
                 });
             }
-
             function displayPage(page) {
                 if (page < 1) page = 1;
                 if (page > pageCount) page = pageCount;

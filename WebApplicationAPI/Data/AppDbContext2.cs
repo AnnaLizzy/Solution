@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using WebApplicationAPI.Models.Certificate;
+﻿using WebApplicationAPI.Models.Certificate;
 
 namespace WebApplicationAPI.Data
 {

@@ -23,9 +23,11 @@ namespace ApiLibrary.ViewModels
         [Required(ErrorMessage = "Please enter end time")]       
         public DateTime? EndTime { get; set; }
         public Status SignStatus { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime? CreateTime { get; set; }
         [Required(ErrorMessage = "Please enter sign user")]
         public string? SignUser { get; set; }
         public string? EmployeeNo { get; set; }
+        public string? Notes { get; set; }
     }
 }

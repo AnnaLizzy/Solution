@@ -9,14 +9,10 @@ using WebApplicationAPI.Models.Enum;
 namespace ApiLibrary.ViewModels
 {
     public class CreateWorkScheduleViewModel
-    {
-       
-        public int EmployeeID { get; set; }
-        public string? EmployeeName { get; set; }
-        public int ShiftID { get; set; }
-        public string? ShiftName { get; set; }
-        public string? LocationID { get; set; }
-        public string? LocationName { get; set; }
+    {       
+        public int EmployeeID { get; set; }   
+        public int ShiftID { get; set; }     
+        public string? LocationID { get; set; }       
         public string? BG { get; set; }
         public string? BU { get; set; }
         public string? PhoneNumber { get; set; }
@@ -27,16 +23,9 @@ namespace ApiLibrary.ViewModels
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? EndTime { get; set; }
         public string? Frequency { get; set; }
-        public int Interval { get; set; }
-        
-        public string[]? ByWeekday { get; set; }
-        public int AreaID { get; set; }
-        public Status Status { get; set; }
+        public int Interval { get; set; }        
+        public string[]? ByWeekday { get; set; }   
         public int SignBy { get; set; }
-        public string? NameShift { get; set; }
-        public string? DescriptionShift { get; set; }
         public List<ListLocationVM>? LocationVM { get; set; }
     }
-
-   
 }

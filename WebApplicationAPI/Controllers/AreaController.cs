@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exceptions;
-using WebApplicationAPI.Service.Interfaces;
-
-namespace WebApplicationAPI.Controllers
+﻿namespace WebApplicationAPI.Controllers
 {
     /// <summary>
     /// 

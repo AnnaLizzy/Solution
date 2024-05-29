@@ -16,8 +16,9 @@
         public class Account()
         {
             public const string LoginUrl = "api/Account/login";
-            public const string GetEmployees = "api/Account";           
-          
+            public const string GetEmployees = "api/Account";    
+            public const string RefreshToken = "api/Account/refresh-token";
+
         }
         public class WorkSchedule()
         {

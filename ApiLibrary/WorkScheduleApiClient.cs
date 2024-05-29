@@ -5,7 +5,8 @@ using WebApplicationAPI.Constants;
 
 namespace ApiLibrary
 {
-    public class WorkScheduleApiClient(HttpClient httpClient,IHttpClientFactory httpClientFactory) : BaseApiClient(httpClient,httpClientFactory), IWorkScheduleApiClient
+    public class WorkScheduleApiClient(HttpClient httpClient,IHttpClientFactory httpClientFactory) 
+        : BaseApiClient(httpClient,httpClientFactory), IWorkScheduleApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
         public async Task<bool> CreateWorkSchedule(CreateWorkScheduleViewModel workSchedule)
@@ -13,7 +14,7 @@ namespace ApiLibrary
             // Kiểm tra dữ liệu đầu vào
             if (workSchedule == null)
             {
-                throw new ArgumentNullException(nameof(workSchedule), "Please enter WorkSchedule");
+                throw new ArgumentNullException(nameof(workSchedule), "Please enter information WorkSchedule");
             }
 
             // Kiểm tra các thuộc tính cần thiết
@@ -22,52 +23,46 @@ namespace ApiLibrary
             {
                 throw new ArgumentException("Chưa được cung cấp đầy đủ thông tin", nameof(workSchedule));
             }
-
-
             string[] weekdaysArray = workSchedule.ByWeekday ?? [];
             string weekdaysString = string.Join(",", weekdaysArray);
-
-
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(SystemConstants.Url.BaseApiUrl);
-
-                var requestContent = new MultipartFormDataContent
-                    {
-                        { new StringContent(workSchedule.EmployeeID.ToString()), "EmployeeID" },
-                        { new StringContent(workSchedule.LocationID), "LocationID" },
-                        { new StringContent(workSchedule.ShiftID.ToString()), "ShiftID" },
-                        { new StringContent(workSchedule.StartTime.ToString() ?? ""), "StartTime" },
-                        { new StringContent(workSchedule.EndTime.ToString() ?? ""), "EndTime" },
-                        { new StringContent(workSchedule.Frequency?.ToString() ?? ""),"Frequency" },
-                        { new StringContent(workSchedule.Interval.ToString()),"Interval" },
-                        { new StringContent(weekdaysString),"ByWeekday" }
-
-                    };
-
+            var requestContent = new MultipartFormDataContent
+                {
+                    { new StringContent(workSchedule.EmployeeID.ToString()), "EmployeeID" },
+                    { new StringContent(workSchedule.LocationID), "LocationID" },
+                    { new StringContent(workSchedule.ShiftID.ToString()), "ShiftID" },
+                    { new StringContent(workSchedule.StartTime.ToString() ?? ""), "StartTime" },
+                    { new StringContent(workSchedule.EndTime.ToString() ?? ""), "EndTime" },
+                    { new StringContent(workSchedule.Frequency?.ToString() ?? ""),"Frequency" },
+                    { new StringContent(workSchedule.Interval.ToString()),"Interval" },
+                    { new StringContent(weekdaysString),"ByWeekday" },
+                    { new StringContent(workSchedule.PhoneNumber ?? "N/a"),"PhoneNumber" },
+                    { new StringContent(workSchedule.SignBy.ToString() ?? "N/a"),"SignBy" },
+                    { new StringContent(workSchedule.Notes ?? "N/a"),"Notes" },
+                    { new StringContent(workSchedule.BuCode ?? "N/a"),"BuCode" },
+                    { new StringContent(workSchedule.BG ?? "N/a"),"BG" },
+                    { new StringContent(workSchedule.BU ?? "N/a"),"BU" }
+                };
             // Gửi yêu cầu API
             var response = await client.PostAsync("/api/WorkSchedule/", requestContent);
-
             // Kiểm tra kết quả của yêu cầu và xử lý
             return response.IsSuccessStatusCode;
         }
-
         public async Task<bool> DeleteWorkSchedule(int? id)
         {
             return await DeleteAsync($"api/WorkSchedule/{id}");
         }
-
         public async Task<WorkScheduleViewModel> GetWorkSchedule(int? id)
         {
             return await GetAsync<WorkScheduleViewModel>(SystemApiConst.WorkSchedule.GetWorkSchedule+id)
                 ?? throw new Exception("Cannot find work schedule");
         }
-
         public async Task<List<WorkScheduleViewModel>> GetWorkSchedules()
         {
             return await GetAsync<List<WorkScheduleViewModel>>(SystemApiConst.WorkSchedule.GetWorkSchedule)
                 ?? throw new Exception("Error occurred");
         }
-
         public async Task<bool> UpdateWorkSchedule(WorkScheduleViewModel workSchedule)
         {
             var id = workSchedule.ScheduleID;
@@ -86,6 +81,12 @@ namespace ApiLibrary
             };
             var response = await client.PutAsync($"/api/WorkSchedule/{id}", requestContent);
             return response.IsSuccessStatusCode;
+        }
+        /*  lấy danh sách ở OndutyListLocation    */
+        public async Task<List<OndutyListLocationViewModel>> GetOndutyListLocationsByAreaID(int? id)
+        {
+            return await GetAsyncList<OndutyListLocationViewModel>($"api/ListLocation/{id}")
+                ?? throw new Exception("Error occurred");
         }
     }
 }

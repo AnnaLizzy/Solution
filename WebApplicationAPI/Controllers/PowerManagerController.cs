@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using WebApplicationAPI.Models;
-using WebApplicationAPI.Service.Interfaces;
-
-namespace WebApplicationAPI.Controllers
+﻿namespace WebApplicationAPI.Controllers
 {
     /// <summary>
     /// 

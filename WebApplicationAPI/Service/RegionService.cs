@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApplicationAPI.Constants;
-using WebApplicationAPI.Data;
-using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exceptions;
-using WebApplicationAPI.Service.Interfaces;
-
-namespace WebApplicationAPI.Service
+﻿namespace WebApplicationAPI.Service
 {
     /// <summary>
     /// region

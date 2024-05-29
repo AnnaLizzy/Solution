@@ -10,10 +10,26 @@
         /// api success result
         /// </summary>
         /// <param name="resultObj"></param>
-        public ApiSuccessResult(T resultObj)
+        /// <param name="message"></param>
+        public ApiSuccessResult(T resultObj,string message)
         {
             IsSuccessed = true;
+            Message = message;
             ResultObj = resultObj;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="refreshToken"></param>
+        /// <param name="message"></param>
+        public ApiSuccessResult(T token, T refreshToken, string message)
+        {
+            IsSuccessed = true;
+            Message = message;
+            Token = token;
+            RefreshToken = refreshToken;
+            
         }
         /// <summary>
         /// api success result is true

@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Service.Interfaces;
-
-namespace WebApplicationAPI.Controllers
+﻿namespace WebApplicationAPI.Controllers
 {
     /// <summary>
     /// 
@@ -86,7 +82,7 @@ namespace WebApplicationAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-               var result =  await _workScheduleService.CreateWorkSchedule(model);
+            var result =  await _workScheduleService.CreateWorkSchedule(model);
             if (result.ResultObj == true)
             {
                 return Ok(result.Message);
@@ -94,11 +90,8 @@ namespace WebApplicationAPI.Controllers
             else
             {
                 ModelState.AddModelError("", result?.Message ?? "");
-                return BadRequest(ModelState);
-                
-            }
-            
-            
+                return BadRequest(ModelState);                
+            }    
         }
         /// <summary>
         /// Delete work schedule by id

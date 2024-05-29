@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ApiLibrary.Interfaces;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using ApiLibrary.ViewModels;
-using System.Security.Claims;
-using WebApplicationApp.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using ApiLibrary.Constants;
+using WebApplicationAPI.Models.Enum;
+using ApiLibrary.ViewModels;
 
 
 
@@ -125,7 +122,6 @@ namespace WebApplicationApp.Controllers
                 return RedirectToAction("Index");
             }
             return View(data);
-
         }      
         public async Task<IActionResult> Update(int id)
         {
@@ -143,17 +139,12 @@ namespace WebApplicationApp.Controllers
                 }
                 var data = await _listLocationApiClient.GetLocationById(id);
                 return View(data);
-            }
-           
-           
+            }      
             else
             {
                 TempData["Error"] = "Please login to continue";
                 return RedirectToAction("Index", "Account");
             }
-            
-         
-           
         }
         [HttpPost]
         public async Task<IActionResult> Update(int id,[FromForm]ListLocationVM location)
@@ -183,7 +174,6 @@ namespace WebApplicationApp.Controllers
             }
             TempData["Error"] = "Please login to continue";
             return View(location);
-        
         }
         public async Task<IActionResult> Delete(int id)
         {
@@ -200,25 +190,37 @@ namespace WebApplicationApp.Controllers
         public async Task<IActionResult> Sign(int id)
         {
             var data = await _listLocationApiClient.GetLocationById(id);
-            if(data == null)
+            var checkSign = new ListLocationVM
+            {
+                SignStatus = data.SignStatus
+            };
+            if(checkSign.SignStatus == Status.DA_KY)
+            {
+                TempData["Infor"] = "Đã ký";
+
+                return View(data);
+            }
+            if (data == null)
             {
                 ViewData["Error"] = "Không có dữ liệu";
-                return RedirectToAction("Index");
-            }
-            ViewData["Success"] = "Ký thành công";
+                return View();
+            }          
             return View(data);
         }
         [HttpPost]
-        public async Task<IActionResult> SignLocation(int id, ListLocationVM model)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Sign([FromRoute]int id,[FromForm] ListLocationVM model)
         {
+            var result = await _listLocationApiClient.GetLocationById(id);
+
             var data = await _listLocationApiClient.SignLocation(id,model);
             if (data == false)
             {
                 TempData["Error"] = "Ký không thành công";
-                return RedirectToAction("Index");
+                return View(result);
             }
             TempData["Success"] = "Ký thành công";
-            return RedirectToAction("Index");
+            return View(result);
         }
     }
 }

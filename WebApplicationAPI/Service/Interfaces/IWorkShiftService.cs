@@ -1,8 +1,4 @@
-﻿using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-using WebApplicationAPI.DTOs;
-
-
-namespace WebApplicationAPI.Service.Interfaces
+﻿namespace WebApplicationAPI.Service.Interfaces
 {
     /// <summary>
     /// WorkShift 

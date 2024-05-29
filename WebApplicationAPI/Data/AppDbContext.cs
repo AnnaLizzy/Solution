@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApplicationAPI.Models;
-
-namespace WebApplicationAPI.Data
+﻿namespace WebApplicationAPI.Data
 {
     /// <summary>
     /// 
@@ -30,6 +27,10 @@ namespace WebApplicationAPI.Data
         /// </summary>
         public DbSet<LogSignUser> LogSignUser { get; set; }
         /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<UserToken> UserToken { get; set; }
+        /// <summary>
         /// Fluent API
         /// </summary>
         /// <param name="modelBuilder"></param>
@@ -40,6 +41,8 @@ namespace WebApplicationAPI.Data
                 .ValueGeneratedOnAdd();
             modelBuilder.Entity<LogSignUser>()
                 .Property(p => p.SignID)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<UserToken>().Property(p => p.TokenID)
                 .ValueGeneratedOnAdd();
         }
 

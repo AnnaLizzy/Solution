@@ -1,13 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApplicationAPI.Data;
-using WebApplicationAPI.DTOs;
-using WebApplicationAPI.Exceptions;
-using WebApplicationAPI.Models;
-using WebApplicationAPI.Models.Enum;
-using WebApplicationAPI.Service.Interfaces;
-using WebApplicationAPI.ViewModels;
-
-namespace WebApplicationAPI.Service
+﻿namespace WebApplicationAPI.Service
 {
     /// <summary>
     /// work schedule service
