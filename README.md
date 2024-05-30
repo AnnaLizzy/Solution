@@ -38,3 +38,5 @@
 ### 
 <img src="https://github.com/AnnaLizzy/Solution/assets/70207000/007e9932-2346-4b2f-8f5d-998e6570f112" atl="photo" />
   
+> [!NOTE]
+> Useful information that users should know, even when skimming content.
